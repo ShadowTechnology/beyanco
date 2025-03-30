@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { TokenStorageService } from '../../../services/token-storage.service';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule],
+  standalone: true, // ✅ Add this
+  imports: [CommonModule, FormsModule, RouterModule], // ✅ Add RouterModule
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
   form: any = {
     username: null,
     password: null
@@ -31,7 +32,7 @@ export class LoginComponent implements OnInit{
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
-      // this.redirectAfterLogin();
+      this.redirectAfterLogin();
     }
   }
 
@@ -46,7 +47,7 @@ export class LoginComponent implements OnInit{
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-        // this.redirectAfterLogin();
+        this.redirectAfterLogin();
       },
       error: err => {
         this.errorMessage = err.error.message || 'Login failed';
@@ -55,7 +56,7 @@ export class LoginComponent implements OnInit{
     });
   }
 
-  // redirectAfterLogin(): void {
-  //   this.router.navigate(['/dashboard']);
-  // }
+  redirectAfterLogin(): void {
+    this.router.navigate(['/dashboard']);
+  }
 }
