@@ -23,11 +23,13 @@ import { HomeComponent } from './components/mainpage/home/home.component';
 import { LoginComponent } from './components/mainpage/login/login.component';
 import { RegisterComponent } from './components/mainpage/register/register.component';
 import { DashboardComponent } from './components/mainpage/dashboard/dashboard.component';
+import { PropertyUploadComponent } from './components/property-upload/property-upload.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },  // ✅ Use 'component' instead of 'loadComponent'
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'dashboard', component: DashboardComponent }
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'property-upload', component: PropertyUploadComponent },
 ];

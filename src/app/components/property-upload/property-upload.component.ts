@@ -328,7 +328,7 @@ export class PropertyUploadComponent implements OnInit {
     private propertyService: PropertyService,
     private tokenStorage: TokenStorageService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const user = this.tokenStorage.getUser();
@@ -339,9 +339,7 @@ export class PropertyUploadComponent implements OnInit {
 
   onFileChange(event: any) {
     const file = event.target.files[0];
-
     if (file) {
-      // Validate file type
       const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!validTypes.includes(file.type)) {
         this.fileError = 'Only JPG and PNG files are allowed';
@@ -350,8 +348,6 @@ export class PropertyUploadComponent implements OnInit {
         this.previewUrl = null;
         return;
       }
-
-      // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.fileError = 'File size must be less than 5MB';
         this.selectedFile = null;
@@ -359,16 +355,11 @@ export class PropertyUploadComponent implements OnInit {
         this.previewUrl = null;
         return;
       }
-
       this.selectedFile = file;
       this.fileName = file.name;
       this.fileError = '';
-
-      // Create a preview
       const reader = new FileReader();
-      reader.onload = (e) => {
-        this.previewUrl = reader.result;
-      };
+      reader.onload = () => this.previewUrl = reader.result;
       reader.readAsDataURL(file);
     }
   }
@@ -378,7 +369,6 @@ export class PropertyUploadComponent implements OnInit {
       this.fileError = 'Please select a file to upload';
       return;
     }
-
     const formData = new FormData();
     formData.append('file', this.selectedFile);
     formData.append('title', this.form.title);
@@ -391,13 +381,13 @@ export class PropertyUploadComponent implements OnInit {
     this.errorMessage = '';
 
     this.propertyService.uploadProperty(formData).subscribe({
-      next: (response) => {
+      next: () => {
         this.isUploading = false;
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.isUploading = false;
-        this.errorMessage = err.error.message || 'Error uploading property. Please try again.';
+        this.errorMessage = err?.error?.message || 'Error uploading property. Please try again.';
       }
     });
   }

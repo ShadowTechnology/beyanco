@@ -1,0 +1,109 @@
+<div class="profile-container">
+    <div class="profile-header">
+      <h1>My Profile</h1>
+      <p>Manage your account information and preferences</p>
+    </div>
+
+    <div class="loading-spinner" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Loading profile information...</p>
+    </div>
+
+    <div class="profile-content" *ngIf="!isLoading">
+      <div class="profile-card">
+        <div class="profile-card-header">
+          <h2>Account Information</h2>
+          <button class="btn btn-primary" (click)="toggleEdit()">
+            {{ isEditing ? 'Cancel' : 'Edit Profile' }}
+          </button>
+        </div>
+
+        <div class="profile-form" *ngIf="!isEditing">
+          <div class="profile-field">
+            <label>Username</label>
+            <p>{{ currentUser.username }}</p>
+          </div>
+          <div class="profile-field">
+            <label>Email</label>
+            <p>{{ currentUser.email }}</p>
+          </div>
+          <div class="profile-field">
+            <label>Name</label>
+            <p>{{ currentUser.name || 'Not provided' }}</p>
+          </div>
+          <div class="profile-field">
+            <label>Phone</label>
+            <p>{{ currentUser.phone || 'Not provided' }}</p>
+          </div>
+          <div class="profile-field">
+            <label>Company</label>
+            <p>{{ currentUser.company || 'Not provided' }}</p>
+          </div>
+          <div class="profile-field">
+            <label>Roles</label>
+            <p>{{ userRoles }}</p>
+          </div>
+        </div>
+
+        <form class="profile-form" *ngIf="isEditing" (submit)="updateProfile()">
+          <div class="profile-field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" [(ngModel)]="form.name" class="form-control">
+          </div>
+          <div class="profile-field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" [(ngModel)]="form.email" class="form-control">
+          </div>
+          <div class="profile-field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" [(ngModel)]="form.phone" class="form-control">
+          </div>
+          <div class="profile-field">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" [(ngModel)]="form.company" class="form-control">
+          </div>
+          <div class="button-group">
+            <button type="submit" class="btn btn-success">Save Changes</button>
+            <button type="button" class="btn btn-secondary" (click)="toggleEdit()">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="profile-card subscription-card">
+        <h2>Subscription Details</h2>
+        <div class="subscription-info">
+          <div class="subscription-field">
+            <span class="field-label">Plan:</span>
+            <span class="field-value">{{ getSubscriptionPlan() }}</span>
+          </div>
+          <div class="subscription-field">
+            <span class="field-label">Credits Remaining:</span>
+            <span class="field-value">{{ currentUser.creditsRemaining || 0 }}</span>
+          </div>
+          <div class="subscription-field">
+            <span class="field-label">Next Billing Date:</span>
+            <span class="field-value">{{ getNextBillingDate() }}</span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block">Upgrade Plan</button>
+      </div>
+
+      <div class="profile-card activity-card">
+        <h2>Recent Activity</h2>
+        <div class="activity-list" *ngIf="recentActivity.length > 0">
+          <div class="activity-item" *ngFor="let activity of recentActivity">
+            <div class="activity-icon" [ngClass]="activity.type">
+              <i class="fas" [ngClass]="getActivityIcon(activity.type)"></i>
+            </div>
+            <div class="activity-details">
+              <p class="activity-description">{{ activity.description }}</p>
+              <p class="activity-date">{{ activity.date | date:'medium' }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="no-activity" *ngIf="recentActivity.length === 0">
+          <p>No recent activity to display</p>
+        </div>
+      </div>
+    </div>
+  </div>

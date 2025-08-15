@@ -13,10 +13,16 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  properties: Property[] = [];
+  properties: any;
   isLoading = true;
   errorMessage = '';
   currentUser: any = {};
+sliderValues: number[] = []; // stores each slider's value
+
+  property = {
+    originalImageUrl: '/uploads/original.jpg',
+    generatedImageUrl: '/uploads/ai-version.jpg'
+  };
 
   constructor(
     private propertyService: PropertyService,
@@ -25,13 +31,15 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.currentUser = this.tokenStorage.getUser();
-    // this.loadProperties();
+    this.currentUser = this.tokenStorage.getUser();
+    this.loadProperties();
+    this.sliderValues = this.properties.map(() => 50);
   }
 
   loadProperties(): void {
-    this.propertyService.getUserProperties().subscribe({
+    this.propertyService.getAllProperty().subscribe({
       next: (properties) => {
+        console.log(properties)
         this.properties = properties;
         this.isLoading = false;
       },

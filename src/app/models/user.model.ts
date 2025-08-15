@@ -9,4 +9,6 @@ export interface User {
   subscriptionStatus?: string;
   creditsRemaining?: number;
   roles: string[];
+  mobile: number;
+  company: string;
 }

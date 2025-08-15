@@ -15,9 +15,9 @@ export class HomeComponent {
     private tokenStorage: TokenStorageService
   ) {
     // Check if user is already logged in
-    if (this.tokenStorage.getToken()) {
-      this.router.navigate(['/dashboard']);
-    }
+    // if (this.tokenStorage.getToken()) {
+    //   this.router.navigate(['/dashboard']);
+    // }
   }
 
   navigateToRegister(): void {
