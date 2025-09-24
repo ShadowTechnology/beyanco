@@ -1,91 +1,104 @@
 <div class="profile-container">
-    <div class="profile-header">
-      <h1>My Profile</h1>
-      <p>Manage your account information and preferences</p>
-    </div>
+  <h2 class="page-title">My Profile</h2>
+  <p class="subtitle">Manage your account settings and preferences</p>
+  <div class="loading-spinner" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading profile information...</p>
+  </div>
 
-    <div class="loading-spinner" *ngIf="isLoading">
-      <div class="spinner"></div>
-      <p>Loading profile information...</p>
-    </div>
-
-    <div class="profile-content" *ngIf="!isLoading">
-      <div class="profile-card">
-        <div class="profile-card-header">
-          <h2>Account Information</h2>
-          <button class="btn btn-primary" (click)="toggleEdit()">
-            {{ isEditing ? 'Cancel' : 'Edit Profile' }}
-          </button>
-        </div>
-
-        <div class="profile-form" *ngIf="!isEditing">
-          <div class="profile-field">
-            <label>Username</label>
-            <p>{{ currentUser.username }}</p>
-          </div>
-          <div class="profile-field">
-            <label>Email</label>
-            <p>{{ currentUser.email }}</p>
-          </div>
-          <div class="profile-field">
-            <label>Name</label>
-            <p>{{ currentUser.name || 'Not provided' }}</p>
-          </div>
-          <div class="profile-field">
-            <label>Phone</label>
-            <p>{{ currentUser.phone || 'Not provided' }}</p>
-          </div>
-          <div class="profile-field">
-            <label>Company</label>
-            <p>{{ currentUser.company || 'Not provided' }}</p>
-          </div>
-          <div class="profile-field">
-            <label>Roles</label>
-            <p>{{ userRoles }}</p>
-          </div>
-        </div>
-
-        <form class="profile-form" *ngIf="isEditing" (submit)="updateProfile()">
-          <div class="profile-field">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" [(ngModel)]="form.name" class="form-control">
-          </div>
-          <div class="profile-field">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" [(ngModel)]="form.email" class="form-control">
-          </div>
-          <div class="profile-field">
-            <label for="phone">Phone</label>
-            <input type="tel" id="phone" name="phone" [(ngModel)]="form.phone" class="form-control">
-          </div>
-          <div class="profile-field">
-            <label for="company">Company</label>
-            <input type="text" id="company" name="company" [(ngModel)]="form.company" class="form-control">
-          </div>
-          <div class="button-group">
-            <button type="submit" class="btn btn-success">Save Changes</button>
-            <button type="button" class="btn btn-secondary" (click)="toggleEdit()">Cancel</button>
-          </div>
-        </form>
+  <div class="profile-layout" *ngIf="!isLoading">
+    <div class="card profile-card" *ngIf="!isEditing">
+      <div class="card-header">
+        <h3><i class="far fa-user"></i> Profile Information</h3>
+        <button class="edit-btn" (click)="toggleEdit()"><i class="fa-solid fa-pen-to-square"></i> {{ isEditing ? 'Cancel'
+          : 'Edit' }}</button>
       </div>
 
-      <div class="profile-card subscription-card">
-        <h2>Subscription Details</h2>
-        <div class="subscription-info">
-          <div class="subscription-field">
-            <span class="field-label">Plan:</span>
-            <span class="field-value">{{ getSubscriptionPlan() }}</span>
-          </div>
-          <div class="subscription-field">
-            <span class="field-label">Credits Remaining:</span>
-            <span class="field-value">{{ currentUser.creditsRemaining || 0 }}</span>
-          </div>
-          <div class="subscription-field">
-            <span class="field-label">Next Billing Date:</span>
-            <span class="field-value">{{ getNextBillingDate() }}</span>
-          </div>
+      <div class="profile-info">
+        <div class="avatar">
+          <span class="avatar-text">J</span>
         </div>
-        <button class="btn btn-primary btn-block">Upgrade Plan</button>
+        <div class="user-details">
+          <h4 class="username">{{ currentUser.username }}</h4>
+          <span class="update-text">Update your profile photo</span>
+        </div>
+      </div>
+      <div class="field">
+        <label><i class="far fa-user"></i> Username</label>
+        <p>{{ currentUser.username }}</p>
+      </div>
+      <div class="field">
+        <label><i class="fa-solid fa-envelope"></i> Email</label>
+        <p>{{ currentUser.email }}</p>
+      </div>
+      <div class="field">
+        <label><i class="far fa-user"></i> Name</label>
+        <p>{{ currentUser.name || 'Not provided' }}</p>
+      </div>
+      <div class="field">
+        <label><i class="fa-solid fa-mobile"></i> Phone</label>
+        <p>{{ currentUser.phone || 'Not provided' }}</p>
+      </div>
+      <div class="field">
+        <label><i class="fa-solid fa-building"></i> Company</label>
+        <p>{{ currentUser.company || 'Not provided' }}</p>
+      </div>
+      <div class="roles">
+        <label><i class="fa-solid fa-shield"></i> Roles</label>
+        <span class="role-tag admin">{{userRoles}}</span>
+        <span class="role-tag dev">Developer</span>
+      </div>
+      <form class="profile-form" *ngIf="isEditing" (submit)="updateProfile()">
+        <div class="profile-field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" [(ngModel)]="form.name"
+            class="form-control">
+        </div>
+        <div class="profile-field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" [(ngModel)]="form.email"
+            class="form-control">
+        </div>
+        <div class="profile-field">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" [(ngModel)]="form.phone"
+            class="form-control">
+        </div>
+        <div class="profile-field">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company"
+            [(ngModel)]="form.company" class="form-control">
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-success">Save Changes</button>
+          <button type="button" class="btn btn-secondary"
+            (click)="toggleEdit()">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="side-section">
+      <div class="card subscription-card">
+        <h3><i class="fa-solid fa-credit-card"></i> Subscription</h3>
+        <p class="plan">Current Plan</p>
+        <p class="pro">{{ getSubscriptionPlan()
+            }}</p>
+        <p class="credits">Credits Remaining</p>
+        <h2 class="credit-count">{{ currentUser.creditsRemaining || 0 }}</h2>
+        <p class="credits">Next Billing Date:</p>
+        <h2 class="credit-count">{{ getNextBillingDate() }}</h2>
+        <div class="progress-bar">
+          <div class="progress" style="width: 70%"></div>
+        </div>
+        <button class="upgrade-btn">Upgrade Subscription</button>
+      </div>
+
+      <div class="card quick-actions-card">
+        <h3>Quick Actions</h3>
+        <button class="action-btn">Change Password</button>
+        <button class="action-btn">Privacy Settings</button>
+        <button class="action-btn">Download Data</button>
+        <button class="delete-btn">Delete Account</button>
       </div>
 
       <div class="profile-card activity-card">
@@ -107,3 +120,4 @@
       </div>
     </div>
   </div>
+</div>

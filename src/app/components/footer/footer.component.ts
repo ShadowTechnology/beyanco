@@ -77,7 +77,6 @@ import { RouterLink } from '@angular/router';
       background-color: #1e2642;
       color: white;
       padding: 60px 0 30px;
-      margin-top: 60px;
     }
 
     .container {
