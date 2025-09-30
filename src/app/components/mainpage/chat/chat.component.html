@@ -1,10 +1,12 @@
 <div class="page" [class.sidebar-collapsed]="sidebarCollapsed">
-  <aside class="sidebar" [class.collapsed]="sidebarCollapsed" [class.open]="mobileSidebarOpen">
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed"
+    [class.open]="mobileSidebarOpen">
     <div class="logo">
       <i class="far fa-comment"></i>
       <span *ngIf="!sidebarCollapsed">Beyanco Chat UI</span>
       <button class="collapse-btn" (click)="toggleSidebar()">
-        <i class="fas" [ngClass]="sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+        <i class="fas"
+          [ngClass]="sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
       </button>
     </div>
     <button class="new-chat" (click)="newChat()"><i class="fas fa-plus"></i> New
@@ -12,8 +14,10 @@
     <div class="divider"></div>
     <p class="history-Chats">Recent Chats</p>
     <div class="history" *ngIf="conversations().length; else noHist">
-      <button *ngFor="let h of conversations(); trackBy: trackById" class="history-item"
-        [class.active]="h.id === activeConversationId()" (click)="openConversation(h.id)">
+      <button *ngFor="let h of conversations(); trackBy: trackById"
+        class="history-item"
+        [class.active]="h.id === activeConversationId()"
+        (click)="openConversation(h.id)">
         <div class="title ellipsis">{{ h.title }}</div>
         <div class="sub ellipsis">{{ h.preview }}</div>
       </button>
@@ -79,10 +83,13 @@
 
     <div class="messages" #scrollArea>
       <ng-container *ngIf="messages().length; else welcome">
-        <div *ngFor="let m of messages(); trackBy: trackById" class="message" [class.user]="m.role==='user'"
+        <div *ngFor="let m of messages(); trackBy: trackById" class="message"
+          [class.user]="m.role==='user'"
           [class.assistant]="m.role==='assistant'">
-          <div class="avatar" [ngClass]="m.role === 'user' ? 'user-avatar' : 'assistant-avatar'">
-            <i class="fas" [ngClass]="m.role === 'user' ? 'fa-user' : 'fa-robot'"></i>
+          <div class="avatar"
+            [ngClass]="m.role === 'user' ? 'user-avatar' : 'assistant-avatar'">
+            <i class="fas"
+              [ngClass]="m.role === 'user' ? 'fa-user' : 'fa-robot'"></i>
           </div>
           <div class="bubble">
             <ng-container *ngIf="m.images?.length">
@@ -109,33 +116,43 @@
       </ng-template>
     </div>
 
-    <div class="composer" (keydown.control.enter)="send()" (keydown.meta.enter)="send()">
+    <div class="composer" (keydown.control.enter)="send()"
+      (keydown.meta.enter)="send()">
       <div class="input-wrap">
-        <textarea [(ngModel)]="description" class="textarea" placeholder="Describe your request..." rows="3"></textarea>
+        <textarea [(ngModel)]="description" class="textarea"
+          placeholder="Describe your request..." rows="3"></textarea>
 
-        <button class="icon-btn plus" (click)="toggleActionsMenu()" title="More actions"><i
+        <button class="icon-btn plus" (click)="toggleActionsMenu()"
+          title="More actions"><i
             class="fas fa-plus"></i></button>
 
-        <button class="icon-btn mic" [disabled]="recognizing()" (click)="startVoice()" title="Voice input">
+        <button class="icon-btn mic" [disabled]="recognizing()"
+          (click)="startVoice()" title="Voice input">
           <i class="fas fa-microphone"></i>
         </button>
-        <button class="icon-btn stop" *ngIf="recognizing()" (click)="stopVoice()" title="Stop recording"><i
+        <button class="icon-btn stop" *ngIf="recognizing()"
+          (click)="stopVoice()" title="Stop recording"><i
             class="fas fa-stop"></i></button>
         <button class="icon-btn send" (click)="send()" title="Send">
           <i class="fas fa-paper-plane"></i>
         </button>
-        <button class="icon-btn room" (click)="showPopup = true" title="Upload & Room">
+        <button class="icon-btn room" (click)="showPopup = true"
+          title="Upload & Room">
           <i class="fas fa-sliders-h"></i>
         </button>
 
         <div class="menu" *ngIf="actionsOpen()">
-          <button class="menu-item" (click)="toggleMeta('Add Photos')"><i class="fas fa-images"></i> Add
+          <button class="menu-item" (click)="toggleMeta('Add Photos')"><i
+              class="fas fa-images"></i> Add
             Photos</button>
-          <button class="menu-item" (click)="toggleMeta('Study & Learn')"><i class="fab fa-leanpub"></i>
+          <button class="menu-item" (click)="toggleMeta('Study & Learn')"><i
+              class="fab fa-leanpub"></i>
             Study & Learn</button>
-          <button class="menu-item" (click)="toggleMeta('Create Image')"><i class="fas fa-palette"></i>
+          <button class="menu-item" (click)="toggleMeta('Create Image')"><i
+              class="fas fa-palette"></i>
             Create Image</button>
-          <button class="menu-item" (click)="toggleMeta('Think Longer')"><i class="fa-solid fa-brain"></i>
+          <button class="menu-item" (click)="toggleMeta('Think Longer')"><i
+              class="fa-solid fa-brain"></i>
             Think Longer</button>
         </div>
       </div>
@@ -155,7 +172,8 @@
           Click to upload <br />
           <small>or drag & drop</small>
         </span>
-        <input type="file" accept="image/*" multiple (change)="onFiles($event)" />
+        <input type="file" accept="image/*" multiple
+          (change)="onFiles($event)" />
       </label>
 
       <!-- Preview uploaded images -->
@@ -164,7 +182,6 @@
           <img [src]="img" alt="Uploaded image preview" />
         </div>
       </div>
-
 
       <label class="field">
         <span class="label">Select room</span>
@@ -181,8 +198,17 @@
         </select>
       </label>
       <label class="field">
+        <span class="label">Select House Style</span>
+        <select [(ngModel)]="style">
+          <option [ngValue]="''">— None —</option>
+          <option *ngFor="let r of HouseStyleTags" [ngValue]="r">{{ r }}</option>
+        </select>
+      </label>
+
+      <label class="field">
         <span class="label">Description</span>
-        <textarea [(ngModel)]="description" class="textarea" placeholder="Describe your request..." rows="1"></textarea>
+        <textarea [(ngModel)]="description" class="textarea"
+          placeholder="Describe your request..." rows="1"></textarea>
       </label>
       <div class="d-flex">
         <button class="confirm-btn" (click)="confirmPopup()">Start Chat</button>

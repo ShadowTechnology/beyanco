@@ -50,6 +50,23 @@ export class ChatComponent {
   description = '';
   actionsOpen = signal(false);
   StyleTags = ['Modern', 'Cozy', 'Luxury', 'Minimalist', 'Rustic', 'Industrial', 'Scandinavian', 'Bohemian'];
+  HouseStyleTags: string[] = [
+    'American',
+    'British',
+    'French',
+    'Italian',
+    'Japanese',
+    'Scandinavian',
+    'German',
+    'Spanish',
+    'Dutch',
+    'Australian',
+    'Swiss',
+    'Moroccan',
+    'Turkish',
+    'Russian',
+  ];
+
   style: string = '';
 
   messages = signal<ChatMessage[]>([]);
