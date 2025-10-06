@@ -39,7 +39,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
     .main-header {
       background-color: white;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 15px 0;
+      padding: 5px 0;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -68,7 +68,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
     }
 
     .tagline {
-      font-size: 0.85rem;
+      font-size: 0.70rem;
       color: #666;
     }
 

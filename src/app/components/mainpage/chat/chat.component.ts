@@ -33,10 +33,6 @@ export class ChatComponent {
     private tokenStorage: TokenStorageService,
     private propertyService: PropertyService,
   ) {
-    // Check if user is already logged in
-    // if (this.tokenStorage.getToken()) {
-    //   this.router.navigate(['/dashboard']);
-    // }
   }
 
   rooms = ['Kitchen', 'Bedroom', 'Living Room', 'Bathroom', 'Dining', 'Study'];
@@ -48,6 +44,8 @@ export class ChatComponent {
   chosenMeta = signal<string[]>([]);
   mobileSidebarOpen = false;
   description = '';
+  composerDescription = '';
+  popupDescription = '';
   actionsOpen = signal(false);
   StyleTags = ['Modern', 'Cozy', 'Luxury', 'Minimalist', 'Rustic', 'Industrial', 'Scandinavian', 'Bohemian'];
   HouseStyleTags: string[] = [
@@ -92,6 +90,7 @@ export class ChatComponent {
     this.description = '';
     this.pendingImages.set([]);
     this.chosenMeta.set([]);
+    this.showPopup = true;
   }
   closePopup() {
     this.showPopup = false;
@@ -103,13 +102,14 @@ export class ChatComponent {
     this.router.navigate(['/profile']);
   }
   confirmPopup() {
-    if (!this.roomModel && !this.pendingImages().length) {
-      alert("Please upload an image or select a room.");
+    if (!this.roomModel && !this.pendingImages().length && !this.popupDescription.trim()) {
+      alert("Please upload an image, select a room, or add description.");
       return;
-    } else {
-      this.showPopup = false;
-      this.send();
     }
+    this.composerDescription = this.popupDescription;
+    this.send();
+    this.showPopup = false;
+    this.popupDescription = '';
   }
 
   toggleSidebar() {
@@ -120,20 +120,6 @@ export class ChatComponent {
   }
   trackById = (_: number, item: any) => item.id;
 
-  // onFiles(ev: Event) {
-  //   const input = ev.target as HTMLInputElement;
-  //   if (!input.files?.length) return;
-  //   const files = Array.from(input.files);
-  //   files.forEach(f => {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       this.pendingImages.update(arr => [...arr, String(reader.result)]);
-
-  //     };
-  //     reader.readAsDataURL(f);
-  //   });
-  //   input.value = '';
-  // }
   onFiles(ev: Event) {
     const input = ev.target as HTMLInputElement;
     if (!input.files?.length) return;
@@ -198,53 +184,8 @@ export class ChatComponent {
     this.recognizing.set(false);
     this.recognition?.stop();
   }
-
-  // send() {
-  //   const text = this.description.trim();
-  //   if (!text && !this.pendingImages().length) return;
-
-  //   const userMsg: ChatMessage = {
-  //     id: crypto.randomUUID(),
-  //     role: 'user',
-  //     text,
-  //     images: this.pendingImages().slice(),
-  //     timestamp: new Date(),
-  //     room: this.roomModel || undefined,
-  //     meta: this.chosenMeta().slice(),
-  //     style: this.style || undefined
-  //   };
-  //   this.messages.update(list => [...list, userMsg]);
-
-  //   this.description = '';
-  //   this.pendingImages.set([]);
-  //   this.actionsOpen.set(false);
-
-  //   const reply: ChatMessage = {
-  //     id: crypto.randomUUID(),
-  //     role: 'assistant',
-  //     text: this.generateAssistantReply(userMsg),
-  //     timestamp: new Date()
-  //   };
-  //   this.messages.update(list => [...list, reply]);
-
-  //   this.conversations.update(list => {
-  //     const copy = [...list];
-  //     const i = copy.findIndex(x => x.id === this.activeConversationId());
-  //     if (i >= 0) {
-  //       copy[i] = {
-  //         ...copy[i],
-  //         title: text ? (text.length > 28 ? text.slice(0, 28) + '…' : text) : 'Image request',
-  //         preview: (userMsg.images?.length
-  //           ? `${userMsg.images.length} photo${userMsg.images.length > 1 ? 's' : ''} · `
-  //           : '') + (userMsg.meta?.join(', ') || '')
-  //       };
-  //     }
-  //     return copy;
-  //   });
-
-  // }
   send() {
-    const text = this.description.trim();
+    const text = this.composerDescription.trim();
     if (!text && !this.pendingImages().length) return;
 
     // Show message immediately with previews
@@ -252,7 +193,7 @@ export class ChatComponent {
       id: crypto.randomUUID(),
       role: 'user',
       text,
-      images: this.pendingImages().slice(),  // ✅ base64 previews
+      images: this.pendingImages().slice(),
       timestamp: new Date(),
       room: this.roomModel || undefined,
       meta: this.chosenMeta().slice(),
@@ -263,7 +204,7 @@ export class ChatComponent {
     // Prepare FormData for API
     const formData = new FormData();
     formData.append('title', text);
-    formData.append('description', this.description || '');
+    formData.append('description', this.composerDescription || '');
     formData.append('propertyType', this.roomModel || '');
     formData.append('enhancementStyle', this.style || 'modern');
 
@@ -281,13 +222,13 @@ export class ChatComponent {
         this.messages.update(list =>
           list.map(msg =>
             msg.id === tempMsg.id
-              ? { ...msg, images: res.generatedImageUrl ? [res.generatedImageUrl] : [] }  // wrap in array
+              ? { ...msg, images: res.generatedImageUrl ? [res.generatedImageUrl] : [] }
               : msg
           )
         );
 
-
-        this.description = '';
+        // Reset forms, etc.
+        this.composerDescription = '';
         this.pendingImages.set([]);
         this.pendingFiles = [];
         this.actionsOpen.set(false);

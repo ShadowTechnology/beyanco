@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -13,7 +13,7 @@ import { FooterComponent } from './components/footer/footer.component';
     <main>
       <router-outlet></router-outlet>
     </main>
-    <app-footer></app-footer>
+    <app-footer *ngIf="showFooter"></app-footer>
   `,
   styles: `
     :host {
@@ -29,4 +29,8 @@ import { FooterComponent } from './components/footer/footer.component';
 })
 export class AppComponent {
   title = 'Beyanco - Real Estate Enhancement Platform';
+  constructor(private router: Router) { }
+  get showFooter(): boolean {
+    return !this.router.url.includes('/chat');
+  }
 }
