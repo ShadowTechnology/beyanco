@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, HostListener, NO_ERRORS_SCHEMA, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { computed, effect, signal } from '@angular/core';
+import { computed, signal } from '@angular/core';
 import { PropertyService } from '../../../services/property.service';
+import { environment } from '../../../../environments/environment';
 
 interface ChatMessage {
   id: string;
@@ -17,6 +18,7 @@ interface ChatMessage {
   meta?: string[];
   style?: string;
 }
+
 @Component({
   selector: 'app-chat',
   imports: [CommonModule, MatIconModule, FormsModule],
@@ -24,240 +26,500 @@ interface ChatMessage {
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent {
-  previewUrls: string[] = [];
-  isUploading: boolean = false;
-  errorMessage: any;
+export class ChatComponent implements AfterViewChecked {
+  @ViewChild('scrollArea') scrollArea?: ElementRef;
+  @ViewChild('textareaRef') textareaRef?: ElementRef;
+
+  // State management
+  isUploading = false;
+  errorMessage = '';
+  sidebarCollapsed = false;
+  mobileSidebarOpen = false;
+  showPopup = false;
+  showImagePopup = false;
+
+  // ✅ Fixed: Properly typed signals
+  pendingImages = signal<string[]>([]);
+  chosenMeta = signal<string[]>([]);
+  messages = signal<ChatMessage[]>([]);
+  activeConversationId = signal<string>('c1');
+  conversations = signal<{ id: string; title: string; preview: string }[]>([
+    { id: 'c1', title: 'Sample: Bedroom Design', preview: 'Modern bedroom with natural lighting' },
+    { id: 'c2', title: 'Kitchen Renovation', preview: 'Scandinavian style kitchen' }
+  ]);
+  recognizing = signal<boolean>(false);
+  actionsOpen = signal<boolean>(false);
+
+  // Form data
+  roomModel = '';
+  style = '';
+  Housestyle = '';
+  composerDescription = '';
+  popupDescription = '';
+  pendingFiles: File[] = [];
+
+  // Tool states
+  activeTool: string | null = null;
+  compareMode: 'horizontal' | 'vertical' = 'horizontal';
+  currentImage: string | null = null;
+  currentOriginalImage: string | null = null;
+  currentGeneratedImage: string | null = null;
+  selectedElement = '';
+  selectedTool = 'Magic Eraser';
+
+  // Data
+  rooms = ['Kitchen', 'Bedroom', 'Living Room', 'Bathroom', 'Dining', 'Study', 'Office', 'Garage'];
+  StyleTags = ['Modern', 'Cozy', 'Luxury', 'Minimalist', 'Rustic', 'Industrial', 'Scandinavian', 'Bohemian'];
+  HouseStyleTags = [
+    'American', 'British', 'French', 'Italian', 'Japanese', 'Scandinavian',
+    'German', 'Spanish', 'Dutch', 'Australian', 'Swiss', 'Moroccan', 'Turkish', 'Russian'
+  ];
+  tools = ['Magic Eraser', 'Compare Version', 'Add Element'];
+  elements = [
+    { name: 'Add Lighting', prompt: 'Add ambient lighting fixtures to enhance the room atmosphere' },
+    { name: 'Add Plants', prompt: 'Add indoor plants and greenery to bring life to the space' },
+    { name: 'Add Furniture', prompt: 'Add complementary furniture pieces that match the style' },
+    { name: 'Add Artwork', prompt: 'Add wall art and decorative elements to enhance the aesthetics' },
+    { name: 'Add Rug', prompt: 'Add a stylish area rug that complements the room design' },
+    { name: 'Add Curtains', prompt: 'Add elegant window treatments and curtains for privacy' }
+  ];
+
+  private recognition?: any;
+  private shouldScrollToBottom = false;
+
   constructor(
     private router: Router,
     private tokenStorage: TokenStorageService,
     private propertyService: PropertyService,
-  ) {
-  }
+  ) { }
 
-  rooms = ['Kitchen', 'Bedroom', 'Living Room', 'Bathroom', 'Dining', 'Study'];
-  showPopup = true;
-  sidebarCollapsed = false;
-  roomModel: string = '';
-  pendingImages = signal<string[]>([]);
-  pendingFiles: File[] = [];
-  chosenMeta = signal<string[]>([]);
-  mobileSidebarOpen = false;
-  description = '';
-  composerDescription = '';
-  popupDescription = '';
-  actionsOpen = signal(false);
-  StyleTags = ['Modern', 'Cozy', 'Luxury', 'Minimalist', 'Rustic', 'Industrial', 'Scandinavian', 'Bohemian'];
-  HouseStyleTags: string[] = [
-    'American',
-    'British',
-    'French',
-    'Italian',
-    'Japanese',
-    'Scandinavian',
-    'German',
-    'Spanish',
-    'Dutch',
-    'Australian',
-    'Swiss',
-    'Moroccan',
-    'Turkish',
-    'Russian',
-  ];
-
-  style: string = '';
-
-  messages = signal<ChatMessage[]>([]);
-
-  conversations = signal<{ id: string; title: string; preview: string }[]>([
-    { id: 'c1', title: 'Sample: Bedroom mood board', preview: '2 photos · Think Longer' },
-    { id: 'c2', title: 'Real Estate Photo Enhancement', preview: 'Working on image processing...' }
-  ]);
-  activeConversationId = signal<string>('c1');
-
-  room = computed(() => this.roomModel);
-
-  newChat() {
-    const id = crypto.randomUUID();
-    this.conversations.update(list => {
-      list = [...list];
-      list.unshift({ id, title: 'New chat', preview: '' });
-      return list;
-    });
-
-    this.activeConversationId.set(id);
-    this.messages.set([]);
-    this.description = '';
-    this.pendingImages.set([]);
-    this.chosenMeta.set([]);
-    this.showPopup = true;
-  }
-  closePopup() {
-    this.showPopup = false;
-  }
-  toggleMobileSidebar() {
-    this.mobileSidebarOpen = !this.mobileSidebarOpen;
-  }
-  goToProfile() {
-    this.router.navigate(['/profile']);
-  }
-  confirmPopup() {
-    if (!this.roomModel && !this.pendingImages().length && !this.popupDescription.trim()) {
-      alert("Please upload an image, select a room, or add description.");
-      return;
+  ngAfterViewChecked() {
+    if (this.shouldScrollToBottom) {
+      this.scrollToBottom();
+      this.shouldScrollToBottom = false;
     }
-    this.composerDescription = this.popupDescription;
-    this.send();
-    this.showPopup = false;
-    this.popupDescription = '';
   }
 
+  // Lifecycle & Event Handlers
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const clickedInsideToolbar = target.closest('.image-toolbar') || target.closest('.message-image');
+
+    if (!clickedInsideToolbar && this.activeTool && !target.closest('.tool-panel')) {
+      this.closeTool();
+    }
+  }
+
+  onEnterKey(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.send();
+    }
+  }
+
+  // Navigation
   toggleSidebar() {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
+
+  toggleMobileSidebar() {
+    this.mobileSidebarOpen = !this.mobileSidebarOpen;
+  }
+
+  goToProfile() {
+    this.router.navigate(['/profile']);
+  }
+
+  // Conversation Management
+  newChat() {
+    const id = crypto.randomUUID();
+    this.conversations.update(list => {
+      const newList = [...list];
+      newList.unshift({ id, title: 'New chat', preview: '' });
+      return newList;
+    });
+    this.activeConversationId.set(id);
+    this.messages.set([]);
+    this.composerDescription = '';
+    this.pendingImages.set([]);
+    this.pendingFiles = [];
+    this.chosenMeta.set([]);
+    this.roomModel = '';
+    this.style = '';
+    this.Housestyle = '';
+    this.showPopup = true;
+  }
+
   openConversation(id: string) {
     this.activeConversationId.set(id);
+    // Load conversation messages here
   }
-  trackById = (_: number, item: any) => item.id;
 
-  onFiles(ev: Event) {
-    const input = ev.target as HTMLInputElement;
+  // Popup Management
+  openUploadPopup() {
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+  }
+  confirmPopup() {
+    if (!this.pendingImages().length && !this.popupDescription.trim()) return;
+
+    this.composerDescription = this.popupDescription;
+
+    // ✅ Optional: automatically send
+    this.send();
+
+    // ✅ Clear the modal state
+    this.pendingImages.set([]);
+    this.popupDescription = '';
+    this.roomModel = '';
+    this.style = '';
+    this.Housestyle = '';
+    this.composerDescription = '';
+
+    this.closePopup();
+  }
+
+  // File Upload
+  onFiles(event: Event) {
+    const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
 
     const files = Array.from(input.files);
-    files.forEach(f => {
-      // Keep file for upload
-      this.pendingFiles.push(f);
+    files.forEach(file => {
+      if (file.size > 10 * 1024 * 1024) {
+        alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+        return;
+      }
 
-      // Generate preview
+      this.pendingFiles.push(file);
       const reader = new FileReader();
       reader.onload = () => {
         this.pendingImages.update(arr => [...arr, String(reader.result)]);
       };
-      reader.readAsDataURL(f);
+      reader.readAsDataURL(file);
     });
 
     input.value = '';
   }
 
-  removePendingImage(idx: number) {
-    this.pendingImages.update(arr => arr.splice(idx, 1));
-  }
-
-  toggleActionsMenu() { this.actionsOpen.update(v => !v); }
-  toggleMeta(tag: string) {
-    this.chosenMeta.update(arr => {
-      return arr.includes(tag) ? arr.filter(x => x !== tag) : [...arr, tag];
+  removePendingImage(index: number) {
+    this.pendingImages.update(arr => {
+      const copy = [...arr];
+      copy.splice(index, 1);
+      return copy;
     });
-
+    this.pendingFiles.splice(index, 1);
   }
-  recognizing = signal(false);
-  private recognition?: any;
 
+  // Image Management
+  selectImage(img: string, event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    this.currentImage = img;
+
+    // Find original and generated images
+    const msgs = this.messages();
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      const msg = msgs[i];
+      if (msg.role === 'assistant' && msg.images?.length) {
+        this.currentGeneratedImage = msg.images[0];
+      }
+      if (msg.role === 'user' && msg.images?.length) {
+        this.currentOriginalImage = msg.images[0];
+        break;
+      }
+    }
+
+    this.showImagePopup = true;
+  }
+
+  closeImagePopup() {
+    this.showImagePopup = false;
+    this.currentImage = null;
+    this.activeTool = null;
+  }
+
+  // Tool Functions
+  openTool(tool: string) {
+    this.activeTool = tool;
+  }
+
+  closeTool() {
+    this.activeTool = null;
+  }
+
+  setCompareMode(mode: 'horizontal' | 'vertical') {
+    this.compareMode = mode;
+  }
+
+  async applyEraser() {
+    if (!this.currentImage) return;
+
+    this.composerDescription = 'Remove unwanted objects and clean up the image using AI magic eraser';
+    this.pendingImages.set([this.currentImage]);
+
+    const file = await this.convertBase64ToFile(this.currentImage, 'eraser-image.png');
+    this.pendingFiles = [file];
+
+    this.closeTool();
+    this.closeImagePopup();
+
+    this.send(); // ✅ call immediately
+  }
+
+  async applyElement() {
+    const element = this.elements.find(e => e.name === this.selectedElement);
+    if (!element || !this.currentGeneratedImage) return;
+
+    this.composerDescription = element.prompt;
+    this.pendingImages.set([this.currentGeneratedImage]);
+
+    // Convert base64 to File
+    const file = await this.convertBase64ToFile(this.currentGeneratedImage, 'element-image.png');
+    this.pendingFiles = [file];
+
+    this.closeTool();
+    this.closeImagePopup();
+
+    // Call send() immediately, no setTimeout
+    this.send();
+  }
+
+
+
+  getElementPrompt(elementName: string): string {
+    const element = this.elements.find(e => e.name === elementName);
+    return element?.prompt || '';
+  }
+
+  // Voice Recognition
   startVoice() {
     const w = window as any;
     const SR = w.SpeechRecognition || w.webkitSpeechRecognition;
+
     if (!SR) {
       alert('Speech Recognition is not supported in this browser.');
       return;
     }
+
     if (!this.recognition) {
       this.recognition = new SR();
       this.recognition.continuous = true;
       this.recognition.interimResults = true;
       this.recognition.lang = 'en-US';
+
       this.recognition.onresult = (event: any) => {
-        let finalText = this.description || '';
+        let finalText = this.composerDescription || '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const res = event.results[i];
-          if (res.isFinal) finalText += (finalText ? ' ' : '') + res[0].transcript.trim();
+          if (res.isFinal) {
+            finalText += (finalText ? ' ' : '') + res[0].transcript.trim();
+          }
         }
-        this.description = finalText;
+        this.composerDescription = finalText;
       };
+
       this.recognition.onend = () => this.recognizing.set(false);
       this.recognition.onerror = () => this.recognizing.set(false);
     }
+
     this.recognizing.set(true);
     this.recognition.start();
   }
+
   stopVoice() {
     this.recognizing.set(false);
     this.recognition?.stop();
   }
+
+  // Message Sending
+  canSend(): boolean {
+    return (this.composerDescription.trim().length > 0 || this.pendingImages().length > 0) && !this.isUploading;
+  }
+
   send() {
     const text = this.composerDescription.trim();
-    if (!text && !this.pendingImages().length) return;
 
-    // Show message immediately with previews
-    const tempMsg: ChatMessage = {
+    if (!text && !this.pendingImages().length) {
+      return;
+    }
+
+    // Create user message
+    const userMsg: ChatMessage = {
       id: crypto.randomUUID(),
       role: 'user',
       text,
       images: this.pendingImages().slice(),
       timestamp: new Date(),
       room: this.roomModel || undefined,
-      meta: this.chosenMeta().slice(),
       style: this.style || undefined
     };
-    this.messages.update(list => [...list, tempMsg]);
 
-    // Prepare FormData for API
+    this.messages.update(list => [...list, userMsg]);
+    this.shouldScrollToBottom = true;
+
+    // Upload to backend if files exist
+    if (this.pendingFiles.length > 0) {
+      this.uploadToBackend(userMsg, text);
+    } else {
+      // Text-only message
+      const aiResponse: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        text: 'To generate images, please upload a photo first. You can click the settings icon to upload images.',
+        timestamp: new Date()
+      };
+
+      this.messages.update(list => [...list, aiResponse]);
+      this.shouldScrollToBottom = true;
+      this.clearComposer();
+    }
+  }
+
+  private uploadToBackend(userMsg: ChatMessage, text: string) {
     const formData = new FormData();
-    formData.append('title', text);
-    formData.append('description', this.composerDescription || '');
-    formData.append('propertyType', this.roomModel || '');
+    formData.append('title', text || 'Image modification');
+    formData.append('description', text || 'AI generated design');
+    formData.append('propertyType', this.roomModel || 'General');
     formData.append('enhancementStyle', this.style || 'modern');
 
-    this.pendingFiles.forEach((file, idx) => {
+    this.pendingFiles.forEach((file: File, idx: number) => {
       formData.append('file', file, file.name || `image-${idx}.png`);
     });
 
     this.isUploading = true;
 
     this.propertyService.uploadProperty(formData).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         this.isUploading = false;
 
-        // Replace base64 previews with real URLs
-        this.messages.update(list =>
-          list.map(msg =>
-            msg.id === tempMsg.id
-              ? { ...msg, images: res.generatedImageUrl ? [res.generatedImageUrl] : [] }
-              : msg
-          )
-        );
+        const baseUrl = environment.backendUrl;
+        const originalUrl = res.originalImageUrl ? `${baseUrl}${res.originalImageUrl}` : '';
+        const generatedUrl = res.generatedImageUrl ? `${baseUrl}${res.generatedImageUrl}` : '';
 
-        // Reset forms, etc.
-        this.composerDescription = '';
-        this.pendingImages.set([]);
-        this.pendingFiles = [];
-        this.actionsOpen.set(false);
+        // Update user message with original image URL
+        if (originalUrl) {
+          this.messages.update(list =>
+            list.map(msg =>
+              msg.id === userMsg.id ? { ...msg, images: [originalUrl] } : msg
+            )
+          );
+        }
 
-        const reply: ChatMessage = {
+        // Add AI response with generated image
+        if (generatedUrl) {
+          const aiMsg: ChatMessage = {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            text: '✨ Here is your AI-generated design based on your requirements.',
+            images: [generatedUrl],
+            timestamp: new Date()
+          };
+          this.messages.update(list => [...list, aiMsg]);
+          this.shouldScrollToBottom = true;
+        }
+
+        this.clearComposer();
+      },
+      error: (err: any) => {
+        this.isUploading = false;
+        this.errorMessage = err?.error?.message || 'Failed to generate image. Please try again.';
+        console.error('Upload error:', err);
+
+        // Show error message
+        const errorMsg: ChatMessage = {
           id: crypto.randomUUID(),
           role: 'assistant',
-          text: this.generateAssistantReply(tempMsg),
+          text: `❌ Error: ${this.errorMessage}`,
           timestamp: new Date()
         };
-        this.messages.update(list => [...list, reply]);
-      },
-      error: (err) => {
-        this.isUploading = false;
-        this.errorMessage =
-          err?.error?.message || 'Error uploading property. Please try again.';
+        this.messages.update(list => [...list, errorMsg]);
+        this.shouldScrollToBottom = true;
+
+        this.clearComposer();
       }
     });
   }
 
-  private generateAssistantReply(userMsg: ChatMessage): string {
-    const lines: string[] = [];
-    if (userMsg.images?.length) lines.push(`I see ${userMsg.images.length} image(s).`);
-    if (userMsg.room) lines.push(`Room selected: ${userMsg.room}.`);
-    if (userMsg.style) lines.push(`style selected: ${userMsg.style}.`);
-    if (userMsg.meta?.length) lines.push(`Options: ${userMsg.meta.join(', ')}.`);
-    if (userMsg.text) lines.push(`\nAnswering your request:\n${userMsg.text}`);
-    lines.push('\n(This is a placeholder response. Wire this up to your backend/LLM.)');
-    return lines.join(' ');
+  private clearComposer() {
+    this.composerDescription = '';
+    this.pendingImages.set([]);
+    this.pendingFiles = [];
+    this.actionsOpen.set(false);
   }
 
+  // Image Actions
+  undo() {
+    console.log('Undo action');
+  }
+
+  redo() {
+    console.log('Redo action');
+  }
+
+  saveImage() {
+    if (!this.currentImage) return;
+    alert('Image saved to your gallery!');
+  }
+
+  likeImage() {
+    if (!this.currentImage) return;
+    alert('Image liked! ❤️');
+  }
+
+  dislikeImage() {
+    if (!this.currentImage) return;
+    alert('Feedback recorded. We will improve!');
+  }
+
+  downloadImage() {
+    if (!this.currentImage) return;
+
+    const link = document.createElement('a');
+    link.href = this.currentImage;
+    link.download = `beyanco-design-${Date.now()}.png`;
+    link.click();
+  }
+
+  shareImage() {
+    if (!this.currentImage) return;
+
+    if (navigator.share) {
+      navigator.share({
+        title: 'Check out this design!',
+        text: 'AI-generated interior design from Beyanco',
+        url: this.currentImage
+      }).catch((err: any) => console.error('Share failed:', err));
+    } else {
+      navigator.clipboard.writeText(this.currentImage);
+      alert('Image URL copied to clipboard!');
+    }
+  }
+
+  // Utilities
+  trackById(_: number, item: any): string {
+    return item.id;
+  }
+
+  private scrollToBottom() {
+    if (this.scrollArea) {
+      try {
+        this.scrollArea.nativeElement.scrollTop = this.scrollArea.nativeElement.scrollHeight;
+      } catch (err) {
+        console.error('Scroll error:', err);
+      }
+    }
+  }
+
+  private async convertBase64ToFile(base64: string, filename: string): Promise<File> {
+    const response = await fetch(base64);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: 'image/png' });
+  }
 }

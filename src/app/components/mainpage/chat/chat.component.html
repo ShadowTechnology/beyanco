@@ -1,263 +1,386 @@
 <div class="page" [class.sidebar-collapsed]="sidebarCollapsed">
+  <!-- Sidebar -->
   <aside class="sidebar" [class.collapsed]="sidebarCollapsed"
     [class.open]="mobileSidebarOpen">
     <div class="logo">
-      <i class="far fa-comment"></i>
-      <span *ngIf="!sidebarCollapsed">Beyanco Chat UI</span>
+      <i class="fas fa-comment"></i>
+      <span *ngIf="!sidebarCollapsed">Beyanco AI Chat</span>
       <button class="collapse-btn" (click)="toggleSidebar()">
         <i class="fas"
           [ngClass]="sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
       </button>
     </div>
-    <button class="new-chat" (click)="newChat()"><i class="fas fa-plus"></i> New
-      chat</button>
+
+    <button class="new-chat-btn" (click)="newChat()">
+      <i class="fas fa-plus"></i>
+      <span *ngIf="!sidebarCollapsed">New Chat</span>
+    </button>
+
     <div class="divider"></div>
-    <p class="history-Chats">Recent Chats</p>
-    <div class="history" *ngIf="conversations().length; else noHist">
-      <button *ngFor="let h of conversations(); trackBy: trackById"
+
+    <p class="section-label" *ngIf="!sidebarCollapsed">Recent Chats</p>
+
+    <div class="history-list" *ngIf="conversations().length; else noHistory">
+      <button *ngFor="let conv of conversations(); trackBy: trackById"
         class="history-item"
-        [class.active]="h.id === activeConversationId()"
-        (click)="openConversation(h.id)">
-        <div class="title ellipsis">{{ h.title }}</div>
-        <div class="sub ellipsis">{{ h.preview }}</div>
+        [class.active]="conv.id === activeConversationId()"
+        (click)="openConversation(conv.id)">
+        <i class="fas fa-message"></i>
+        <div class="history-content" *ngIf="!sidebarCollapsed">
+          <div class="history-title">{{ conv.title }}</div>
+          <div class="history-preview">{{ conv.preview }}</div>
+        </div>
       </button>
     </div>
-    <ng-template #noHist>
-      <div class="empty">No history yet</div>
+
+    <ng-template #noHistory>
+      <div class="empty-state" *ngIf="!sidebarCollapsed">
+        <i class="fas fa-inbox"></i>
+        <p>No conversations yet</p>
+      </div>
     </ng-template>
 
     <div class="sidebar-footer">
-      <div class="profile" (click)="goToProfile()">
+      <button class="footer-btn" (click)="goToProfile()" title="Profile">
         <i class="fas fa-user-circle"></i>
-        <span>Profile</span>
-      </div>
-      <button class="settings-btn" title="Settings">
-        <i class="fas fa-cog"></i>
+        <span *ngIf="!sidebarCollapsed">Profile</span>
       </button>
+      <!-- <button class="footer-btn" title="Settings">
+        <i class="fas fa-cog"></i>
+        <span *ngIf="!sidebarCollapsed">Settings</span>
+      </button> -->
     </div>
-
   </aside>
-  
-  <!-- <aside class="sidebar">
-    <div class="logo"><i class="far fa-comment"></i> Beyanco Chat UI</div>
-    <button class="new-chat" (click)="newChat()"><i class="fas fa-plus"></i> New
-      chat</button>
-    <div class="divider"></div>
-    <p class="history-Chats">Recent Chats</p>
-    <div class="history" *ngIf="conversations().length; else noHist">
-      <button
-        *ngFor="let h of conversations(); trackBy: trackById"
-        class="history-item"
-        [class.active]="h.id === activeConversationId()"
-        (click)="openConversation(h.id)">
-        <div class="title ellipsis">{{ h.title }}</div>
-        <div class="sub ellipsis">{{ h.preview }}</div>
-      </button>
-    </div>
-    <ng-template #noHist>
-      <div class="empty">No history yet</div>
-    </ng-template>
 
-    <div class="sidebar-footer">
-      <div class="profile">
-        <i class="fas fa-user-circle"></i>
-        <span>Profile</span>
-      </div>
-      <button class="settings-btn" title="Settings">
-        <i class="fas fa-cog"></i>
-      </button>
-    </div>
-  </aside> -->
+  <!-- Main Chat Area -->
+  <main class="chat-main">
+    <!-- Messages Container -->
+    <div class="messages-container" #scrollArea>
+      <ng-container *ngIf="messages().length; else welcomeScreen">
+        <div *ngFor="let msg of messages(); trackBy: trackById"
+          class="message-wrapper"
+          [class.user-message]="msg.role === 'user'"
+          [class.assistant-message]="msg.role === 'assistant'">
 
-  <main class="chat">
-    <div class="chat-header">
-      <button class="hamburger-btn" (click)="toggleMobileSidebar()">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <div class="room-chip" *ngIf="room()">Room: {{ room() }}</div>
-    </div>
-    
-    <!-- <div class="chat-header">
-      <div class="room-chip" *ngIf="room()">Room: {{ room() }}</div>
-    </div> -->
-
-    <div class="messages" #scrollArea>
-      <ng-container *ngIf="messages().length; else welcome">
-        <div *ngFor="let m of messages(); trackBy: trackById" class="message"
-          [class.user]="m.role==='user'"
-          [class.assistant]="m.role==='assistant'">
-          <div class="avatar"
-            [ngClass]="m.role === 'user' ? 'user-avatar' : 'assistant-avatar'">
-            <i class="fas"
-              [ngClass]="m.role === 'user' ? 'fa-user' : 'fa-robot'"></i>
-          </div>
-          <div class="bubble">
-            <ng-container *ngIf="m.images?.length">
-              <div class="image-strip" *ngIf="m.images?.length">
-                <!-- <img *ngFor="let img of m.images" [src]="img" alt="uploaded" /> -->
-                <img *ngFor="let img of m.images" [src]="img" alt="uploaded">
-              </div>
-            </ng-container>
-            <div class="text" [innerText]="m.text"></div>
-            <div class="meta" *ngIf="m.meta?.length">
-              <span *ngFor="let tag of m.meta" class="tag">{{ tag }}</span>
+          <div class="message-content">
+            <div class="avatar">
+              <i class="fas"
+                [ngClass]="msg.role === 'user' ? 'fa-user' : 'fa-robot'"></i>
             </div>
-            <div class="time">{{ m.timestamp | date:'shortTime' }}</div>
+
+            <div class="message-body">
+              <div class="message-text" *ngIf="msg.text">{{ msg.text }}</div>
+
+              <div class="message-images" *ngIf="msg.images?.length">
+                <img *ngFor="let img of msg.images"
+                  [src]="img"
+                  alt="Image"
+                  class="message-image"
+                  (click)="selectImage(img, $event)" />
+              </div>
+
+              <div class="message-meta" *ngIf="msg.room || msg.style">
+                <span class="meta-tag" *ngIf="msg.room">
+                  <i class="fas fa-door-open"></i> {{ msg.room }}
+                </span>
+                <span class="meta-tag" *ngIf="msg.style">
+                  <i class="fas fa-palette"></i> {{ msg.style }}
+                </span>
+              </div>
+
+              <div class="message-time">{{ msg.timestamp | date:'short' }}</div>
+            </div>
           </div>
         </div>
       </ng-container>
-      <ng-template #welcome>
-        <div class="welcome">
-          <h2>Welcome 👋</h2>
-          <p>Ask anything. Upload an image, pick a room, and describe your task.
-            Results will appear here in a ChatGPT-style thread. Images show
-            above your description.</p>
+
+      <ng-template #welcomeScreen>
+        <div class="welcome-screen">
+          <div class="welcome-icon">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h2>Welcome to Beyanco AI Chat</h2>
+          <p>Upload an image, select a room, and describe your vision. Our AI
+            will bring it to life.</p>
+
+          <div class="quick-actions">
+            <button class="quick-action-btn" (click)="openUploadPopup()">
+              <i class="fas fa-upload"></i>
+              <span>Upload Image</span>
+            </button>
+            <button class="quick-action-btn" (click)="openUploadPopup()">
+              <i class="fas fa-home"></i>
+              <span>Select Room</span>
+            </button>
+          </div>
         </div>
       </ng-template>
+
+      <!-- Loading Indicator -->
+      <div class="loading-indicator" *ngIf="isUploading">
+        <div class="spinner"></div>
+        <span>Generating your design...</span>
+      </div>
     </div>
 
-    <div class="composer" (keydown.control.enter)="send()"
-      (keydown.meta.enter)="send()">
-      <div class="input-wrap">
-        <textarea [(ngModel)]="composerDescription" class="textarea"
-          placeholder="Describe your request..." rows="3"></textarea>
+    <!-- Input Composer -->
+    <div class="composer-container">
+      <div class="composer-wrapper">
+        <div class="composer-input">
+          <!-- ✅ FIXED - use keydown event instead -->
+          <textarea [(ngModel)]="composerDescription"
+            class="composer-textarea"
+            placeholder="Describe your vision..."
+            rows="1"
+            (keydown)="onEnterKey($event)"
+            #textareaRef></textarea>
 
-        <button class="icon-btn plus" (click)="toggleActionsMenu()"
-          title="More actions"><i
-            class="fas fa-plus"></i></button>
+          <div class="composer-actions">
+            <button class="action-btn" (click)="openUploadPopup()"
+              title="Upload & Settings">
+              <i class="fas fa-sliders-h"></i>
+            </button>
 
-        <button class="icon-btn mic" [disabled]="recognizing()"
-          (click)="startVoice()" title="Voice input">
-          <i class="fas fa-microphone"></i>
-        </button>
-        <button class="icon-btn stop" *ngIf="recognizing()"
-          (click)="stopVoice()" title="Stop recording"><i
-            class="fas fa-stop"></i></button>
-        <button class="icon-btn send" (click)="send()" title="Send">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-        <button class="icon-btn room" (click)="showPopup = true"
-          title="Upload & Room">
-          <i class="fas fa-sliders-h"></i>
-        </button>
+            <button class="action-btn"
+              [class.recording]="recognizing()"
+              (click)="recognizing() ? stopVoice() : startVoice()"
+              title="Voice Input">
+              <i class="fas"
+                [ngClass]="recognizing() ? 'fa-stop' : 'fa-microphone'"></i>
+            </button>
 
-        <div class="menu" *ngIf="actionsOpen()">
-          <button class="menu-item" (click)="toggleMeta('Add Photos')"><i
-              class="fas fa-images"></i> Add
-            Photos</button>
-          <button class="menu-item" (click)="toggleMeta('Study & Learn')"><i
-              class="fab fa-leanpub"></i>
-            Study & Learn</button>
-          <button class="menu-item" (click)="toggleMeta('Create Image')"><i
-              class="fas fa-palette"></i>
-            Create Image</button>
-          <button class="menu-item" (click)="toggleMeta('Think Longer')"><i
-              class="fa-solid fa-brain"></i>
-            Think Longer</button>
+            <button class="action-btn send-btn"
+              (click)="send()"
+              [disabled]="!canSend()"
+              title="Send">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="composer-preview" *ngIf="pendingImages().length">
+          <div class="preview-item"
+            *ngFor="let img of pendingImages(); let i = index">
+            <img [src]="img" alt="Preview">
+            <button class="remove-preview" (click)="removePendingImage(i)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </main>
-  <!-- popup -->
-  <div class="popup-backdrop" *ngIf="showPopup">
-    <div class="popup-box">
-      <div class="popup-header">
-        <h2>Setup Chat</h2>
-        <button class="close-btn" (click)="closePopup()">✕</button>
+
+  <!-- Setup Popup -->
+  <div class="modal-overlay" *ngIf="showPopup" (click)="closePopup()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Setup Your Project</h2>
+        <button class="close-modal-btn" (click)="closePopup()">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
 
-      <label class="upload-box" *ngIf="pendingImages().length === 0">
-        <i class="fas fa-cloud-upload-alt upload-icon"></i>
-        <span class="upload-text">
-          Click to upload <br />
-          <small>or drag & drop</small>
-        </span>
-        <input type="file" accept="image/*" multiple
-          (change)="onFiles($event)" />
-      </label>
+      <div class="modal-body">
+        <!-- Upload Area -->
+        <div class="upload-area" *ngIf="!pendingImages().length">
+          <label class="upload-label">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Click to upload or drag & drop</span>
+            <small>PNG, JPG up to 10MB</small>
+            <input type="file" accept="image/*" multiple
+              (change)="onFiles($event)" hidden>
+          </label>
+        </div>
 
-      <!-- Preview uploaded images -->
-      <div class="preview-container">
-        <div class="preview" *ngFor="let img of pendingImages()">
-          <img [src]="img" alt="Uploaded image preview" />
+        <!-- Preview Grid -->
+        <div class="preview-grid" *ngIf="pendingImages().length">
+          <div class="preview-card"
+            *ngFor="let img of pendingImages(); let i = index">
+            <img [src]="img" alt="Preview">
+            <button class="remove-btn" (click)="removePendingImage(i)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Form Fields -->
+        <div class="form-group">
+          <label>Room Type</label>
+          <select [(ngModel)]="roomModel" class="form-select">
+            <option value>Select room...</option>
+            <option *ngFor="let room of rooms" [value]="room">{{ room
+              }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Style Theme</label>
+          <select [(ngModel)]="style" class="form-select">
+            <option value>Select style...</option>
+            <option *ngFor="let s of StyleTags" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>House Style</label>
+          <select [(ngModel)]="Housestyle" class="form-select">
+            <option value>Select house style...</option>
+            <option *ngFor="let hs of HouseStyleTags" [value]="hs">{{ hs
+              }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="popupDescription"
+            class="form-textarea"
+            placeholder="Describe what you want to create..."
+            rows="3"></textarea>
         </div>
       </div>
 
-      <label class="field">
-        <span class="label">Select room</span>
-        <select [(ngModel)]="roomModel">
-          <option [ngValue]="''">— None —</option>
-          <option *ngFor="let r of rooms" [ngValue]="r">{{ r }}</option>
-        </select>
-      </label>
-      <label class="field">
-        <span class="label">Select Theme</span>
-        <select [(ngModel)]="style">
-          <option [ngValue]="''">— None —</option>
-          <option *ngFor="let r of StyleTags" [ngValue]="r">{{ r }}</option>
-        </select>
-      </label>
-      <label class="field">
-        <span class="label">Select House Style</span>
-        <select [(ngModel)]="style">
-          <option [ngValue]="''">— None —</option>
-          <option *ngFor="let r of HouseStyleTags" [ngValue]="r">{{ r }}</option>
-        </select>
-      </label>
-
-      <label class="field">
-        <span class="label">Description</span>
-        <textarea [(ngModel)]="popupDescription" class="textarea"
-          placeholder="Describe your request..." rows="1"></textarea>
-      </label>
-      <div class="d-flex">
-        <button class="confirm-btn" (click)="confirmPopup()">Start Chat</button>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closePopup()">Cancel</button>
+        <button class="btn btn-primary" (click)="confirmPopup()">Start
+          Chat</button>
       </div>
-
     </div>
   </div>
-  
-  <!-- <aside class="right">
-    <button class="right-popup-btn" (click)="showPopup = true"
-      title="Upload & Room">
-      <i class="fas fa-sliders-h"></i>
-    </button>
-  </aside> -->
-  <!-- <aside class="right">
-    <div class="panel">
-      <span class="label">Upload image</span>
-      <label class="upload-box">
-        <i class="fas fa-cloud-upload-alt upload-icon"></i>
-        <span class="upload-text">
-          Click to upload <br />
-          <small>or drag and drop</small>
-        </span>
-        <input type="file" accept="image/*" multiple
-          (change)="onFiles($event)" />
-      </label>
 
-      <label class="field">
-        <span class="label">Select room</span>
-        <select [(ngModel)]="roomModel">
-          <option [ngValue]="''">— None —</option>
-          <option *ngFor="let r of rooms" [ngValue]="r">{{ r }}</option>
-        </select>
-      </label>
+  <!-- Image Viewer Modal -->
+  <div class="modal-overlay" *ngIf="showImagePopup && currentImage"
+    (click)="closeImagePopup()">
+    <div class="modal-content image-modal" (click)="$event.stopPropagation()">
+      <!-- Toolbar -->
+      <div class="image-toolbar">
+        <div class="toolbar-left">
+          <button class="toolbar-btn" (click)="undo()" title="Undo">
+            <i class="fas fa-undo"></i>
+          </button>
+          <button class="toolbar-btn" (click)="redo()" title="Redo">
+            <i class="fas fa-redo"></i>
+          </button>
 
-      <div class="thumbs" *ngIf="pendingImages().length">
-        <div class="thumb" *ngFor="let img of pendingImages(); let i = index">
-          <img [src]="img" alt="preview" />
-          <button class="remove" (click)="removePendingImage(i)"
-            title="Remove">✕</button>
+          <select [(ngModel)]="selectedTool" (change)="openTool(selectedTool)"
+            class="tool-select">
+            <option *ngFor="let tool of tools" [value]="tool">{{ tool
+              }}</option>
+          </select>
+        </div>
+
+        <div class="toolbar-right">
+          <button class="toolbar-btn" (click)="likeImage()" title="Like">
+            <i class="fas fa-thumbs-up"></i>
+          </button>
+          <button class="toolbar-btn" (click)="dislikeImage()" title="Dislike">
+            <i class="fas fa-thumbs-down"></i>
+          </button>
+          <button class="toolbar-btn" (click)="downloadImage()"
+            title="Download">
+            <i class="fas fa-download"></i>
+          </button>
+          <button class="toolbar-btn" (click)="shareImage()" title="Share">
+            <i class="fas fa-share-alt"></i>
+          </button>
+          <button class="toolbar-btn close-btn" (click)="closeImagePopup()">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
       </div>
 
-      <div class="chips" *ngIf="chosenMeta().length">
-        <span class="chip" *ngFor="let m of chosenMeta()"
-          (click)="toggleMeta(m)">{{ m }} ✕</span>
+      <!-- Tool Panels -->
+      <div class="tool-panel" *ngIf="activeTool === 'Magic Eraser'">
+        <h3><i class="fas fa-eraser"></i> Magic Eraser</h3>
+        <p>Remove unwanted objects and clean up your image automatically.</p>
+        <div class="tool-actions">
+          <button class="btn btn-primary" (click)="applyEraser()">
+            <i class="fas fa-magic"></i> Apply Magic Eraser
+          </button>
+          <button class="btn btn-secondary"
+            (click)="closeTool()">Cancel</button>
+        </div>
       </div>
 
-      <div class="hint">Tip: Press Ctrl/Cmd + Enter to send</div>
+      <div class="tool-panel" *ngIf="activeTool === 'Compare Version'">
+        <h3><i class="fas fa-columns"></i> Compare Images</h3>
+
+        <div class="compare-mode-selector">
+          <button class="mode-btn"
+            [class.active]="compareMode === 'horizontal'"
+            (click)="setCompareMode('horizontal')">
+            <i class="fas fa-grip-lines-vertical"></i> Horizontal
+          </button>
+          <button class="mode-btn"
+            [class.active]="compareMode === 'vertical'"
+            (click)="setCompareMode('vertical')">
+            <i class="fas fa-grip-lines"></i> Vertical
+          </button>
+        </div>
+
+        <div class="comparison-container"
+          [class.horizontal]="compareMode === 'horizontal'"
+          [class.vertical]="compareMode === 'vertical'">
+          <div class="comparison-side">
+            <div class="comparison-label">Original</div>
+            <img [src]="currentOriginalImage" *ngIf="currentOriginalImage"
+              alt="Original">
+            <div class="no-image" *ngIf="!currentOriginalImage">No original
+              image</div>
+          </div>
+          <div class="comparison-side">
+            <div class="comparison-label">Generated</div>
+            <img [src]="currentGeneratedImage" *ngIf="currentGeneratedImage"
+              alt="Generated">
+            <div class="no-image" *ngIf="!currentGeneratedImage">No generated
+              image</div>
+          </div>
+        </div>
+
+        <div class="tool-actions">
+          <button class="btn btn-secondary" (click)="closeTool()">Close</button>
+        </div>
+      </div>
+
+      <div class="tool-panel" *ngIf="activeTool === 'Add Element'">
+        <h3><i class="fas fa-plus-circle"></i> Add Element</h3>
+        <p>Select an element to enhance your design:</p>
+
+        <div class="element-grid">
+          <button *ngFor="let el of elements"
+            class="element-card"
+            [class.selected]="selectedElement === el.name"
+            (click)="selectedElement = el.name">
+            <i class="fas fa-lightbulb" *ngIf="el.name === 'Add Lighting'"></i>
+            <i class="fas fa-leaf" *ngIf="el.name === 'Add Plants'"></i>
+            <i class="fas fa-couch" *ngIf="el.name === 'Add Furniture'"></i>
+            <i class="fas fa-image" *ngIf="el.name === 'Add Artwork'"></i>
+            <i class="fas fa-th-large" *ngIf="el.name === 'Add Rug'"></i>
+            <i class="fas fa-window-maximize"
+              *ngIf="el.name === 'Add Curtains'"></i>
+            <span>{{ el.name }}</span>
+          </button>
+        </div>
+
+        <div class="element-description" *ngIf="selectedElement">
+          <strong>Prompt:</strong> {{ getElementPrompt(selectedElement) }}
+        </div>
+
+        <div class="tool-actions">
+          <button class="btn btn-primary"
+            (click)="applyElement()"
+            [disabled]="!selectedElement">
+            <i class="fas fa-check"></i> Apply Element
+          </button>
+          <button class="btn btn-secondary"
+            (click)="closeTool()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Image Display -->
+      <div class="image-display" *ngIf="!activeTool">
+        <img [src]="currentImage" alt="Full size preview">
+      </div>
     </div>
-  </aside> -->
+  </div>
 </div>

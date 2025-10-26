@@ -57,6 +57,6 @@ export class LoginComponent implements OnInit {
   }
 
   redirectAfterLogin(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/home']);
   }
 }
