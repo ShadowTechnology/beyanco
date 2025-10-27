@@ -64,4 +64,10 @@ export class PropertyService {
     });
   }
 
+  getChatProperty(id: number): Observable<Property> {
+    return this.http.get<Property>(`${API_URL}byChat/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
 }

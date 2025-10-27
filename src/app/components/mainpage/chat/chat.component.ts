@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, NO_ERRORS_SCHEMA, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, HostListener, NO_ERRORS_SCHEMA, ViewChild, ElementRef, AfterViewChecked, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,9 @@ import { FormsModule } from '@angular/forms';
 import { computed, signal } from '@angular/core';
 import { PropertyService } from '../../../services/property.service';
 import { environment } from '../../../../environments/environment';
+import { ChatHistoryService } from '../../../services/chathistory.service';
+import { ChatHistory } from '../../../models/chathistory.model';
+import { Property } from '../../../models/property.model';
 
 interface ChatMessage {
   id: string;
@@ -29,10 +32,9 @@ interface ChatMessage {
 export class ChatComponent implements AfterViewChecked {
   @ViewChild('scrollArea') scrollArea?: ElementRef;
   @ViewChild('textareaRef') textareaRef?: ElementRef;
-
-  // State management
-  isUploading = false;
-  errorMessage = '';
+  previewUrls: string[] = [];
+  isUploading: boolean = false;
+  errorMessage: any;
   sidebarCollapsed = false;
   mobileSidebarOpen = false;
   showPopup = false;
@@ -42,10 +44,10 @@ export class ChatComponent implements AfterViewChecked {
   pendingImages = signal<string[]>([]);
   chosenMeta = signal<string[]>([]);
   messages = signal<ChatMessage[]>([]);
-  activeConversationId = signal<string>('c1');
-  conversations = signal<{ id: string; title: string; preview: string }[]>([
-    { id: 'c1', title: 'Sample: Bedroom Design', preview: 'Modern bedroom with natural lighting' },
-    { id: 'c2', title: 'Kitchen Renovation', preview: 'Scandinavian style kitchen' }
+  activeConversationId = signal<number | null>(null);
+  conversations = signal<{ id: string; title: string; }[]>([
+    { id: 'c1', title: 'Sample: Bedroom Design' },
+    { id: 'c2', title: 'Kitchen Renovation' }
   ]);
   recognizing = signal<boolean>(false);
   actionsOpen = signal<boolean>(false);
@@ -83,21 +85,29 @@ export class ChatComponent implements AfterViewChecked {
     { name: 'Add Rug', prompt: 'Add a stylish area rug that complements the room design' },
     { name: 'Add Curtains', prompt: 'Add elegant window treatments and curtains for privacy' }
   ];
+  properties: Property[] = [];
 
   private recognition?: any;
   private shouldScrollToBottom = false;
+  conversationsList: any[] = [];
+  isLoadingProperties = false;
 
   constructor(
     private router: Router,
     private tokenStorage: TokenStorageService,
     private propertyService: PropertyService,
-  ) { }
+    private chatService: ChatHistoryService
+  ) {
+    this.loadChats();
+  }
 
   ngAfterViewChecked() {
     if (this.shouldScrollToBottom) {
       this.scrollToBottom();
       this.shouldScrollToBottom = false;
     }
+    this.currentUser = this.tokenStorage.getUser();
+    // this.loadChats();
   }
 
   // Lifecycle & Event Handlers
@@ -131,15 +141,19 @@ export class ChatComponent implements AfterViewChecked {
     this.router.navigate(['/profile']);
   }
 
-  // Conversation Management
+  room = computed(() => this.roomModel);
+  currentUser: any = {};
+  chatList: ChatHistory[] = [];
+  newChatHistory: ChatHistory = { title: '', messages: '' };
+
   newChat() {
     const id = crypto.randomUUID();
     this.conversations.update(list => {
       const newList = [...list];
-      newList.unshift({ id, title: 'New chat', preview: '' });
+      newList.unshift({ id, title: 'New chat' });
       return newList;
     });
-    this.activeConversationId.set(id);
+    this.activeConversationId.set(0);
     this.messages.set([]);
     this.composerDescription = '';
     this.pendingImages.set([]);
@@ -151,10 +165,25 @@ export class ChatComponent implements AfterViewChecked {
     this.showPopup = true;
   }
 
-  openConversation(id: string) {
-    this.activeConversationId.set(id);
-    // Load conversation messages here
+  openConversation(chatId: number) {
+  this.activeConversationId.set(chatId);
+  this.isLoadingProperties = true;
+
+  this.propertyService.getChatProperty(chatId).subscribe(
+  (res: any) => {
+    this.properties = res;
+    this.isLoadingProperties = false;
+  },
+  (err) => {
+    console.error('Error loading properties:', err);
+    this.isLoadingProperties = false;
   }
+);
+
+}
+
+
+
 
   // Popup Management
   openUploadPopup() {
@@ -275,20 +304,28 @@ export class ChatComponent implements AfterViewChecked {
 
   async applyElement() {
     const element = this.elements.find(e => e.name === this.selectedElement);
-    if (!element || !this.currentGeneratedImage) return;
+    if (!element || !this.currentGeneratedImage && !this.currentOriginalImage) return;
 
     this.composerDescription = element.prompt;
-    this.pendingImages.set([this.currentGeneratedImage]);
+    let file: any;
+    if (this.currentGeneratedImage) {
+      this.pendingImages.set([this.currentGeneratedImage]);
+      file = await this.convertBase64ToFile(this.currentGeneratedImage, 'element-image.png');
+    } else if (this.currentOriginalImage) {
+      this.pendingImages.set([this.currentOriginalImage]);
+      file = await this.convertBase64ToFile(this.currentOriginalImage, 'element-image.png');
+    }
+
 
     // Convert base64 to File
-    const file = await this.convertBase64ToFile(this.currentGeneratedImage, 'element-image.png');
+    // const file = await this.convertBase64ToFile(this.currentGeneratedImage, 'element-image.png');
     this.pendingFiles = [file];
 
-    this.closeTool();
-    this.closeImagePopup();
+    // this.closeTool();
+    // this.closeImagePopup();
 
     // Call send() immediately, no setTimeout
-    this.send();
+    // this.send();
   }
 
 
@@ -388,6 +425,7 @@ export class ChatComponent implements AfterViewChecked {
     formData.append('description', text || 'AI generated design');
     formData.append('propertyType', this.roomModel || 'General');
     formData.append('enhancementStyle', this.style || 'modern');
+    // formData.append('chatHistoryId', this.activeConversationId?.toString() || '');
 
     this.pendingFiles.forEach((file: File, idx: number) => {
       formData.append('file', file, file.name || `image-${idx}.png`);
@@ -395,57 +433,139 @@ export class ChatComponent implements AfterViewChecked {
 
     this.isUploading = true;
 
-    this.propertyService.uploadProperty(formData).subscribe({
-      next: (res: any) => {
-        this.isUploading = false;
+    // ✅ Generate a natural chat title
+    const autoGeneratedTitle = this.generateChatTitle(
+      this.composerDescription,
+      this.roomModel,
+      this.style
+    );
 
-        const baseUrl = environment.backendUrl;
-        const originalUrl = res.originalImageUrl ? `${baseUrl}${res.originalImageUrl}` : '';
-        const generatedUrl = res.generatedImageUrl ? `${baseUrl}${res.generatedImageUrl}` : '';
+    // Prepare chat payload
+    const chatPayload: ChatHistory = {
+      title: autoGeneratedTitle,
+      messages: JSON.stringify([
+        { role: 'user', content: this.composerDescription }
+      ])
+    };
 
-        // Update user message with original image URL
-        if (originalUrl) {
-          this.messages.update(list =>
-            list.map(msg =>
-              msg.id === userMsg.id ? { ...msg, images: [originalUrl] } : msg
-            )
-          );
-        }
+    console.log('Prepared chat payload:', chatPayload);
+    console.log('Uploading files (FormData content):');
+    for (const pair of formData.entries()) {
+      console.log(pair[0] + ':', pair[1]);
+    }
 
-        // Add AI response with generated image
-        if (generatedUrl) {
-          const aiMsg: ChatMessage = {
-            id: crypto.randomUUID(),
-            role: 'assistant',
-            text: '✨ Here is your AI-generated design based on your requirements.',
-            images: [generatedUrl],
-            timestamp: new Date()
-          };
-          this.messages.update(list => [...list, aiMsg]);
-          this.shouldScrollToBottom = true;
-        }
+    // Save chat history
+    this.chatService.createChat(chatPayload).subscribe({
+      next: (data: any) => {
+        console.log('Chat created:', data);
+        this.chatList.unshift(data); // add to top of list
+        this.newChatHistory = { title: '', messages: '' }; // reset form
 
-        this.clearComposer();
+        formData.append('chatHistoryId', data.id);
+
+        this.activeConversationId.set(data.id);
+
+        this.propertyService.uploadProperty(formData).subscribe({
+          next: (res: any) => {
+            this.isUploading = false;
+
+            const baseUrl = environment.backendUrl;
+            const originalUrl = res.originalImageUrl ? `${baseUrl}${res.originalImageUrl}` : '';
+            const generatedUrl = res.generatedImageUrl ? `${baseUrl}${res.generatedImageUrl}` : '';
+
+            // Update user message with original image URL
+            if (originalUrl) {
+              this.messages.update(list =>
+                list.map(msg =>
+                  msg.id === userMsg.id ? { ...msg, images: [originalUrl] } : msg
+                )
+              );
+            }
+
+
+            // Replace previews with uploaded image URLs
+            // this.messages.update(list =>
+            //   list.map(msg =>
+            //     msg.id === userMsg.id
+            //       ? { ...msg, images: res.generatedImageUrl ? [res.generatedImageUrl] : [] }
+            //       : msg
+            //   )
+            // );
+
+            // Add AI response with generated image
+            if (generatedUrl) {
+              const aiMsg: ChatMessage = {
+                id: crypto.randomUUID(),
+                role: 'assistant',
+                text: '✨ Here is your AI-generated design based on your requirements.',
+                images: [generatedUrl],
+                timestamp: new Date()
+              };
+              this.messages.update(list => [...list, aiMsg]);
+              this.shouldScrollToBottom = true;
+              this.loadChats();
+            }
+
+            this.clearComposer();
+          },
+          error: (err: any) => {
+            this.isUploading = false;
+            this.errorMessage = err?.error?.message || 'Failed to generate image. Please try again.';
+            console.error('Upload error:', err);
+
+
+            // Reset composer state
+            this.composerDescription = '';
+            this.pendingImages.set([]);
+            this.pendingFiles = [];
+            this.actionsOpen.set(false);
+
+            // Show error message
+            const errorMsg: ChatMessage = {
+              id: crypto.randomUUID(),
+              role: 'assistant',
+              text: `❌ Error: ${this.errorMessage}`,
+              timestamp: new Date()
+            };
+            this.messages.update(list => [...list, errorMsg]);
+            this.shouldScrollToBottom = true;
+
+            this.clearComposer();
+          }
+        });
       },
-      error: (err: any) => {
-        this.isUploading = false;
-        this.errorMessage = err?.error?.message || 'Failed to generate image. Please try again.';
-        console.error('Upload error:', err);
-
-        // Show error message
-        const errorMsg: ChatMessage = {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          text: `❌ Error: ${this.errorMessage}`,
-          timestamp: new Date()
-        };
-        this.messages.update(list => [...list, errorMsg]);
-        this.shouldScrollToBottom = true;
-
-        this.clearComposer();
-      }
+      error: (err) => console.error('Error creating chat:', err)
     });
   }
+
+  private generateChatTitle(description: string, propertyType?: string, style?: string): string {
+    // Trim and clean up inputs
+    const cleanDesc = (description || '').trim();
+    const cleanType = (propertyType || '').trim();
+    const cleanStyle = (style || '').trim();
+
+    // If description already has multiple words, use it directly
+    if (cleanDesc.split(' ').length >= 5) {
+      return `${cleanStyle ? cleanStyle + ' ' : ''}${cleanType ? cleanType + ' ' : ''}${cleanDesc}`;
+    }
+
+    // Otherwise, auto-build a descriptive title
+    let titleParts: string[] = [];
+
+    if (cleanStyle) titleParts.push(`${cleanStyle.charAt(0).toUpperCase() + cleanStyle.slice(1)} style`);
+    if (cleanType) titleParts.push(cleanType.toLowerCase());
+    if (cleanDesc) titleParts.push(cleanDesc);
+
+    const combined = titleParts.join(' ').trim();
+
+    // Make sure it's at least ~5 words long
+    if (combined.split(' ').length < 5) {
+      return `Design idea for ${cleanType || 'space'} in ${cleanStyle || 'modern'} style with details: ${cleanDesc}`;
+    }
+
+    return combined;
+  }
+
 
   private clearComposer() {
     this.composerDescription = '';
@@ -522,4 +642,16 @@ export class ChatComponent implements AfterViewChecked {
     const blob = await response.blob();
     return new File([blob], filename, { type: 'image/png' });
   }
+
+  loadChats() {
+    this.chatService.getUserChats().subscribe({
+      next: (data) => {
+        // assuming backend returns an array like [{id:1, title:"..."}, ...]
+        this.conversationsList = data;
+        console.log('Loaded chats:', this.conversationsList);
+      },
+      error: (err) => console.error('Error loading chats:', err)
+    });
+  }
+
 }

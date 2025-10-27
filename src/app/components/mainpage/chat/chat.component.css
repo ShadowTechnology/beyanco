@@ -948,6 +948,77 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   }
 }
+.property-gallery {
+  margin: 20px;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+}
+.gallery-title {
+  font-size: 18px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.property-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 10px;
+}
+.image-pair {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+.image-block {
+  flex: 1;
+  position: relative;
+}
+.image-preview {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.img-label {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}
+.property-header h4 {
+  margin: 0;
+  font-size: 16px;
+}
+.property-footer {
+  margin-top: 6px;
+  text-align: right;
+  color: #888;
+  font-size: 12px;
+}
+.loading-properties {
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+}
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #ccc;
+  border-top: 3px solid #333;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin-right: 6px;
+}
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
 
 /* Animations */
 @keyframes fadeIn {
