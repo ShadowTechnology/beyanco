@@ -27,23 +27,29 @@ export class ChatHistoryService {
     });
   }
 
+  getChatById(chatId: number): Observable<ChatHistory> {
+    return this.http.get<ChatHistory>(`${API_URL}${chatId}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
   // ✅ Create a new chat
   createChat(chat: ChatHistory): Observable<ChatHistory> {
     return this.http.post<ChatHistory>(`${API_URL}createChat`, chat, {
       headers: this.getAuthHeaders()
     });
   }
-
+  
   // ✅ Update a chat
   updateChat(id: number, chat: ChatHistory): Observable<ChatHistory> {
-    return this.http.put<ChatHistory>(`${API_URL}updateChat${id}`, chat, {
+    return this.http.put<ChatHistory>(`${API_URL}updateChat/${id}`, chat, {
       headers: this.getAuthHeaders()
     });
   }
 
   // ✅ Delete chat
   deleteChat(id: number): Observable<any> {
-    return this.http.delete(`${API_URL}deleteChat${id}`, {
+    return this.http.delete(`${API_URL}deleteChat/${id}`, {
       headers: this.getAuthHeaders()
     });
   }

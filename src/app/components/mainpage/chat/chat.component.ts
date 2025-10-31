@@ -39,6 +39,7 @@ export class ChatComponent implements AfterViewChecked {
   mobileSidebarOpen = false;
   showPopup = false;
   showImagePopup = false;
+  hasActiveConversation = false;
 
   // ✅ Fixed: Properly typed signals
   pendingImages = signal<string[]>([]);
@@ -59,6 +60,7 @@ export class ChatComponent implements AfterViewChecked {
   composerDescription = '';
   popupDescription = '';
   pendingFiles: File[] = [];
+  isLoadingChat = false;
 
   // Tool states
   activeTool: string | null = null;
@@ -68,6 +70,7 @@ export class ChatComponent implements AfterViewChecked {
   currentGeneratedImage: string | null = null;
   selectedElement = '';
   selectedTool = 'Magic Eraser';
+  compareThumbnails: string[] = []; // store uploaded/generated image thumbnails
 
   // Data
   rooms = ['Kitchen', 'Bedroom', 'Living Room', 'Bathroom', 'Dining', 'Study', 'Office', 'Garage'];
@@ -120,7 +123,25 @@ export class ChatComponent implements AfterViewChecked {
       this.closeTool();
     }
   }
+  // Add thumbnails dynamically
+  addCompareImage(imgUrl: string) {
+    if (this.compareThumbnails.length >= 4) {
+      alert('Maximum 4 images allowed for comparison.');
+      return;
+    }
+    this.compareThumbnails.push(imgUrl);
+  }
 
+  // Select image from thumbnail strip
+  selectCompareImage(imgUrl: string) {
+    this.currentGeneratedImage = imgUrl;
+  }
+
+  // Remove a thumbnail
+  removeCompareImage(index: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.compareThumbnails.splice(index, 1);
+  }
   onEnterKey(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
@@ -148,6 +169,7 @@ export class ChatComponent implements AfterViewChecked {
 
   newChat() {
     const id = crypto.randomUUID();
+    this.hasActiveConversation = false;
     this.conversations.update(list => {
       const newList = [...list];
       newList.unshift({ id, title: 'New chat' });
@@ -163,24 +185,66 @@ export class ChatComponent implements AfterViewChecked {
     this.style = '';
     this.Housestyle = '';
     this.showPopup = true;
+    this.messages.set([]);
+    this.properties = [];
   }
 
   openConversation(chatId: number) {
-  this.activeConversationId.set(chatId);
-  this.isLoadingProperties = true;
+    this.activeConversationId.set(chatId);
+    this.isLoadingChat = true;
+    // Reset image viewer state
+    this.currentImage = null;
+    this.currentOriginalImage = null;
+    this.currentGeneratedImage = null;
+    this.activeTool = null;
+    this.showImagePopup = false;
+    this.isLoadingProperties = true;
+    this.hasActiveConversation = true;
+    // Load chat history
+    this.chatService.getChatById(chatId).subscribe(
+      (chatData: any) => {
+        // Parse messages if stored as JSON string
+        const messages = typeof chatData.messages === 'string'
+          ? JSON.parse(chatData.messages)
+          : chatData.messages;
 
-  this.propertyService.getChatProperty(chatId).subscribe(
-  (res: any) => {
-    this.properties = res;
-    this.isLoadingProperties = false;
-  },
-  (err) => {
-    console.error('Error loading properties:', err);
-    this.isLoadingProperties = false;
+        // Convert to ChatMessage format and populate messages signal
+        const parsedMessages: ChatMessage[] = messages.map((msg: any, index: number) => ({
+          id: msg.id || `msg-${index}`,
+          role: msg.role || 'user',
+          text: msg.content || msg.text || '',
+          timestamp: msg.timestamp ? new Date(msg.timestamp) : new Date(),
+          images: msg.images || [],
+          room: msg.room,
+          style: msg.style
+        }));
+
+        this.messages.set(parsedMessages);
+        this.shouldScrollToBottom = true;
+      },
+      (err) => {
+        console.error('Error loading chat history:', err);
+        this.messages.set([]);
+      }
+    );
+
+    // Load properties (designs)
+    this.propertyService.getChatProperty(chatId).subscribe(
+      (res: any) => {
+        this.properties = res.map((p: any) => ({
+          ...p,
+          originalImageUrl: p.originalImageUrl ? `${environment.backendUrl}${p.originalImageUrl}` : '',
+          generatedImageUrl: p.generatedImageUrl ? `${environment.backendUrl}${p.generatedImageUrl}` : ''
+        }));
+        this.isLoadingProperties = false;
+      },
+      (err) => {
+        console.error('Error loading properties:', err);
+        this.isLoadingProperties = false;
+      }
+    );
+
   }
-);
-
-}
 
 
 
@@ -290,42 +354,48 @@ export class ChatComponent implements AfterViewChecked {
   async applyEraser() {
     if (!this.currentImage) return;
 
-    this.composerDescription = 'Remove unwanted objects and clean up the image using AI magic eraser';
-    this.pendingImages.set([this.currentImage]);
+    console.log('Current image to convert:', this.currentImage); // ✅ Debug log
 
-    const file = await this.convertBase64ToFile(this.currentImage, 'eraser-image.png');
+    const file = await this.convertImageToFile(this.currentImage, 'eraser-image.png');
+    if (!file) {
+      console.error('Conversion failed for:', this.currentImage); // ✅ Error log
+      alert('Image conversion failed. Please upload a valid image first.');
+      return;
+    }
     this.pendingFiles = [file];
-
     this.closeTool();
     this.closeImagePopup();
-
-    this.send(); // ✅ call immediately
+    this.send();
   }
 
   async applyElement() {
     const element = this.elements.find(e => e.name === this.selectedElement);
-    if (!element || !this.currentGeneratedImage && !this.currentOriginalImage) return;
-
-    this.composerDescription = element.prompt;
-    let file: any;
-    if (this.currentGeneratedImage) {
-      this.pendingImages.set([this.currentGeneratedImage]);
-      file = await this.convertBase64ToFile(this.currentGeneratedImage, 'element-image.png');
-    } else if (this.currentOriginalImage) {
-      this.pendingImages.set([this.currentOriginalImage]);
-      file = await this.convertBase64ToFile(this.currentOriginalImage, 'element-image.png');
+    if (!element) {
+      alert('Please select an element to apply.');
+      return;
+    }
+    const baseImage = this.currentGeneratedImage || this.currentOriginalImage;
+    if (!baseImage) {
+      alert('No image found to modify. Please upload or generate an image first.');
+      return;
     }
 
+    this.composerDescription = element.prompt;
+    this.pendingImages.set([baseImage]);
 
-    // Convert base64 to File
-    // const file = await this.convertBase64ToFile(this.currentGeneratedImage, 'element-image.png');
+    // ✅ Use convertImageToFile instead of convertBase64ToFile
+    const file = await this.convertImageToFile(baseImage, 'element-image.png');
+
+    if (!file) {
+      alert('Image conversion failed. Please try again.');
+      return;
+    }
+
     this.pendingFiles = [file];
+    this.closeTool();
+    this.closeImagePopup();
 
-    // this.closeTool();
-    // this.closeImagePopup();
-
-    // Call send() immediately, no setTimeout
-    // this.send();
+    this.send();
   }
 
 
@@ -386,7 +456,11 @@ export class ChatComponent implements AfterViewChecked {
     if (!text && !this.pendingImages().length) {
       return;
     }
-
+    // ✅ Extra guard for failed image conversion
+    if (this.pendingFiles.length === 0 && this.pendingImages().length > 0) {
+      alert('To generate images, please upload a valid photo first.');
+      return;
+    }
     // Create user message
     const userMsg: ChatMessage = {
       id: crypto.randomUUID(),
@@ -472,6 +546,12 @@ export class ChatComponent implements AfterViewChecked {
             const baseUrl = environment.backendUrl;
             const originalUrl = res.originalImageUrl ? `${baseUrl}${res.originalImageUrl}` : '';
             const generatedUrl = res.generatedImageUrl ? `${baseUrl}${res.generatedImageUrl}` : '';
+            if (generatedUrl) {
+              this.addCompareImage(generatedUrl);
+            }
+            if (originalUrl) {
+              this.addCompareImage(originalUrl);
+            }
 
             // Update user message with original image URL
             if (originalUrl) {
@@ -636,12 +716,62 @@ export class ChatComponent implements AfterViewChecked {
       }
     }
   }
-
-  private async convertBase64ToFile(base64: string, filename: string): Promise<File> {
-    const response = await fetch(base64);
-    const blob = await response.blob();
-    return new File([blob], filename, { type: 'image/png' });
+  private async convertImageToFile(image: string, filename: string): Promise<File | null> {
+    try {
+      if (image.startsWith('data:')) {
+        // Data URL
+        const arr = image.split(',');
+        const mimeMatch = arr[0].match(/:(.*?);/);
+        if (!mimeMatch) return null;
+        const mime = mimeMatch[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) u8arr[n] = bstr.charCodeAt(n);
+        return new File([u8arr], filename, { type: mime });
+      } else if (image.startsWith('http')) {
+        // HTTP URL
+        const response = await fetch(image);
+        const blob = await response.blob();
+        return new File([blob], filename, { type: blob.type });
+      } else {
+        console.error('Invalid image string:', image);
+        return null;
+      }
+    } catch (err) {
+      console.error('Error converting image to file:', err);
+      return null;
+    }
   }
+
+  private async convertBase64ToFile(base64: string, filename: string): Promise<File | null> {
+    try {
+      if (!base64.startsWith('data:')) {
+        console.error('Invalid base64 string:', base64);
+        return null;
+      }
+      const arr = base64.split(',');
+      const mimeMatch = arr[0].match(/:(.*?);/);
+      if (!mimeMatch) return null;
+      const mime = mimeMatch[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) u8arr[n] = bstr.charCodeAt(n);
+      return new File([u8arr], filename, { type: mime });
+    } catch (err) {
+      console.error('Error converting base64 to file:', err);
+      return null;
+    }
+  }
+
+
+
+  // private async convertBase64ToFile(base64: string, filename: string): Promise<File> {
+  //   const response = await fetch(base64);
+  //   const blob = await response.blob();
+  //   return new File([blob], filename, { type: 'image/png' });
+  // }
 
   loadChats() {
     this.chatService.getUserChats().subscribe({
