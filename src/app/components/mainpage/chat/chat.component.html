@@ -72,8 +72,7 @@
         <div *ngFor="let msg of messages(); trackBy: trackById"
           class="message-wrapper"
           [class.user-message]="msg.role === 'user'"
-          [class.assistant-message]="msg.role === 'assistant'"
-         >
+          [class.assistant-message]="msg.role === 'assistant'">
 
           <div class="message-content">
             <div class="avatar">
@@ -87,8 +86,7 @@
 
               <div class="message-images" *ngIf="msg.images?.length">
                 <img *ngFor="let img of msg.images" [src]="img" alt="Image"
-                  class="message-image" (click)="selectImage(img, $event)"
-                  />
+                  class="message-image" (click)="selectImage(img, $event)" />
               </div>
 
               <div class="message-meta" *ngIf="msg.room || msg.style">
@@ -129,11 +127,10 @@
       </ng-template>
 
       <!-- Loading Indicator -->
-      <div class="loading-indicator"
-        *ngIf="isUploading || isLoadingChat">
+      <div class="loading-indicator" *ngIf="isUploading">
         <div class="spinner"></div>
-        <span>Loading chat history...</span>
-    </div>
+        <span>Generating your design...</span>
+      </div>
 
     </div>
 
@@ -355,36 +352,44 @@
           <button class="btn btn-primary" (click)="applyEraser()">
             <i class="fas fa-magic"></i> Apply Magic Eraser
           </button>
-          <button class="btn btn-secondary"
-            (click)="closeTool()">Cancel</button>
+          <!-- <button class="btn btn-secondary"
+            (click)="closeTool()">Cancel</button> -->
         </div>
       </div>
       <div class="tool-panel" *ngIf="activeTool === 'Compare Version'">
-        <h3>
-          <i class="fas fa-columns"></i> Compare Images
-        </h3>
+        <h3><i class="fas fa-columns"></i> Compare Images</h3>
 
-        <!-- ✅ Thumbnail Strip -->
+        <!-- Thumbnail Strip with Load More -->
         <div class="thumbnail-strip">
           <div
             class="thumb"
-            *ngFor="let img of compareThumbnails; let i = index"
-            (click)="selectCompareImage(img)">
+            *ngFor="let img of visibleThumbnails; let i = index"
+            draggable="true"
+            (dragstart)="onDragStart($event, img)">
             <img [src]="img" alt="Thumbnail" />
             <button class="remove-btn" (click)="removeCompareImage(i, $event)">
               <i class="fas fa-times"></i>
             </button>
           </div>
 
-          <!-- limit to 4 -->
-          <div
-            *ngIf="compareThumbnails.length === 0"
-            class="no-thumbs">
+          <div class="load-more"
+            *ngIf="compareThumbnails.length > visibleThumbnails.length">
+            <button (click)="loadMoreThumbnails()">Load More</button>
+          </div>
+
+          <div class="no-thumbs" *ngIf="compareThumbnails.length === 0">
             No images yet
           </div>
         </div>
 
-        <!-- ✅ Orientation buttons -->
+        <!-- Dropdown for number of boxes -->
+        <div class="compare-box-selector">
+          <label style="margin: 0;">Number of comparison boxes:</label>
+          <select class="dropdown-count" [(ngModel)]="numCompareBoxes">
+            <option *ngFor="let n of [2,4,6]" [value]="n">{{n}}</option>
+          </select>
+        </div>
+        <!-- Orientation buttons -->
         <div class="compare-mode-selector">
           <button
             class="mode-btn"
@@ -399,38 +404,27 @@
             <i class="fas fa-grip-lines"></i> Vertical
           </button>
         </div>
-
-        <!-- ✅ Comparison Area -->
+        <!-- Comparison Area -->
         <div
           class="comparison-container"
           [class.horizontal]="compareMode === 'horizontal'"
           [class.vertical]="compareMode === 'vertical'">
-          <div class="comparison-side">
-            <div class="comparison-label">Original</div>
-            <img
-              [src]="currentOriginalImage"
-              *ngIf="currentOriginalImage"
-              alt="Original" />
-            <div class="no-image" *ngIf="!currentOriginalImage">
-              No original image
-            </div>
-          </div>
 
-          <div class="comparison-side">
-            <div class="comparison-label">Generated</div>
-            <img
-              [src]="currentGeneratedImage"
-              *ngIf="currentGeneratedImage"
-              alt="Generated" />
-            <div class="no-image" *ngIf="!currentGeneratedImage">
-              No generated image
-            </div>
+          <div
+            class="comparison-side"
+            *ngFor="let box of compareBoxes; let i = index"
+            (drop)="onDrop($event, i)"
+            (dragover)="onDragOver($event)">
+
+            <div class="comparison-label">Box {{i+1}}</div>
+            <img *ngIf="box" [src]="box" alt="Comparison" />
+            <div class="no-image" *ngIf="!box">Drop image here</div>
           </div>
         </div>
 
-        <div class="tool-actions">
+        <!-- <div class="tool-actions">
           <button class="btn btn-secondary" (click)="closeTool()">Close</button>
-        </div>
+        </div> -->
       </div>
 
       <!-- <div class="tool-panel" *ngIf="activeTool === 'Compare Version'">
@@ -494,8 +488,8 @@
             [disabled]="!selectedElement">
             <i class="fas fa-check"></i> Apply Element
           </button>
-          <button class="btn btn-secondary"
-            (click)="closeTool()">Cancel</button>
+          <!-- <button class="btn btn-secondary"
+            (click)="closeTool()">Cancel</button> -->
         </div>
       </div>
 

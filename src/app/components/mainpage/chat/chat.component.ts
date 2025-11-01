@@ -41,6 +41,12 @@ export class ChatComponent implements AfterViewChecked {
   showImagePopup = false;
   hasActiveConversation = false;
 
+  compareThumbnails = signal<string[]>([]);
+  visibleThumbnails: string[] = [];
+  thumbnailBatch = 10;
+  numCompareBoxes: number = 2;
+  compareBoxes: (string | null)[] = [];
+
   // ✅ Fixed: Properly typed signals
   pendingImages = signal<string[]>([]);
   chosenMeta = signal<string[]>([]);
@@ -70,7 +76,6 @@ export class ChatComponent implements AfterViewChecked {
   currentGeneratedImage: string | null = null;
   selectedElement = '';
   selectedTool = 'Magic Eraser';
-  compareThumbnails: string[] = []; // store uploaded/generated image thumbnails
 
   // Data
   rooms = ['Kitchen', 'Bedroom', 'Living Room', 'Bathroom', 'Dining', 'Study', 'Office', 'Garage'];
@@ -124,30 +129,91 @@ export class ChatComponent implements AfterViewChecked {
     }
   }
   // Add thumbnails dynamically
-  addCompareImage(imgUrl: string) {
-    if (this.compareThumbnails.length >= 4) {
-      alert('Maximum 4 images allowed for comparison.');
-      return;
+addCompareImage(imgUrl: string) {
+  this.compareThumbnails.update(arr => {
+    if (arr.length >= 10) { // max 10
+      alert('Maximum 10 images allowed for comparison.');
+      return arr;
     }
-    this.compareThumbnails.push(imgUrl);
-  }
+    return [...arr, imgUrl]; // append
+  });
+
+  // Update visible thumbnails for the strip
+  this.updateVisibleThumbnails();
+}
+
 
   // Select image from thumbnail strip
   selectCompareImage(imgUrl: string) {
     this.currentGeneratedImage = imgUrl;
   }
 
-  // Remove a thumbnail
-  removeCompareImage(index: number, event: MouseEvent) {
-    event.stopPropagation();
-    this.compareThumbnails.splice(index, 1);
-  }
+removeCompareImage(index: number, event: MouseEvent) {
+  event.stopPropagation();
+  this.compareThumbnails.update(arr => {
+    const copy = [...arr];
+    copy.splice(index, 1);
+    return copy;
+  });
+
+  // Update visible thumbnails after removal
+  this.updateVisibleThumbnails();
+}
+
   onEnterKey(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       this.send();
     }
   }
+
+// Update visible thumbnails whenever thumbnails change
+updateVisibleThumbnails() {
+  this.visibleThumbnails = this.compareThumbnails().slice(0, this.thumbnailBatch);
+}
+
+// Load more thumbnails
+loadMoreThumbnails() {
+  this.thumbnailBatch += 10;
+  this.updateVisibleThumbnails();
+}
+
+// Watch for changes in compareThumbnails
+ngOnChanges() {
+  this.updateVisibleThumbnails();
+}
+
+// Handle drag & drop
+onDragStart(event: DragEvent, img: string) {
+  event.dataTransfer?.setData('text/plain', img);
+}
+
+onDragOver(event: DragEvent) {
+  event.preventDefault();
+}
+
+onDrop(event: DragEvent, boxIndex: number) {
+  event.preventDefault();
+  const img = event.dataTransfer?.getData('text/plain');
+  if (!img) return;
+
+  // Assign dragged image to chosen box
+  if (boxIndex < this.numCompareBoxes) {
+    this.compareBoxes[boxIndex] = img;
+  }
+}
+
+// Watch for dropdown changes
+ngDoCheck() {
+  // Update compareBoxes array based on selected number of boxes
+  if (this.compareBoxes.length !== this.numCompareBoxes) {
+    const newBoxes: (string | null)[] = [];
+    for (let i = 0; i < this.numCompareBoxes; i++) {
+      newBoxes[i] = this.compareBoxes[i] || null;
+    }
+    this.compareBoxes = newBoxes;
+  }
+}
 
   // Navigation
   toggleSidebar() {
