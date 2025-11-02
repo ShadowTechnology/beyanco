@@ -61,14 +61,14 @@ import { TokenStorageService } from '../../services/token-storage.service';
     }
 
     .logo {
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: #2a3990;
       text-decoration: none;
     }
 
     .tagline {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       color: #666;
     }
 
@@ -212,7 +212,10 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.isLoggedIn = !!this.tokenStorage.getToken();
+    // this.isLoggedIn = !!this.tokenStorage.getToken();
+     this.tokenStorage.isLoggedIn$.subscribe(status => {
+    this.isLoggedIn = status;
+  });
   }
 
   logout(event: Event): void {

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -7,15 +8,20 @@ const USER_KEY = 'auth-user';
   providedIn: 'root'
 })
 export class TokenStorageService {
+  private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem(TOKEN_KEY));
+  isLoggedIn$ = this.loggedIn.asObservable();
+
   constructor() { }
 
   signOut(): void {
-    window.localStorage.clear();
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.removeItem(USER_KEY);
+    this.loggedIn.next(false);
   }
 
   public saveToken(token: string): void {
-    window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.setItem(TOKEN_KEY, token);
+    this.loggedIn.next(true);
   }
 
   public getToken(): string | null {
@@ -23,7 +29,7 @@ export class TokenStorageService {
   }
 
   public saveUser(user: any): void {
-    window.localStorage.removeItem(USER_KEY);
+    // window.localStorage.removeItem(USER_KEY);
     window.localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
