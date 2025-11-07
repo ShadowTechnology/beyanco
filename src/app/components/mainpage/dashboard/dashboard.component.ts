@@ -5,6 +5,7 @@ import { PropertyService } from '../../../services/property.service';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +18,8 @@ export class DashboardComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
   currentUser: any = {};
-sliderValues: number[] = []; // stores each slider's value
+  sliderValues: number[] = []; // stores each slider's value
+  environment = environment;
 
   property = {
     originalImageUrl: '/uploads/original.jpg',
@@ -27,7 +29,7 @@ sliderValues: number[] = []; // stores each slider's value
   constructor(
     private propertyService: PropertyService,
     private tokenStorage: TokenStorageService,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit(): void {

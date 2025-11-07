@@ -35,10 +35,10 @@
         <!-- Image Comparison -->
         <div class="image-comparison">
           <div class="image after">
-            <img [src]="'http://localhost:8080' + property.generatedImageUrl" alt="After">
+            <img [src]="`${environment.backendUrl}` + property.generatedImageUrl" alt="After">
           </div>
           <div class="image before" [style.width.%]="sliderValues[i]">
-            <img [src]="'http://localhost:8080' + property.originalImageUrl" alt="Before">
+            <img [src]="`${environment.backendUrl}` + property.originalImageUrl" alt="Before">
           </div>
           <input type="range" min="0" max="100" [(ngModel)]="sliderValues[i]" />
         </div>

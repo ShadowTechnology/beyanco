@@ -129,18 +129,18 @@ export class ChatComponent implements AfterViewChecked {
     }
   }
   // Add thumbnails dynamically
-addCompareImage(imgUrl: string) {
-  this.compareThumbnails.update(arr => {
-    if (arr.length >= 10) { // max 10
-      alert('Maximum 10 images allowed for comparison.');
-      return arr;
-    }
-    return [...arr, imgUrl]; // append
-  });
+  addCompareImage(imgUrl: string) {
+    this.compareThumbnails.update(arr => {
+      if (arr.length >= 10) { // max 10
+        alert('Maximum 10 images allowed for comparison.');
+        return arr;
+      }
+      return [...arr, imgUrl]; // append
+    });
 
-  // Update visible thumbnails for the strip
-  this.updateVisibleThumbnails();
-}
+    // Update visible thumbnails for the strip
+    this.updateVisibleThumbnails();
+  }
 
 
   // Select image from thumbnail strip
@@ -148,17 +148,17 @@ addCompareImage(imgUrl: string) {
     this.currentGeneratedImage = imgUrl;
   }
 
-removeCompareImage(index: number, event: MouseEvent) {
-  event.stopPropagation();
-  this.compareThumbnails.update(arr => {
-    const copy = [...arr];
-    copy.splice(index, 1);
-    return copy;
-  });
+  removeCompareImage(index: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.compareThumbnails.update(arr => {
+      const copy = [...arr];
+      copy.splice(index, 1);
+      return copy;
+    });
 
-  // Update visible thumbnails after removal
-  this.updateVisibleThumbnails();
-}
+    // Update visible thumbnails after removal
+    this.updateVisibleThumbnails();
+  }
 
   onEnterKey(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -167,53 +167,53 @@ removeCompareImage(index: number, event: MouseEvent) {
     }
   }
 
-// Update visible thumbnails whenever thumbnails change
-updateVisibleThumbnails() {
-  this.visibleThumbnails = this.compareThumbnails().slice(0, this.thumbnailBatch);
-}
-
-// Load more thumbnails
-loadMoreThumbnails() {
-  this.thumbnailBatch += 10;
-  this.updateVisibleThumbnails();
-}
-
-// Watch for changes in compareThumbnails
-ngOnChanges() {
-  this.updateVisibleThumbnails();
-}
-
-// Handle drag & drop
-onDragStart(event: DragEvent, img: string) {
-  event.dataTransfer?.setData('text/plain', img);
-}
-
-onDragOver(event: DragEvent) {
-  event.preventDefault();
-}
-
-onDrop(event: DragEvent, boxIndex: number) {
-  event.preventDefault();
-  const img = event.dataTransfer?.getData('text/plain');
-  if (!img) return;
-
-  // Assign dragged image to chosen box
-  if (boxIndex < this.numCompareBoxes) {
-    this.compareBoxes[boxIndex] = img;
+  // Update visible thumbnails whenever thumbnails change
+  updateVisibleThumbnails() {
+    this.visibleThumbnails = this.compareThumbnails().slice(0, this.thumbnailBatch);
   }
-}
 
-// Watch for dropdown changes
-ngDoCheck() {
-  // Update compareBoxes array based on selected number of boxes
-  if (this.compareBoxes.length !== this.numCompareBoxes) {
-    const newBoxes: (string | null)[] = [];
-    for (let i = 0; i < this.numCompareBoxes; i++) {
-      newBoxes[i] = this.compareBoxes[i] || null;
+  // Load more thumbnails
+  loadMoreThumbnails() {
+    this.thumbnailBatch += 10;
+    this.updateVisibleThumbnails();
+  }
+
+  // Watch for changes in compareThumbnails
+  ngOnChanges() {
+    this.updateVisibleThumbnails();
+  }
+
+  // Handle drag & drop
+  onDragStart(event: DragEvent, img: string) {
+    event.dataTransfer?.setData('text/plain', img);
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  onDrop(event: DragEvent, boxIndex: number) {
+    event.preventDefault();
+    const img = event.dataTransfer?.getData('text/plain');
+    if (!img) return;
+
+    // Assign dragged image to chosen box
+    if (boxIndex < this.numCompareBoxes) {
+      this.compareBoxes[boxIndex] = img;
     }
-    this.compareBoxes = newBoxes;
   }
-}
+
+  // Watch for dropdown changes
+  ngDoCheck() {
+    // Update compareBoxes array based on selected number of boxes
+    if (this.compareBoxes.length !== this.numCompareBoxes) {
+      const newBoxes: (string | null)[] = [];
+      for (let i = 0; i < this.numCompareBoxes; i++) {
+        newBoxes[i] = this.compareBoxes[i] || null;
+      }
+      this.compareBoxes = newBoxes;
+    }
+  }
 
   // Navigation
   toggleSidebar() {
@@ -232,6 +232,7 @@ ngDoCheck() {
   currentUser: any = {};
   chatList: ChatHistory[] = [];
   newChatHistory: ChatHistory = { title: '', messages: '' };
+  chatId: any;
 
   newChat() {
     const id = crypto.randomUUID();
@@ -256,6 +257,7 @@ ngDoCheck() {
   }
 
   openConversation(chatId: number) {
+    this.chatId = chatId;
     this.activeConversationId.set(chatId);
     this.isLoadingChat = true;
     // Reset image viewer state
@@ -436,35 +438,48 @@ ngDoCheck() {
 
   async applyElement() {
     const element = this.elements.find(e => e.name === this.selectedElement);
-    if (!element) {
-      alert('Please select an element to apply.');
-      return;
-    }
-    const baseImage = this.currentGeneratedImage || this.currentOriginalImage;
-    if (!baseImage) {
+    if (!element) return alert('Please select an element to apply.');
+
+    const baseImagePath = this.currentGeneratedImage || this.currentOriginalImage;
+
+    if (!baseImagePath) {
       alert('No image found to modify. Please upload or generate an image first.');
       return;
     }
 
     this.composerDescription = element.prompt;
-    this.pendingImages.set([baseImage]);
 
-    // ✅ Use convertImageToFile instead of convertBase64ToFile
-    const file = await this.convertImageToFile(baseImage, 'element-image.png');
+    try {
+      // ✅ Convert PATH → actual File
+      const file = await this.fetchImageAsFile(baseImagePath, 'element-image.png');
 
-    if (!file) {
-      alert('Image conversion failed. Please try again.');
-      return;
+      this.pendingFiles = [file];
+      this.pendingImages.set([baseImagePath]);
+
+      this.closeTool();
+      this.closeImagePopup();
+      this.send();
+    } catch (e) {
+      alert("Image conversion failed. Check console.");
     }
-
-    this.pendingFiles = [file];
-    this.closeTool();
-    this.closeImagePopup();
-
-    this.send();
   }
 
 
+  async fetchImageAsFile(imageUrl: string, fileName: string): Promise<File> {
+    try {
+      const res = await fetch(imageUrl);
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch image: " + res.status);
+      }
+
+      const blob = await res.blob();
+      return new File([blob], fileName, { type: blob.type });
+    } catch (err) {
+      console.error("fetchImageAsFile() error:", err);
+      throw err;
+    }
+  }
 
   getElementPrompt(elementName: string): string {
     const element = this.elements.find(e => e.name === elementName);
@@ -594,94 +609,176 @@ ngDoCheck() {
       console.log(pair[0] + ':', pair[1]);
     }
 
-    // Save chat history
-    this.chatService.createChat(chatPayload).subscribe({
-      next: (data: any) => {
-        console.log('Chat created:', data);
-        this.chatList.unshift(data); // add to top of list
-        this.newChatHistory = { title: '', messages: '' }; // reset form
+    if (!this.chatId) {
+      // Save chat history
+      this.chatService.createChat(chatPayload).subscribe({
+        next: (data: any) => {
+          this.chatId = data.id;
+          console.log('Chat created:', data);
+          this.chatList.unshift(data); // add to top of list
+          this.newChatHistory = { title: '', messages: '' }; // reset form
 
-        formData.append('chatHistoryId', data.id);
+          formData.append('chatHistoryId', data.id);
 
-        this.activeConversationId.set(data.id);
+          this.activeConversationId.set(data.id);
 
-        this.propertyService.uploadProperty(formData).subscribe({
-          next: (res: any) => {
-            this.isUploading = false;
+          this.propertyService.uploadProperty(formData).subscribe({
+            next: (res: any) => {
+              this.isUploading = false;
 
-            const baseUrl = environment.backendUrl;
-            const originalUrl = res.originalImageUrl ? `${baseUrl}${res.originalImageUrl}` : '';
-            const generatedUrl = res.generatedImageUrl ? `${baseUrl}${res.generatedImageUrl}` : '';
-            if (generatedUrl) {
-              this.addCompareImage(generatedUrl);
-            }
-            if (originalUrl) {
-              this.addCompareImage(originalUrl);
-            }
+              const baseUrl = environment.backendUrl;
+              const originalUrl = res.originalImageUrl ? `${baseUrl}${res.originalImageUrl}` : '';
+              const generatedUrl = res.generatedImageUrl ? `${baseUrl}${res.generatedImageUrl}` : '';
+              if (generatedUrl) {
+                this.addCompareImage(generatedUrl);
+              }
+              if (originalUrl) {
+                this.addCompareImage(originalUrl);
+              }
 
-            // Update user message with original image URL
-            if (originalUrl) {
-              this.messages.update(list =>
-                list.map(msg =>
-                  msg.id === userMsg.id ? { ...msg, images: [originalUrl] } : msg
-                )
-              );
-            }
+              // Update user message with original image URL
+              if (originalUrl) {
+                this.messages.update(list =>
+                  list.map(msg =>
+                    msg.id === userMsg.id ? { ...msg, images: [originalUrl] } : msg
+                  )
+                );
+              }
 
 
-            // Replace previews with uploaded image URLs
-            // this.messages.update(list =>
-            //   list.map(msg =>
-            //     msg.id === userMsg.id
-            //       ? { ...msg, images: res.generatedImageUrl ? [res.generatedImageUrl] : [] }
-            //       : msg
-            //   )
-            // );
+              // Replace previews with uploaded image URLs
+              // this.messages.update(list =>
+              //   list.map(msg =>
+              //     msg.id === userMsg.id
+              //       ? { ...msg, images: res.generatedImageUrl ? [res.generatedImageUrl] : [] }
+              //       : msg
+              //   )
+              // );
 
-            // Add AI response with generated image
-            if (generatedUrl) {
-              const aiMsg: ChatMessage = {
+              // Add AI response with generated image
+              if (generatedUrl) {
+                const aiMsg: ChatMessage = {
+                  id: crypto.randomUUID(),
+                  role: 'assistant',
+                  text: '✨ Here is your AI-generated design based on your requirements.',
+                  images: [generatedUrl],
+                  timestamp: new Date()
+                };
+                this.messages.update(list => [...list, aiMsg]);
+                this.shouldScrollToBottom = true;
+                this.loadChats();
+              }
+
+              this.clearComposer();
+            },
+            error: (err: any) => {
+              this.isUploading = false;
+              this.errorMessage = err?.error?.message || 'Failed to generate image. Please try again.';
+              console.error('Upload error:', err);
+
+
+              // Reset composer state
+              this.composerDescription = '';
+              this.pendingImages.set([]);
+              this.pendingFiles = [];
+              this.actionsOpen.set(false);
+
+              // Show error message
+              const errorMsg: ChatMessage = {
                 id: crypto.randomUUID(),
                 role: 'assistant',
-                text: '✨ Here is your AI-generated design based on your requirements.',
-                images: [generatedUrl],
+                text: `❌ Error: ${this.errorMessage}`,
                 timestamp: new Date()
               };
-              this.messages.update(list => [...list, aiMsg]);
+              this.messages.update(list => [...list, errorMsg]);
               this.shouldScrollToBottom = true;
-              this.loadChats();
+
+              this.clearComposer();
             }
+          });
+        },
+        error: (err) => console.error('Error creating chat:', err)
+      });
+    } else {
+      formData.append('chatHistoryId', this.chatId);
 
-            this.clearComposer();
-          },
-          error: (err: any) => {
-            this.isUploading = false;
-            this.errorMessage = err?.error?.message || 'Failed to generate image. Please try again.';
-            console.error('Upload error:', err);
+      this.activeConversationId.set(this.chatId);
+
+      this.propertyService.uploadProperty(formData).subscribe({
+        next: (res: any) => {
+          this.isUploading = false;
+
+          const baseUrl = environment.backendUrl;
+          const originalUrl = res.originalImageUrl ? `${baseUrl}${res.originalImageUrl}` : '';
+          const generatedUrl = res.generatedImageUrl ? `${baseUrl}${res.generatedImageUrl}` : '';
+          if (generatedUrl) {
+            this.addCompareImage(generatedUrl);
+          }
+          if (originalUrl) {
+            this.addCompareImage(originalUrl);
+          }
+
+          // Update user message with original image URL
+          if (originalUrl) {
+            this.messages.update(list =>
+              list.map(msg =>
+                msg.id === userMsg.id ? { ...msg, images: [originalUrl] } : msg
+              )
+            );
+          }
 
 
-            // Reset composer state
-            this.composerDescription = '';
-            this.pendingImages.set([]);
-            this.pendingFiles = [];
-            this.actionsOpen.set(false);
+          // Replace previews with uploaded image URLs
+          // this.messages.update(list =>
+          //   list.map(msg =>
+          //     msg.id === userMsg.id
+          //       ? { ...msg, images: res.generatedImageUrl ? [res.generatedImageUrl] : [] }
+          //       : msg
+          //   )
+          // );
 
-            // Show error message
-            const errorMsg: ChatMessage = {
+          // Add AI response with generated image
+          if (generatedUrl) {
+            const aiMsg: ChatMessage = {
               id: crypto.randomUUID(),
               role: 'assistant',
-              text: `❌ Error: ${this.errorMessage}`,
+              text: '✨ Here is your AI-generated design based on your requirements.',
+              images: [generatedUrl],
               timestamp: new Date()
             };
-            this.messages.update(list => [...list, errorMsg]);
+            this.messages.update(list => [...list, aiMsg]);
             this.shouldScrollToBottom = true;
-
-            this.clearComposer();
+            this.loadChats();
           }
-        });
-      },
-      error: (err) => console.error('Error creating chat:', err)
-    });
+
+          this.clearComposer();
+        },
+        error: (err: any) => {
+          this.isUploading = false;
+          this.errorMessage = err?.error?.message || 'Failed to generate image. Please try again.';
+          console.error('Upload error:', err);
+
+
+          // Reset composer state
+          this.composerDescription = '';
+          this.pendingImages.set([]);
+          this.pendingFiles = [];
+          this.actionsOpen.set(false);
+
+          // Show error message
+          const errorMsg: ChatMessage = {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            text: `❌ Error: ${this.errorMessage}`,
+            timestamp: new Date()
+          };
+          this.messages.update(list => [...list, errorMsg]);
+          this.shouldScrollToBottom = true;
+
+          this.clearComposer();
+        }
+      });
+    }
   }
 
   private generateChatTitle(description: string, propertyType?: string, style?: string): string {

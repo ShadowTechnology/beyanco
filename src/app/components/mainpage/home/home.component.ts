@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { MatIconModule } from '@angular/material/icon';
+import { HealthService } from '../../../services/HealthService.service';
 
 @Component({
   selector: 'app-home',
@@ -11,16 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
-  constructor(
-    private router: Router,
-    private tokenStorage: TokenStorageService
-  ) {
-    // Check if user is already logged in
-    // if (this.tokenStorage.getToken()) {
-    //   this.router.navigate(['/dashboard']);
-    // }
-  }
+export class HomeComponent implements OnInit{
   banners = [
     { imageUrl: 'assets/images/banner1.jpg' },
     { imageUrl: 'assets/images/banner2.jpg' },
@@ -47,8 +39,33 @@ export class HomeComponent {
       after: 'https://organizeddad.com/wp-content/uploads/2022/04/dl.beatsnoop.com-1649008255-3.jpg'
     }
   ];
+  
 
   sliderValues: number[] = this.transformations.map(() => 50);
+  healthStatus: any;
+
+  constructor(
+    private router: Router,
+    private tokenStorage: TokenStorageService,
+    private healthService: HealthService
+  ) {
+    // Check if user is already logged in
+    // if (this.tokenStorage.getToken()) {
+    //   this.router.navigate(['/dashboard']);
+    // }
+  }
+
+  ngOnInit(): void {
+    // this.healthService.getHealthCheck().subscribe({
+    //   next: (data) => {
+    //     console.log('✅ Health Check:', data);
+    //     this.healthStatus = data;
+    //   },
+    //   error: (err) => {
+    //     console.error('❌ Error fetching health check:', err);
+    //   }
+    // });
+  }
 
   onSlider(index: number, e: Event) {
     const val = Number((e.target as HTMLInputElement).value);
