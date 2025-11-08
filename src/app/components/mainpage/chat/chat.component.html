@@ -1,4 +1,5 @@
-<div class="page" [class.sidebar-collapsed]="sidebarCollapsed">
+<div class="page" [class.sidebar-collapsed]="sidebarCollapsed"
+  [class.modal-open]="showPopup || showImagePopup">
   <!-- Sidebar -->
   <aside class="sidebar" [class.collapsed]="sidebarCollapsed"
     [class.open]="mobileSidebarOpen">
@@ -35,7 +36,7 @@
       <button *ngFor="let conv of conversationsList;" class="history-item"
         (click)="openConversation(conv.id)">
         <i class="fas fa-message"></i>
-        <div class="history-content" *ngIf="!sidebarCollapsed">
+        <div class="history-content">
           <div class="history-title">{{ conv.title }}</div>
         </div>
       </button>
@@ -68,7 +69,8 @@
   <main class="chat-main">
     <!-- Messages Container -->
     <div class="messages-container" #scrollArea>
-      <ng-container *ngIf="hasActiveConversation || isUploading || isLoadingChat || messages().length; else welcomeScreen">
+      <ng-container
+        *ngIf="hasActiveConversation || isUploading || isLoadingChat || messages().length; else welcomeScreen">
         <div *ngFor="let msg of messages(); trackBy: trackById"
           class="message-wrapper"
           [class.user-message]="msg.role === 'user'"
@@ -82,7 +84,7 @@
 
             <div class="message-body">
               <div class="message-text" *ngIf="msg.text">{{ msg.text
-               }}</div>
+                }}</div>
 
               <div class="message-images" *ngIf="msg.images?.length">
                 <img *ngFor="let img of msg.images" [src]="img" alt="Image"
@@ -238,7 +240,7 @@
           </div>
         </div>
 
-        <div class="composer-preview" *ngIf="pendingImages().length">
+        <!-- <div class="composer-preview" *ngIf="pendingImages().length">
           <div class="preview-item"
             *ngFor="let img of pendingImages(); let i = index">
             <img [src]="img" alt="Preview">
@@ -246,7 +248,7 @@
               <i class="fas fa-times"></i>
             </button>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </main>
@@ -397,11 +399,11 @@
           </div>
 
           <div class="load-more"
-            *ngIf="compareThumbnails.length > visibleThumbnails.length">
+            *ngIf="compareThumbnails().length > visibleThumbnails.length">
             <button (click)="loadMoreThumbnails()">Load More</button>
           </div>
 
-          <div class="no-thumbs" *ngIf="compareThumbnails.length === 0">
+          <div class="no-thumbs" *ngIf="compareThumbnails().length === 0">
             No images yet
           </div>
         </div>

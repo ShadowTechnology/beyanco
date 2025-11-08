@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, NO_ERRORS_SCHEMA, ViewChild, ElementRef, AfterViewChecked, OnInit } from '@angular/core';
+import { Component, HostListener, NO_ERRORS_SCHEMA, ViewChild, ElementRef, AfterViewChecked, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -104,7 +104,8 @@ export class ChatComponent implements AfterViewChecked {
     private router: Router,
     private tokenStorage: TokenStorageService,
     private propertyService: PropertyService,
-    private chatService: ChatHistoryService
+    private chatService: ChatHistoryService,
+    private cdRef: ChangeDetectorRef
   ) {
     this.loadChats();
   }
@@ -273,7 +274,7 @@ export class ChatComponent implements AfterViewChecked {
     // Load chat history
     this.chatService.getChatById(chatId).subscribe({
       next: (chatData: any) => {
-                // Parse messages if stored as JSON string
+        // Parse messages if stored as JSON string
         const messages = typeof chatData.messages === 'string'
           ? JSON.parse(chatData.messages)
           : chatData.messages;
@@ -316,7 +317,7 @@ export class ChatComponent implements AfterViewChecked {
         this.isLoadingProperties = false;
       }
     });
-    
+
   }
 
 
@@ -445,8 +446,8 @@ export class ChatComponent implements AfterViewChecked {
     const element = this.elements.find(e => e.name === this.selectedElement);
     if (!element) return alert('Please select an element to apply.');
 
-    const baseImagePath = this.currentGeneratedImage || this.currentOriginalImage;
-
+    const baseImagePath = this.currentImage;
+    // const baseImagePath = this.currentGeneratedImage || this.currentOriginalImage || this.currentImage;
     if (!baseImagePath) {
       alert('No image found to modify. Please upload or generate an image first.');
       return;
@@ -464,6 +465,7 @@ export class ChatComponent implements AfterViewChecked {
       this.closeTool();
       this.closeImagePopup();
       this.send();
+      this.clearComposer();
     } catch (e) {
       alert("Image conversion failed. Check console.");
     }
@@ -817,9 +819,24 @@ export class ChatComponent implements AfterViewChecked {
 
   private clearComposer() {
     this.composerDescription = '';
+    this.popupDescription = '';
     this.pendingImages.set([]);
     this.pendingFiles = [];
     this.actionsOpen.set(false);
+
+    this.roomModel = '';
+    this.style = '';
+    this.Housestyle = '';
+
+    if (this.textareaRef?.nativeElement) {
+      this.textareaRef.nativeElement.value = '';
+      this.textareaRef.nativeElement.style.height = 'auto';
+    }
+    this.cdRef.detectChanges();
+
+    setTimeout(() => {
+      this.cdRef.detectChanges();
+    }, 10);
   }
 
   // Image Actions
