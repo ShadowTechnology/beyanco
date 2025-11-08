@@ -68,7 +68,7 @@
   <main class="chat-main">
     <!-- Messages Container -->
     <div class="messages-container" #scrollArea>
-      <ng-container *ngIf="messages().length; else welcomeScreen">
+      <ng-container *ngIf="hasActiveConversation || isUploading || isLoadingChat || messages().length; else welcomeScreen">
         <div *ngFor="let msg of messages(); trackBy: trackById"
           class="message-wrapper"
           [class.user-message]="msg.role === 'user'"
@@ -82,7 +82,7 @@
 
             <div class="message-body">
               <div class="message-text" *ngIf="msg.text">{{ msg.text
-                }}</div>
+               }}</div>
 
               <div class="message-images" *ngIf="msg.images?.length">
                 <img *ngFor="let img of msg.images" [src]="img" alt="Image"
@@ -105,7 +105,7 @@
       </ng-container>
 
       <ng-template #welcomeScreen>
-        <div class="welcome-screen">
+        <div *ngIf="!hasActiveConversation" class="welcome-screen">
           <div class="welcome-icon">
             <i class="fas fa-comments"></i>
           </div>
@@ -133,56 +133,80 @@
       </div>
 
     </div>
+    <!-- Generated Property Chat Messages -->
+    <div class="messages-container-generated" *ngIf="properties.length > 0">
+      <ng-container>
+        <div *ngFor="let p of properties">
 
-    <!-- Generated Property Gallery -->
-    <div class="property-gallery" *ngIf="properties.length > 0">
-      <h3 class="gallery-title">Generated Designs</h3>
-      <div class="gallery-grid">
-        <div *ngFor="let p of properties" class="property-card">
-          <div class="property-header">
-            <h4>{{ p.title }}</h4>
-            <p class="meta">{{ p.propertyType }} | {{ p.enhancementStyle ||
-              'N/A' }}</p>
-          </div>
-          <!--   <div class="property-images">
-            <div class="image-pair">
-            <div class="image-block" *ngIf="p.originalImageUrl">
-            <img [src]="p.originalImageUrl" alt="Original"
-            class="image-preview"
-            (click)="selectImage(p.originalImageUrl, $event)"
-            [@fadeIn] />
-           <div class="img-label">Original</div>
-           </div>
-           <div class="image-block" *ngIf="p.generatedImageUrl">
-            <img [src]="p.generatedImageUrl" alt="Generated"
-            class="image-preview"
-           (click)="selectImage(p.generatedImageUrl, $event)"
-           [@fadeIn] />
-      <div class="img-label">Generated</div>
-         </div>
-         </div>
-      </div> -->
-
-          <div class="property-images">
-            <div class="image-pair">
-              <div class="image-block">
-                <img [src]="p.originalImageUrl" alt="Original"
-                  class="image-preview" />
-                <div class="img-label">Original</div>
+          <div class="message-wrapper user-message">
+            <div class="message-content">
+              <div class="avatar">
+                <i class="fas fa-user"></i>
               </div>
-              <div class="image-block">
-                <img [src]="p.generatedImageUrl" alt="Generated"
-                  class="image-preview" />
-                <div class="img-label">Generated</div>
+
+              <div class="message-body">
+                <div class="message-text">
+                  {{ p.title }}
+                </div>
+
+                <div class="message-images" *ngIf="p.originalImageUrl">
+                  <img [src]="p.originalImageUrl"
+                    alt="Original Design"
+                    class="message-image"
+                    (click)="selectImage(p.originalImageUrl, $event)" />
+                </div>
+
+                <div class="message-meta">
+                  <span class="meta-tag">
+                    <i class="fas fa-door-open"></i> {{ p.propertyType }}
+                  </span>
+                  <span class="meta-tag" *ngIf="p.enhancementStyle">
+                    <i class="fas fa-palette"></i> {{ p.enhancementStyle }}
+                  </span>
+                </div>
+
+                <div class="message-time">
+                  {{ p.createdAt | date:'short' }}
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="property-footer">
-            <small>{{ p.createdAt | date:'medium' }}</small>
+          <div class="message-wrapper assistant-message">
+            <div class="message-content">
+              <div class="avatar">
+                <i class="fas fa-robot"></i>
+              </div>
+
+              <div class="message-body">
+                <div class="message-text">
+                  Generated Design for <strong>{{ p.propertyType }}</strong>
+                </div>
+
+                <div class="message-images" *ngIf="p.generatedImageUrl">
+                  <img [src]="p.generatedImageUrl"
+                    alt="Generated Design"
+                    class="message-image"
+                    (click)="selectImage(p.generatedImageUrl, $event)" />
+                </div>
+
+                <div class="message-meta">
+                  <span class="meta-tag">
+                    <i class="fas fa-door-open"></i> {{ p.propertyType }}
+                  </span>
+                  <span class="meta-tag" *ngIf="p.enhancementStyle">
+                    <i class="fas fa-palette"></i> {{ p.enhancementStyle }}
+                  </span>
+                </div>
+
+                <div class="message-time">
+                  {{ p.createdAt | date:'short' }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </ng-container>
     </div>
 
     <!-- Input Composer -->

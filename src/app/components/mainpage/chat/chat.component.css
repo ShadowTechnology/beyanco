@@ -210,18 +210,22 @@
 .messages-container {
   flex: 1;
   overflow-y: auto;
-  /* padding: 24px; */
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   scroll-behavior: smooth;
 }
 
+.messages-container-generated {
+  padding: 10px;
+}
+
 .message-wrapper {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  max-width: 80%;
+  max-width: 100%;
   animation: fadeIn 0.3s ease;
 
   &.user-message {
@@ -1192,4 +1196,74 @@
   border: 1px solid #ccc;
   padding: 5px;
   border-radius: 4px;
+}
+.uploaded-data {
+  background: #e8f4ff;
+  border-radius: 16px 16px 0 16px;
+  padding: 1rem;
+  max-width: 65%;
+  margin-left: auto;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  text-align: right;
+}
+
+.uploaded-header {
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 0.5rem;
+}
+
+.uploaded-images {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  .uploaded-thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    object-fit: cover;
+    cursor: pointer;
+  }
+}
+
+.generated-output {
+  background: #fff;
+  border-radius: 16px 16px 16px 0;
+  padding: 1rem;
+  max-width: 70%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  margin-right: auto;
+}
+
+.generated-header {
+  font-weight: 600;
+  color: #059669;
+  margin-bottom: 0.5rem;
+}
+
+.generated-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+
+  .gen-img-block {
+    .generated-thumb {
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .generated-thumb:hover {
+      transform: scale(1.05);
+    }
+  }
 }

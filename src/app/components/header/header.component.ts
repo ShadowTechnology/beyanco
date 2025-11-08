@@ -18,8 +18,9 @@ import { TokenStorageService } from '../../services/token-storage.service';
         <nav class="main-nav">
           <ul>
             <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-            <li *ngIf="isLoggedIn"><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
-            <li *ngIf="isLoggedIn"><a routerLink="/property-upload" routerLinkActive="active">Upload</a></li>
+            <!-- <li *ngIf="isLoggedIn"><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+            <li *ngIf="isLoggedIn"><a routerLink="/property-upload" routerLinkActive="active">Upload</a></li> -->
+            <li *ngIf="isLoggedIn"><a routerLink="/chat" routerLinkActive="active">Chat</a></li> 
             <li *ngIf="isLoggedIn"><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
             <li *ngIf="!isLoggedIn"><a routerLink="/login" routerLinkActive="active" class="login-btn">Login</a></li>
             <li *ngIf="!isLoggedIn"><a routerLink="/register" routerLinkActive="active" class="register-btn">Register</a></li>

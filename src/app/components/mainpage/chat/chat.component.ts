@@ -40,7 +40,7 @@ export class ChatComponent implements AfterViewChecked {
   showPopup = false;
   showImagePopup = false;
   hasActiveConversation = false;
-
+  conversationLoaded = false;
   compareThumbnails = signal<string[]>([]);
   visibleThumbnails: string[] = [];
   thumbnailBatch = 10;
@@ -260,23 +260,24 @@ export class ChatComponent implements AfterViewChecked {
     this.chatId = chatId;
     this.activeConversationId.set(chatId);
     this.isLoadingChat = true;
+    this.isLoadingProperties = true;
+    this.hasActiveConversation = true;
+    this.conversationLoaded = false;
     // Reset image viewer state
     this.currentImage = null;
     this.currentOriginalImage = null;
     this.currentGeneratedImage = null;
     this.activeTool = null;
     this.showImagePopup = false;
-    this.isLoadingProperties = true;
-    this.hasActiveConversation = true;
+
     // Load chat history
-    this.chatService.getChatById(chatId).subscribe(
-      (chatData: any) => {
-        // Parse messages if stored as JSON string
+    this.chatService.getChatById(chatId).subscribe({
+      next: (chatData: any) => {
+                // Parse messages if stored as JSON string
         const messages = typeof chatData.messages === 'string'
           ? JSON.parse(chatData.messages)
           : chatData.messages;
 
-        // Convert to ChatMessage format and populate messages signal
         const parsedMessages: ChatMessage[] = messages.map((msg: any, index: number) => ({
           id: msg.id || `msg-${index}`,
           role: msg.role || 'user',
@@ -289,16 +290,20 @@ export class ChatComponent implements AfterViewChecked {
 
         this.messages.set(parsedMessages);
         this.shouldScrollToBottom = true;
+        this.isLoadingChat = false;
+        this.conversationLoaded = true;
       },
-      (err) => {
+      error: (err) => {
         console.error('Error loading chat history:', err);
         this.messages.set([]);
+        this.isLoadingChat = false;
+        this.conversationLoaded = true;
       }
-    );
+    });
 
     // Load properties (designs)
-    this.propertyService.getChatProperty(chatId).subscribe(
-      (res: any) => {
+    this.propertyService.getChatProperty(chatId).subscribe({
+      next: (res: any) => {
         this.properties = res.map((p: any) => ({
           ...p,
           originalImageUrl: p.originalImageUrl ? `${environment.backendUrl}${p.originalImageUrl}` : '',
@@ -306,12 +311,12 @@ export class ChatComponent implements AfterViewChecked {
         }));
         this.isLoadingProperties = false;
       },
-      (err) => {
+      error: (err) => {
         console.error('Error loading properties:', err);
         this.isLoadingProperties = false;
       }
-    );
-
+    });
+    
   }
 
 
