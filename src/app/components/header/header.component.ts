@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TokenStorageService } from '../../services/token-storage.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +26,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
             <li *ngIf="!isLoggedIn"><a routerLink="/login" routerLinkActive="active" class="login-btn">Login</a></li>
             <li *ngIf="!isLoggedIn"><a routerLink="/register" routerLinkActive="active" class="register-btn">Register</a></li>
             <li *ngIf="isLoggedIn"><a href="#" (click)="logout($event)" class="logout-btn">Logout</a></li>
+            <li class="credit-badge" *ngIf="isLoggedIn && userCredits !== null" [class.low]="userCredits <= 0">Credits: {{ userCredits }}</li>
           </ul>
         </nav>
 
@@ -48,7 +50,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
 
     .container {
       width: 100%;
-      max-width: 1200px;
+      max-width: 95%;
       margin: 0 auto;
       padding: 0 20px;
       display: flex;
@@ -159,6 +161,25 @@ import { TokenStorageService } from '../../services/token-storage.service';
       transition: 0.3s;
     }
 
+    .credit-badge {
+  margin-left: auto;
+  background: #004aad;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  height: fit-content;
+  align-self: center;
+  margin-top: -6px;
+}
+
+.credit-badge.low {
+  background: #d7263d;
+}
+
+
     @media (max-width: 768px) {
       .main-nav {
         position: fixed;
@@ -206,17 +227,39 @@ import { TokenStorageService } from '../../services/token-storage.service';
 export class HeaderComponent implements OnInit {
   isLoggedIn = false;
   isMobileMenuActive = false;
+  userCredits: any;
+  userId: number = 0;
 
   constructor(
     private tokenStorage: TokenStorageService,
-    private router: Router
+    private router: Router,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
-    // this.isLoggedIn = !!this.tokenStorage.getToken();
-     this.tokenStorage.isLoggedIn$.subscribe(status => {
-    this.isLoggedIn = status;
+    this.tokenStorage.isLoggedIn$.subscribe(status => {
+      this.isLoggedIn = status;
+
+      if (this.isLoggedIn) {
+        const user = this.tokenStorage.getUser();
+        this.userId = user?.id;
+        this.loadCredit(this.userId);
+      } 
+    });
+  }
+  
+  loadCredit(id: number): void {
+    if (id > 0) {
+    this.userService.getUserProfile(this.userId).subscribe({
+    next: (user) => {
+      this.userCredits = user.creditsRemaining;
+
+      // ✅ Update local storage instantly
+      this.tokenStorage.updateUserCredits(user.creditsRemaining);
+    },
+    error: (err) => console.error('Error loading user credits:', err)
   });
+  }
   }
 
   logout(event: Event): void {

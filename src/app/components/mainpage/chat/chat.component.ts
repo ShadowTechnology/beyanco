@@ -99,6 +99,8 @@ export class ChatComponent implements AfterViewChecked {
   private shouldScrollToBottom = false;
   conversationsList: any[] = [];
   isLoadingProperties = false;
+  userCredits: any;
+  showCreditPopup: boolean = false;
 
   constructor(
     private router: Router,
@@ -116,6 +118,10 @@ export class ChatComponent implements AfterViewChecked {
       this.shouldScrollToBottom = false;
     }
     this.currentUser = this.tokenStorage.getUser();
+    this.tokenStorage.credits$.subscribe(credits => {
+      this.userCredits = credits;
+      console.log('Credits updated:', this.userCredits);
+    });
     // this.loadChats();
   }
 
@@ -539,49 +545,60 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   send() {
-    const text = this.composerDescription.trim();
+    if (this.userCredits > 0) {
+      const text = this.composerDescription.trim();
 
-    if (!text && !this.pendingImages().length) {
-      return;
-    }
-    // ✅ Extra guard for failed image conversion
-    if (this.pendingFiles.length === 0 && this.pendingImages().length > 0) {
-      alert('To generate images, please upload a valid photo first.');
-      return;
-    }
-    // Create user message
-    const userMsg: ChatMessage = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      text,
-      images: this.pendingImages().slice(),
-      timestamp: new Date(),
-      room: this.roomModel || undefined,
-      style: this.style || undefined
-    };
-
-    this.messages.update(list => [...list, userMsg]);
-    this.shouldScrollToBottom = true;
-
-    // Upload to backend if files exist
-    if (this.pendingFiles.length > 0) {
-      this.uploadToBackend(userMsg, text);
-    } else {
-      // Text-only message
-      const aiResponse: ChatMessage = {
+      if (!text && !this.pendingImages().length) {
+        return;
+      }
+      // ✅ Extra guard for failed image conversion
+      if (this.pendingFiles.length === 0 && this.pendingImages().length > 0) {
+        alert('To generate images, please upload a valid photo first.');
+        return;
+      }
+      // Create user message
+      const userMsg: ChatMessage = {
         id: crypto.randomUUID(),
-        role: 'assistant',
-        text: 'To generate images, please upload a photo first. You can click the settings icon to upload images.',
-        timestamp: new Date()
+        role: 'user',
+        text,
+        images: this.pendingImages().slice(),
+        timestamp: new Date(),
+        room: this.roomModel || undefined,
+        style: this.style || undefined
       };
 
-      this.messages.update(list => [...list, aiResponse]);
+      this.messages.update(list => [...list, userMsg]);
       this.shouldScrollToBottom = true;
-      this.clearComposer();
+
+      // Upload to backend if files exist
+      if (this.pendingFiles.length > 0) {
+        this.uploadToBackend(userMsg, text);
+      } else {
+        // Text-only message
+        const aiResponse: ChatMessage = {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          text: 'To generate images, please upload a photo first. You can click the settings icon to upload images.',
+          timestamp: new Date()
+        };
+
+        this.messages.update(list => [...list, aiResponse]);
+        this.shouldScrollToBottom = true;
+        this.clearComposer();
+      }
+    } else {
+      this.openCreditPopup();
     }
   }
+  openCreditPopup() {
+    this.showCreditPopup = true;
+  }
 
+  closeCreditPopup() {
+    this.showCreditPopup = false;
+  }
   private uploadToBackend(userMsg: ChatMessage, text: string) {
+
     const formData = new FormData();
     formData.append('title', text || 'Image modification');
     formData.append('description', text || 'AI generated design');
@@ -674,6 +691,11 @@ export class ChatComponent implements AfterViewChecked {
                 this.messages.update(list => [...list, aiMsg]);
                 this.shouldScrollToBottom = true;
                 this.loadChats();
+              }
+              if (res.user.creditsRemaining !== undefined) {
+                const user = this.tokenStorage.getUser();
+                user.creditsRemaining = res.user.creditsRemaining;
+                this.tokenStorage.saveUser(user);
               }
 
               this.clearComposer();

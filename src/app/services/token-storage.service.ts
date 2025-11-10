@@ -10,6 +10,9 @@ const USER_KEY = 'auth-user';
 export class TokenStorageService {
   private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem(TOKEN_KEY));
   isLoggedIn$ = this.loggedIn.asObservable();
+  private creditsSubject = new BehaviorSubject<number>(0);
+  credits$ = this.creditsSubject.asObservable();
+
 
   constructor() { }
 
@@ -28,9 +31,25 @@ export class TokenStorageService {
     return window.localStorage.getItem(TOKEN_KEY);
   }
 
+  // public saveUser(user: any): void {
+  //   // window.localStorage.removeItem(USER_KEY);
+  //   window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+  // }
+
   public saveUser(user: any): void {
-    // window.localStorage.removeItem(USER_KEY);
     window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+    this.loggedIn.next(true);   // ✅ triggers update only after user is stored
+  }
+
+  updateUserCredits(newCredits: any): void {
+    const user = this.getUser();
+    if (user) {
+      user.creditsRemaining = newCredits;
+      localStorage.setItem('auth-user', JSON.stringify(user));
+
+      // ✅ Update Observable so ALL components get new value
+      this.creditsSubject.next(newCredits);
+    }
   }
 
   public getUser(): any {
@@ -38,7 +57,6 @@ export class TokenStorageService {
     if (user) {
       return JSON.parse(user);
     }
-
     return null;
   }
 }

@@ -526,3 +526,16 @@
     </div>
   </div>
 </div>
+<!-- BACKDROP -->
+<div class="credit-backdrop" *ngIf="showCreditPopup" (click)="closeCreditPopup()">
+
+  <!-- MODAL BOX -->
+  <div class="credit-modal" (click)="$event.stopPropagation()">
+    <h2>Credit Limit Reached</h2>
+    <p>You have no credits left. Please upgrade your plan.</p>
+
+    <button class="close-btn" (click)="closeCreditPopup()">Close</button>
+  </div>
+
+</div>
+
