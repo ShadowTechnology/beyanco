@@ -50,7 +50,7 @@ export class ProfileComponent implements OnInit {
           
           // Format roles for display
           this.userRoles = data.roles 
-            ? data.roles.map((role: string) => role.replace('ROLE_', '')).join(', ') 
+            ? data.roles.map((role: any) => role.name.replace('ROLE_', '')).join(', ') 
             : 'User';
           
           this.loadRecentActivity();

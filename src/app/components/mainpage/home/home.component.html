@@ -9,7 +9,23 @@
       <button class="btn btn-primary" (click)="goToChat()">Get Started</button>
       <button class="btn btn-light">See Examples</button>
     </div>
+    <!-- <div class="grid grid--ba-2">
+      <div class="ba-card" *ngFor="let item of transformation; let i = index" [style.--pos.%]="sliderValues[i]">
+        <div class="ba-media">
+          <img class="ba-img ba-img--before" [src]="item.before" alt="Before {{ item.title }}" />
+          <img class="ba-img ba-img--after" [src]="item.after" alt="After {{ item.title }}" />
+          <div class="ba-divider" aria-hidden="true">
+            <span class="ba-handle"></span>
+          </div>
+          <input class="ba-range" type="range" min="0" max="100" [value]="sliderValues[i]" (input)="onSlider(i, $event)"
+            aria-label="Reveal after image" />
+          <span class="ba-label ba-label--before">Before</span>
+          <span class="ba-label ba-label--after">After</span>
+        </div>
+      </div>
+    </div> -->
   </div>
+
 
   <div class="hero__controls">
     <button class="nav-btn prev">&#10094;</button>
@@ -42,8 +58,7 @@
               furniture and elegant styling.</p>
           </div>
         </div>
-        <button class="card-active-link" type="button">Learn More &nbsp; <i
-            class="fas fa-arrow-right"></i></button>
+        <button class="card-active-link" type="button">Learn More &nbsp; <i class="fas fa-arrow-right"></i></button>
       </article>
 
       <article class="card" *ngFor="let s of services">
@@ -72,19 +87,15 @@
       our before and after comparisons</p>
 
     <div class="grid grid--ba">
-      <div class="ba-card" *ngFor="let item of transformations; let i = index"
-        [style.--pos.%]="sliderValues[i]">
+      <div class="ba-card" *ngFor="let item of transformations; let i = index" [style.--pos.%]="sliderValues[i]">
         <div class="ba-media">
-          <img class="ba-img ba-img--before" [src]="item.before"
-            alt="Before {{ item.title }}" />
-          <img class="ba-img ba-img--after" [src]="item.after"
-            alt="After {{ item.title }}" />
+          <img class="ba-img ba-img--before" [src]="item.before" alt="Before {{ item.title }}" />
+          <img class="ba-img ba-img--after" [src]="item.after" alt="After {{ item.title }}" />
           <div class="ba-divider" aria-hidden="true">
             <span class="ba-handle"></span>
           </div>
-          <input class="ba-range" type="range" min="0" max="100"
-            [value]="sliderValues[i]"
-            (input)="onSlider(i, $event)" aria-label="Reveal after image" />
+          <input class="ba-range" type="range" min="0" max="100" [value]="sliderValues[i]" (input)="onSlider(i, $event)"
+            aria-label="Reveal after image" />
           <span class="ba-label ba-label--before">Before</span>
           <span class="ba-label ba-label--after">After</span>
         </div>

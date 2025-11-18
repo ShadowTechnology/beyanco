@@ -644,7 +644,11 @@ img {
   gap: .75rem;
   flex-shrink: 0;
 }
-
+.grid--ba-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
 
 @media (max-width: 760px) {
   .cta__box {

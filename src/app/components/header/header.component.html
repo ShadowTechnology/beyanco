@@ -1,0 +1,32 @@
+<header class="main-header">
+    <div class="container">
+        <div class="logo-container">
+            <a routerLink="/" class="logo">Beyanco</a>
+            <p class="tagline">Real Estate Enhancement Platform</p>
+        </div>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+                </li>
+                <!-- <li *ngIf="isLoggedIn"><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+            <li *ngIf="isLoggedIn"><a routerLink="/property-upload" routerLinkActive="active">Upload</a></li> -->
+                <li *ngIf="isLoggedIn"><a routerLink="/chat" routerLinkActive="active">Chat</a></li>
+                <li *ngIf="isLoggedIn"><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
+                <li *ngIf="!isLoggedIn"><a routerLink="/login" routerLinkActive="active" class="login-btn">Login</a>
+                </li>
+                <li *ngIf="!isLoggedIn"><a routerLink="/register" routerLinkActive="active"
+                        class="register-btn">Register</a></li>
+                <li *ngIf="isLoggedIn"><a href="#" (click)="logout($event)" class="logout-btn">Logout</a></li>
+                <li class="credit-badge" *ngIf="isLoggedIn && userCredits !== null" [class.low]="userCredits <= 0">
+                    Credits: {{ userCredits }}</li>
+            </ul>
+        </nav>
+
+        <div class="mobile-menu-toggle" (click)="toggleMenu()">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+</header>

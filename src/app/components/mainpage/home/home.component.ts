@@ -39,6 +39,15 @@ export class HomeComponent implements OnInit{
       after: 'https://organizeddad.com/wp-content/uploads/2022/04/dl.beatsnoop.com-1649008255-3.jpg'
     }
   ];
+
+  transformation = [
+    {
+      title: 'Living Room Transformation',
+      desc: 'From empty space to welcoming living area with modern furniture and warm styling',
+      before: 'https://gravelmag.com/wp-content/uploads/2022/02/spanish-16.jpg',
+      after: 'https://belleabodes.com/wp-content/uploads/2024/01/Emma-Stone-Spanish-Style-House-Living-Room-Get-the-Look-1024x682.jpg'
+    }
+  ];
   
 
   sliderValues: number[] = this.transformations.map(() => 50);
