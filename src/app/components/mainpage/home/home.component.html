@@ -6,7 +6,7 @@
     <p>Professional staging that maximizes your property's potential</p>
 
     <div class="hero__buttons">
-      <button class="btn btn-primary" (click)="goToChat()">Get Started</button>
+      <button class="btn btn-primary" (click)="goToChat()">Try Now</button>
       <button class="btn btn-light">See Examples</button>
     </div>
     <!-- <div class="grid grid--ba-2">
@@ -25,22 +25,88 @@
       </div>
     </div> -->
   </div>
-
-
-  <div class="hero__controls">
-    <button class="nav-btn prev">&#10094;</button>
-
-    <div class="dots">
-      <span class="dot"></span>
-      <span class="dot active"></span>
-      <span class="dot"></span>
+  
+  <div class="hero__mini-slider">
+    <div class="slider-wrapper">
+      <div
+        class="slide-card"
+        *ngFor="let item of herosectionSlider; let i = index"
+        [class.active]="i === currentIndex">
+        <div class="ba-card" [style.--pos.%]="sliderValues[i]">
+          <div class="ba-media">
+            <img class="ba-img ba-img--before" [src]="item.before" alt>
+            <img class="ba-img ba-img--after" [src]="item.after" alt>
+            <div class="ba-divider">
+              <span class="ba-handle"></span>
+            </div>
+            <input
+              class="ba-range"
+              type="range"
+              min="0"
+              max="100"
+              [value]="sliderValues[i]"
+              (input)="onSlider(i, $event)" />
+            <span class="ba-label ba-label--before">Before</span>
+            <span class="ba-label ba-label--after">After</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <button class="play-btn">&#9658;</button>
+    <div class="hero__controls">
+      <button class="nav-btn prev" (click)="prevSlide()">&#10094;</button>
 
-    <button class="nav-btn next">&#10095;</button>
+      <div class="dots">
+        <span
+          class="dot"
+          *ngFor="let t of herosectionSlider; let i = index"
+          [class.active]="i === currentIndex"
+          (click)="goToSlide(i)"></span>
+      </div>
+      <button class="play-btn" (click)="toggleAutoPlay()">
+        {{ isPlaying ? '❚❚' : '▶' }}
+      </button>
+      <button class="nav-btn next" (click)="nextSlide()">&#10095;</button>
+    </div>
+
   </div>
 </div>
+
+<section id="work" class="section work-section-bg">
+  <div class="container">
+    <h2 class="section__title _color">How It Works</h2>
+    <p class="section__subtitle subtitle_color">Enhance your real‑estate photos
+      in three simple
+      steps — no artistic talent necessary</p>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step__num">1</div>
+        <h3 class="step__title">Send your photo</h3>
+        <p class="step__text">Upload the photo you wish to enhance.</p>
+        <button class="btn btn--sm" type="button">Uploading files</button>
+      </li>
+      <li class="step">
+        <div class="step__num">2</div>
+        <h3 class="step__title">Choose your options</h3>
+        <p class="step__text">Pick retouching type and decor style to match your
+          goal.</p>
+        <div class="step__chips">
+          <button class="chip" type="button">Furnish</button>
+          <button class="chip" type="button">Modern</button>
+          <button class="chip" type="button">Scandinavian</button>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step__num">3</div>
+        <h3 class="step__title">Click on 'Start'</h3>
+        <p class="step__text">Preview the result and fine‑tune with the
+          slider.</p>
+        <button class="btn btn--sm" type="button">Start now</button>
+      </li>
+    </ol>
+  </div>
+</section>
 
 <section id="services" class="section">
   <div class="service-padding">
@@ -49,7 +115,7 @@
       and budget</p>
 
     <div class="grid grid--cards">
-      <article class="card active-card--featured">
+      <!-- <article class="card active-card--featured">
         <div class="d-flex-card">
           <div class="active_card__icon"><i class="fas fa-house"></i></div>
           <div class="d-flex-item">
@@ -59,9 +125,9 @@
           </div>
         </div>
         <button class="card-active-link" type="button">Learn More &nbsp; <i class="fas fa-arrow-right"></i></button>
-      </article>
+      </article> -->
 
-      <article class="card" *ngFor="let s of services">
+      <article class="card active-card--featured" *ngFor="let s of services">
         <div class="d-flex-card">
           <div class="card__icon">
             <i [class]="s.icon"></i>
@@ -87,14 +153,18 @@
       our before and after comparisons</p>
 
     <div class="grid grid--ba">
-      <div class="ba-card" *ngFor="let item of transformations; let i = index" [style.--pos.%]="sliderValues[i]">
+      <div class="ba-card" *ngFor="let item of transformations; let i = index"
+        [style.--pos.%]="sliderValues[i]">
         <div class="ba-media">
-          <img class="ba-img ba-img--before" [src]="item.before" alt="Before {{ item.title }}" />
-          <img class="ba-img ba-img--after" [src]="item.after" alt="After {{ item.title }}" />
+          <img class="ba-img ba-img--before" [src]="item.before"
+            alt="Before {{ item.title }}" />
+          <img class="ba-img ba-img--after" [src]="item.after"
+            alt="After {{ item.title }}" />
           <div class="ba-divider" aria-hidden="true">
             <span class="ba-handle"></span>
           </div>
-          <input class="ba-range" type="range" min="0" max="100" [value]="sliderValues[i]" (input)="onSlider(i, $event)"
+          <input class="ba-range" type="range" min="0" max="100"
+            [value]="sliderValues[i]" (input)="onSlider(i, $event)"
             aria-label="Reveal after image" />
           <span class="ba-label ba-label--before">Before</span>
           <span class="ba-label ba-label--after">After</span>
@@ -113,11 +183,11 @@
     <h2 class="section__title">Our Affordable Pricing Plans</h2>
     <p class="section__subtitle">Choose the plan that suits you best</p>
 
-    <div class="pricing-toggle">
+    <!-- <div class="pricing-toggle">
       <button class="toggle-btn active">Photo</button>
       <button class="toggle-btn">Video</button>
       <button class="toggle-btn">Photo + Video <span>-15%</span></button>
-    </div>
+    </div> -->
 
     <div class="billing-toggle">
       <button class="toggle-btn">Per month</button>
@@ -168,41 +238,6 @@
   </div>
 </section>
 
-<section id="work" class="section work-section-bg">
-  <div class="container">
-    <h2 class="section__title _color">How It Works</h2>
-    <p class="section__subtitle subtitle_color">Enhance your real‑estate photos in three simple
-      steps — no artistic talent necessary</p>
-
-    <ol class="steps">
-      <li class="step">
-        <div class="step__num">1</div>
-        <h3 class="step__title">Send your photo</h3>
-        <p class="step__text">Upload the photo you wish to enhance.</p>
-        <button class="btn btn--sm" type="button">Uploading files</button>
-      </li>
-      <li class="step">
-        <div class="step__num">2</div>
-        <h3 class="step__title">Choose your options</h3>
-        <p class="step__text">Pick retouching type and decor style to match your
-          goal.</p>
-        <div class="step__chips">
-          <button class="chip" type="button">Furnish</button>
-          <button class="chip" type="button">Modern</button>
-          <button class="chip" type="button">Scandinavian</button>
-        </div>
-      </li>
-      <li class="step">
-        <div class="step__num">3</div>
-        <h3 class="step__title">Click on 'Start'</h3>
-        <p class="step__text">Preview the result and fine‑tune with the
-          slider.</p>
-        <button class="btn btn--sm" type="button">Start now</button>
-      </li>
-    </ol>
-  </div>
-</section>
-
 <section id="cta" class="section cta">
   <div class="container cta__box">
     <div>
@@ -214,5 +249,46 @@
       <a class="btn btn-get-start" href="#">Get Started Today</a>
       <a class="btn btn--ghost" href="#portfolio">View Portfolio</a>
     </div>
+  </div>
+</section>
+
+<section class="updates-section">
+  <div class="container">
+
+    <h2 class="section-title">Stay Connected</h2>
+    <p class="section__subtitle">Stay informed with our latest announcements,
+      updates, and customer stories.
+    </p>
+    <div class="updates-grid">
+
+      <div class="update-card">
+        <div class="icon-box">
+          <i class="fas fa-bullhorn"></i>
+        </div>
+        <h3>Announcement</h3>
+        <p>Our updates & events to the public</p>
+        <a href="#" class="view-link">View all →</a>
+      </div>
+
+      <div class="update-card">
+        <div class="icon-box">
+          <i class="fas fa-envelope-open-text"></i>
+        </div>
+        <h3>Reach Us</h3>
+        <p>Ask your queries & send feedbacks</p>
+        <a href="#" class="view-link">View all →</a>
+      </div>
+
+      <div class="update-card">
+        <div class="icon-box">
+          <i class="fas fa-comments"></i>
+        </div>
+        <h3>Testimonials</h3>
+        <p>What our customers say about us</p>
+        <a href="#" class="view-link">View all →</a>
+      </div>
+
+    </div>
+
   </div>
 </section>

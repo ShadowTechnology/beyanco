@@ -7,18 +7,26 @@
 
         <nav class="main-nav">
             <ul>
-                <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+                <li><a routerLink="/home" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{exact: true}">Home</a>
                 </li>
                 <!-- <li *ngIf="isLoggedIn"><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
             <li *ngIf="isLoggedIn"><a routerLink="/property-upload" routerLinkActive="active">Upload</a></li> -->
-                <li *ngIf="isLoggedIn"><a routerLink="/chat" routerLinkActive="active">Chat</a></li>
-                <li *ngIf="isLoggedIn"><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
-                <li *ngIf="!isLoggedIn"><a routerLink="/login" routerLinkActive="active" class="login-btn">Login</a>
+                <li *ngIf="isLoggedIn"><a routerLink="/chat"
+                        routerLinkActive="active">Chat</a></li>
+                <li *ngIf="isLoggedIn"><a routerLink="/profile"
+                        routerLinkActive="active">Profile</a></li>
+                <li *ngIf="!isLoggedIn"><a routerLink="/login"
+                        routerLinkActive="active" class="login-btn">Login</a>
                 </li>
-                <li *ngIf="!isLoggedIn"><a routerLink="/register" routerLinkActive="active"
+                <li *ngIf="!isLoggedIn"><a routerLink="/register"
+                        routerLinkActive="active"
                         class="register-btn">Register</a></li>
-                <li *ngIf="isLoggedIn"><a href="#" (click)="logout($event)" class="logout-btn">Logout</a></li>
-                <li class="credit-badge" *ngIf="isLoggedIn && userCredits !== null" [class.low]="userCredits <= 0">
+                <li *ngIf="isLoggedIn"><a href="#" (click)="logout($event)"
+                        class="logout-btn">Logout</a></li>
+                <li class="credit-badge"
+                    *ngIf="isLoggedIn && userCredits !== null"
+                    [class.low]="userCredits <= 0" (click)="togglePopup()">
                     Credits: {{ userCredits }}</li>
             </ul>
         </nav>
@@ -27,6 +35,22 @@
             <div class="bar"></div>
             <div class="bar"></div>
             <div class="bar"></div>
+        </div>
+        <div class="filter-card" *ngIf="isPopupOpen">
+            <h3 class="filter-title">{{ count }} Photos</h3>
+            <input
+                type="range"
+                min="1"
+                max="200"
+                [(ngModel)]="count"
+                (input)="updatePrice()"
+                class="range-slider" />
+            <p class="price-text">
+                Price: <strong class="text-danger">₹{{ totalPrice }}</strong>
+            </p>
+            <div class="action-area">
+                <button class="buy-btn">Buy Now</button>
+            </div>
         </div>
     </div>
 </header>

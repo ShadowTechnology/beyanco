@@ -13,17 +13,21 @@ import { HealthService } from '../../../services/HealthService.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit{
+  currentIndex = 0;
+  isPlaying = false;
+  autoPlayInterval: any;
   banners = [
     { imageUrl: 'assets/images/banner1.jpg' },
     { imageUrl: 'assets/images/banner2.jpg' },
     { imageUrl: 'assets/images/banner3.jpg' }
   ];
   services = [
+    { icon: 'fas fa-house', title: 'Living Room Design', text: 'Transform your living space with contemporary furniture and elegant styling.' },
     { icon: 'fa-solid fa-kitchen-set', title: 'Kitchen Staging', text: 'Modern kitchen designs that showcase functionality and style.' },
     { icon: 'fa-solid fa-bed', title: 'Bedroom Styling', text: 'Create peaceful, inviting bedrooms that buyers will love.' },
     { icon: 'fa-solid fa-couch', title: 'Furniture Arrangement', text: 'Optimize your space with professional furniture placement.' },
     { icon: 'fa-solid fa-palette', title: 'Color Coordination', text: 'Expert color schemes that enhance your property\'s appeal.' },
-    { icon: 'fa-solid fa-desktop', title: 'Virtual Staging', text: 'AI-powered staging for stunning visual transformations.' },
+    // { icon: 'fa-solid fa-desktop', title: 'Virtual Staging', text: 'AI-powered staging for stunning visual transformations.' },
   ];
   transformations = [
     {
@@ -48,7 +52,33 @@ export class HomeComponent implements OnInit{
       after: 'https://belleabodes.com/wp-content/uploads/2024/01/Emma-Stone-Spanish-Style-House-Living-Room-Get-the-Look-1024x682.jpg'
     }
   ];
-  
+
+  herosectionSlider = [
+    {
+      title: 'Living Room Transformation',
+      desc: 'From empty space to welcoming living area with modern furniture and warm styling',
+      before: 'https://gravelmag.com/wp-content/uploads/2022/02/spanish-16.jpg',
+      after: 'https://belleabodes.com/wp-content/uploads/2024/01/Emma-Stone-Spanish-Style-House-Living-Room-Get-the-Look-1024x682.jpg'
+    },
+    {
+      title: 'Kitchen Renovation',
+      desc: 'Complete kitchen staging with high‑end appliances and contemporary design elements',
+      before: 'https://mudosikitchenandbath.com/wp-content/uploads/2023/01/Rolling-Cart.jpg',
+      after: 'https://organizeddad.com/wp-content/uploads/2022/04/dl.beatsnoop.com-1649008255-3.jpg'
+    },
+    {
+      title: 'Living Room Transformation',
+      desc: 'From empty space to welcoming living area with modern furniture and warm styling',
+      before: 'https://gravelmag.com/wp-content/uploads/2022/02/spanish-16.jpg',
+      after: 'https://belleabodes.com/wp-content/uploads/2024/01/Emma-Stone-Spanish-Style-House-Living-Room-Get-the-Look-1024x682.jpg'
+    },
+    {
+      title: 'Kitchen Renovation',
+      desc: 'Complete kitchen staging with high‑end appliances and contemporary design elements',
+      before: 'https://mudosikitchenandbath.com/wp-content/uploads/2023/01/Rolling-Cart.jpg',
+      after: 'https://organizeddad.com/wp-content/uploads/2022/04/dl.beatsnoop.com-1649008255-3.jpg'
+    }
+  ];
 
   sliderValues: number[] = this.transformations.map(() => 50);
   healthStatus: any;
@@ -74,8 +104,40 @@ export class HomeComponent implements OnInit{
     //     console.error('❌ Error fetching health check:', err);
     //   }
     // });
+    this.sliderValues = this.transformations.map(() => 50);
   }
 
+  nextSlide() {
+    this.currentIndex =
+      (this.currentIndex + 1) % this.herosectionSlider.length;
+  }
+
+  prevSlide() {
+    this.currentIndex =
+      (this.currentIndex - 1 + this.herosectionSlider.length) %
+      this.herosectionSlider.length;
+  }
+
+  goToSlide(i: number) {
+    this.currentIndex = i;
+  }
+
+  toggleAutoPlay() {
+    this.isPlaying = !this.isPlaying;
+
+    if (this.isPlaying) {
+      this.autoPlayInterval = setInterval(() => {
+        this.nextSlide();
+      }, 2000);
+    } else {
+      clearInterval(this.autoPlayInterval);
+    }
+  }
+
+  /* Before/After drag slider */
+  // onSlider(i: number, event: any) {
+  //   this.sliderValues[i] = event.target.value;
+  // }
   onSlider(index: number, e: Event) {
     const val = Number((e.target as HTMLInputElement).value);
     this.sliderValues[index] = val;

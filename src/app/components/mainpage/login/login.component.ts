@@ -57,6 +57,13 @@ export class LoginComponent implements OnInit {
   }
 
   redirectAfterLogin(): void {
-    this.router.navigate(['/home']);
+    // const user = this.tokenStorage.getUser();
+    // const roles = user.roles || [];
+
+    if (this.roles.includes('ROLE_ADMIN')) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.router.navigate(['/home']);
+    }
   }
 }
