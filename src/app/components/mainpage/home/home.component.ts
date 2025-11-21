@@ -12,8 +12,9 @@ import { HealthService } from '../../../services/HealthService.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
   currentIndex = 0;
+  prevIndex = -1;
   isPlaying = false;
   autoPlayInterval: any;
   banners = [
@@ -109,16 +110,19 @@ export class HomeComponent implements OnInit{
 
   nextSlide() {
     this.currentIndex =
-      (this.currentIndex + 1) % this.herosectionSlider.length;
+      this.prevIndex = this.currentIndex;
+    this.currentIndex = (this.currentIndex + 1) % this.herosectionSlider.length;
   }
 
   prevSlide() {
+    this.prevIndex = this.currentIndex;
     this.currentIndex =
       (this.currentIndex - 1 + this.herosectionSlider.length) %
       this.herosectionSlider.length;
   }
 
   goToSlide(i: number) {
+    this.prevIndex = this.currentIndex;
     this.currentIndex = i;
   }
 

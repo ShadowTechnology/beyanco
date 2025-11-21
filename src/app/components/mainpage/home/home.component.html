@@ -25,13 +25,14 @@
       </div>
     </div> -->
   </div>
-  
+
   <div class="hero__mini-slider">
     <div class="slider-wrapper">
       <div
         class="slide-card"
         *ngFor="let item of herosectionSlider; let i = index"
-        [class.active]="i === currentIndex">
+        [class.active]="i === currentIndex"
+        [class.prev]="i === prevIndex">
         <div class="ba-card" [style.--pos.%]="sliderValues[i]">
           <div class="ba-media">
             <img class="ba-img ba-img--before" [src]="item.before" alt>

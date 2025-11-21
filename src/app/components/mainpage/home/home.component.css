@@ -143,7 +143,7 @@ img {
 
 .hero__controls {
   position: absolute;
-  top: 140px;
+  bottom: -30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -206,7 +206,7 @@ img {
 .hero__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
 }
 
 /* Hero content */
@@ -232,32 +232,36 @@ img {
 
 /* Slider container */
 .slider-wrapper {
-  width: 900px;
-  height: 150px;
-  /* overflow: hidden; */
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-
-  .slide-card {
-    width: 280px;
-    height: 150px;
-    border-radius: 12px;
-    overflow: hidden;
-    opacity: 0.4;
-    transition: 0.4s;
-
-    &.active {
-      opacity: 1;
-      transform: scale(1.05);
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
+  position: relative;
+  width: 22%;
+  height: 180px;
+  overflow: hidden;
+}
+.slide-card {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px) scale(0.95);
+  opacity: 0;
+  transition: all 0.6s ease;
+  width: 100%;
+  max-width: 500px;
+  pointer-events: none;
+}
+.slide-card.active {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0px) scale(1);
+  pointer-events: auto;
+  z-index: 3;
+}
+.slide-card.prev {
+  opacity: 0;
+  transform: translateX(-50%) translateY(40px) scale(0.90);
+  z-index: 2;
+}
+.slide-card:not(.active):not(.prev) {
+  opacity: 0;
+  z-index: 0;
 }
 
 /* Controls */
