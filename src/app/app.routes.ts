@@ -26,6 +26,8 @@ import { DashboardComponent } from './components/mainpage/dashboard/dashboard.co
 import { PropertyUploadComponent } from './components/property-upload/property-upload.component';
 import { ChatComponent } from './components/mainpage/chat/chat.component';
 import { ProfileComponent } from './components/mainpage/profile/profile.component';
+import { AdminDashboardComponent } from './components/dashboard/admin-dashboard.component';
+import { ProjectsDashboardComponent } from './components/projects-dashboard/projects-dashboard.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -35,5 +37,8 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'property-upload', component: PropertyUploadComponent },
   { path: 'chat', component: ChatComponent },
-  { path: 'profile', component:ProfileComponent}
+  { path: 'profile', component:ProfileComponent},
+  { path: 'admin-dashboard', component:AdminDashboardComponent},
+  { path: 'project-dashboard', component:ProjectsDashboardComponent},
+
 ];

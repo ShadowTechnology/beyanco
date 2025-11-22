@@ -1,0 +1,17 @@
+<div class="projects-container">
+    <div class="filter-tabs">
+        <button class="tab" [class.active]="selectedTab === 'All'" (click)="selectedTab = 'All'">
+            All Projects
+        </button>
+        <button class="tab" [class.active]="selectedTab === 'Completed'" (click)="selectedTab = 'Completed'">
+            Completed
+        </button>
+        <button class="tab" [class.active]="selectedTab === 'Pending'" (click)="selectedTab = 'Pending'">
+            Pending
+        </button>
+    </div>
+
+    <div class="grid">
+        <app-project-card *ngFor="let project of filteredProjects" [project]="project"></app-project-card>
+    </div>
+</div>

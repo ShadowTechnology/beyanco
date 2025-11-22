@@ -1,0 +1,112 @@
+.recent-projects {
+    background: #fff;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+  
+      h2 {
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+  
+      .view-all {
+        font-size: 0.875rem;
+        color: #0f766e;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        text-decoration: none;
+      }
+    }
+  
+    .project {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-top: 1px solid #f1f5f9;
+  
+      &:first-child {
+        border-top: none;
+      }
+  
+      .left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+  
+        img {
+          width: 56px;
+          height: 56px;
+          object-fit: cover;
+          border-radius: 0.5rem;
+        }
+  
+        .details {
+          h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 0.35rem 0;
+          }
+  
+          .tags {
+            display: flex;
+            gap: 0.5rem;
+  
+            .tag {
+              font-size: 0.75rem;
+              font-weight: 500;
+              padding: 0.25rem 0.75rem;
+              border-radius: 9999px;
+  
+              &.dark {
+                background-color: #e0f2fe;
+                color: #0c4a6e;
+              }
+  
+              &.light {
+                background-color: #fef3c7;
+                color: #78350f;
+              }
+            }
+          }
+  
+          .date {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+          }
+        }
+      }
+  
+      .view-btn {
+        background-color: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #0f172a;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+  
+        i {
+          font-size: 0.875rem;
+        }
+  
+        &:hover {
+          background-color: #f1f5f9;
+        }
+      }
+    }
+  }
+  

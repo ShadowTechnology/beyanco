@@ -1,0 +1,101 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.dashboard .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+.dashboard .bottom-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.dashboard .bottom-grid app-recent-projects,
+.dashboard .bottom-grid app-quick-actions {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+
+/* --- Start Cards --- */
+
+.start-cards-1 {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-left: 6px solid #16a34a;
+}
+
+.start-cards-2 {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-left: 6px solid #0d9488;
+}
+
+.start-cards-3 {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-left: 6px solid #4f46e5;
+}
+
+.start-cards-4 {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-left: 6px solid #dc2626;
+}
+
+
+/* --- Charts Grid --- */
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+
+/* --- Vertical Bar Chart --- */
+
+.vertical-bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 150px;
+    padding: 1rem 0;
+    gap: 1rem;
+}
+
+.vertical-bar-chart .bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+}
+
+.vertical-bar-chart .bar-group .bar {
+    width: 100%;
+    height: 100px; /* fallback if binding fails */
+    background-color: #0f766e;
+    border-radius: 0.25rem 0.25rem 0 0;
+    transition: height 0.3s ease;
+}
+
+.vertical-bar-chart .bar-group .label {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: #475569;
+    text-align: center;
+}
+
+/* Orange variant */
+.vertical-bar-chart.orange .bar-group .bar {
+    background-color: #ea580c !important;
+}

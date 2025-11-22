@@ -1,0 +1,32 @@
+<div class="recent-projects">
+    <div class="header">
+      <h2>Recent Projects</h2>
+      <a class="view-all" routerLink="/project-dashboard">
+        View all <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  
+    <div class="project" *ngFor="let project of projects">
+      <div class="left">
+        <img [src]="project.image" alt="{{ project.name }}" />
+        <div class="details">
+          <h3>{{ project.name }}</h3>
+          <div class="tags">
+            <span
+              class="tag"
+              *ngFor="let tag of project.tags; let i = index"
+              [ngClass]="{ dark: i === 0, light: i === 1 }"
+            >
+              {{ tag }}
+            </span>
+          </div>
+          <p class="date">{{ project.date }}</p>
+        </div>
+      </div>
+  
+      <button class="view-btn">
+        <i class="fas fa-eye"></i> View
+      </button>
+    </div>
+  </div>
+  

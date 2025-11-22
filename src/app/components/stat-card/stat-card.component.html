@@ -1,0 +1,10 @@
+<div class="stat-card">
+    <div class="header">
+        <p class="title">{{ title }}</p>
+        <i class="icon" [ngClass]="getIconClass(icon)"></i>
+    </div>
+    <p class="value">{{ value }}</p>
+    <p class="change" [ngClass]="{ 'positive': isPositiveChange(), 'negative': !isPositiveChange() }">
+        {{ change }}
+    </p>
+</div>

@@ -1,0 +1,42 @@
+<div class="project-card">
+    <!-- Image + Transformed Badge -->
+    <div class="image-container">
+      <img [src]="project.image" alt="{{ project.title }}" />
+      <span class="badge" *ngIf="project.transformed">Transformed</span>
+    </div>
+  
+    <!-- Project Info -->
+    <div class="details">
+      <!-- Title + Menu -->
+      <div class="header-row">
+        <h3>{{ project.title }}</h3>
+        <div class="menu-container">
+          <button class="dots-btn" (click)="toggleMenu()">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+  
+          <!-- Dropdown -->
+          <div class="dropdown-menu" *ngIf="menuOpen">
+            <button><i class="fa fa-eye"></i> View Design</button>
+            <button><i class="fa fa-download"></i> Download</button>
+            <button><i class="fa fa-edit"></i> Edit</button>
+            <button class="danger"><i class="fa fa-trash"></i> Delete</button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Tags -->
+      <div class="tags">
+        <span class="tag" *ngFor="let tag of project.tags">{{ tag }}</span>
+      </div>
+  
+      <!-- Date + View -->
+      <div class="footer-row">
+        <div class="date">{{ project.date }}</div>
+        <button class="view-btn">
+          <i class="fa fa-eye"></i> View
+        </button>
+      </div>
+    </div>
+  </div>
+  
