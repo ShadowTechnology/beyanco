@@ -83,7 +83,7 @@
 .vertical-bar-chart .bar-group .bar {
     width: 100%;
     height: 100px; /* fallback if binding fails */
-    background-color: #0f766e;
+    background-color: #f7c222;
     border-radius: 0.25rem 0.25rem 0 0;
     transition: height 0.3s ease;
 }

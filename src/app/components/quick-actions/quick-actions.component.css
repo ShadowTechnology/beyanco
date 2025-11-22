@@ -26,7 +26,7 @@ h2 {
 
     .action-btn {
       background: #fff;
-      color: #0f766e;
+      color: #f7c222;
       border: none;
       padding: 0.5rem 1rem;
       font-size: 0.875rem;
@@ -36,7 +36,7 @@ h2 {
     }
 
     &.gradient-green {
-      background: linear-gradient(135deg, #0f766e, #67e8f9);
+      background: linear-gradient(135deg, #f7c222, #67e8f9);
     }
 
     &.gradient-orange {

@@ -20,9 +20,9 @@
         }
   
         &.active {
-          background-color: #0f766e;
+          background-color: #f7c222;
           color: #fff;
-          border-color: #0f766e;
+          border-color: #f7c222;
         }
       }
     }
