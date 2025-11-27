@@ -650,10 +650,12 @@ export class ChatComponent implements AfterViewChecked {
 
   private uploadToBackend(userMsg: ChatMessage, text: string) {
     const formData = new FormData();
+    formData.append('userId', this.currentUser.id || 'Image modification');
     formData.append('title', text || 'Image modification');
     formData.append('description', text || 'AI generated design');
     formData.append('propertyType', this.roomModel || 'General');
     formData.append('enhancementStyle', this.style || 'modern');
+    formData.append('enhancementType', this.style || 'modern');
 
     this.pendingFiles.forEach((file: File, idx: number) => {
       formData.append('file', file, file.name || `image-${idx}.png`);
@@ -678,7 +680,8 @@ export class ChatComponent implements AfterViewChecked {
           this.propertyService.uploadPropertyAsync(formData).subscribe({
             next: (res: any) => {
               this.isUploading = true;
-              const jobId = res.message.split(": ")[1];  // Extract jobId
+              const jobId = res.jobId;
+ // Extract jobId
 
               this.pollUploadStatus(jobId, userMsg);
             },
@@ -699,7 +702,8 @@ export class ChatComponent implements AfterViewChecked {
       this.propertyService.uploadPropertyAsync(formData).subscribe({
         next: (res: any) => {
           this.isUploading = true;
-          const jobId = res.message.split(": ")[1];  // Extract jobId
+          const jobId = res.jobId;
+ // Extract jobId
 
           this.pollUploadStatus(jobId, userMsg);
         },

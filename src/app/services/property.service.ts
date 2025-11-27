@@ -70,8 +70,14 @@ export class PropertyService {
     });
   }
 
+  // uploadPropertyAsync(formData: FormData): Observable<any> {
+  //   return this.http.post(`${API_URL}upload`, formData, {
+  //     headers: this.getAuthHeaders()
+  //   });
+  // }
+
   uploadPropertyAsync(formData: FormData): Observable<any> {
-    return this.http.post(`${API_URL}upload`, formData, {
+    return this.http.post(`${API_URL}asyncupload`, formData, {
       headers: this.getAuthHeaders()
     });
   }
