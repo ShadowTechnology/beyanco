@@ -1,33 +1,34 @@
-<div class="dashboard">
+<div class="dashboard-layout">
 
-    <!-- Top Stats -->
-    <div class="stats-grid">
-        <app-stat-card class="start-cards-1" icon="project" title="Total Projects" value="152"
-            change="+12%"></app-stat-card>
-        <app-stat-card class="start-cards-2" icon="design" title="Designs Created" value="267"
-            change="+8%"></app-stat-card>
-        <app-stat-card class="start-cards-3" icon="download" title="Downloads" value="1,243"
-            change="+22%"></app-stat-card>
-        <app-stat-card class="start-cards-4" icon="active" title="Active Projects" value="24"
-            change="-5%"></app-stat-card>
-    </div>
+  <!-- Sidebar -->
+  <app-admin-sidebar class="sidebar"></app-admin-sidebar>
 
-    <!-- Charts -->
-    <div class="charts-grid">
+  <!-- Main Content Area -->
+  <div class="dashboard-content">
+
+    <div class="dashboard">
+
+      <!-- Top Stats -->
+      <div class="stats-grid">
+          <app-stat-card class="start-cards-1" icon="project" title="Total Projects" value="152" change="+12%"></app-stat-card>
+          <app-stat-card class="start-cards-2" icon="design" title="Designs Created" value="267" change="+8%"></app-stat-card>
+          <app-stat-card class="start-cards-3" icon="download" title="Downloads" value="1,243" change="+22%"></app-stat-card>
+          <app-stat-card class="start-cards-4" icon="active" title="Active Projects" value="24" change="-5%"></app-stat-card>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid">
+
         <!-- Popular Design Styles Bar Chart -->
         <app-chart-card title="Popular Design Styles">
           <div class="vertical-bar-chart">
             <div class="bar-group" *ngFor="let style of popularStyles">
-              <div
-                class="bar"
-                [style.height.px]="style.value"
-                [title]="style.value + '%'">
-              </div>
+              <div class="bar" [style.height.px]="style.value" [title]="style.value + '%'"></div>
               <span class="label">{{ style.label }}</span>
             </div>
           </div>
         </app-chart-card>
-      
+
         <!-- Monthly Activity Bar Chart -->
         <app-chart-card title="Monthly Activity">
           <div class="vertical-bar-chart orange">
@@ -41,14 +42,17 @@
             </div>
           </div>
         </app-chart-card>
+
       </div>
-      
 
+      <!-- Bottom Section -->
+      <div class="bottom-grid">
+          <app-recent-projects></app-recent-projects>
+          <app-quick-actions></app-quick-actions>
+      </div>
 
-    <!-- Projects and Actions -->
-    <div class="bottom-grid">
-        <app-recent-projects></app-recent-projects>
-        <app-quick-actions></app-quick-actions>
     </div>
+
+  </div>
 
 </div>

@@ -5,15 +5,17 @@ import { StatCardComponent } from '../stat-card/stat-card.component';
 import { ChartCardComponent } from '../chart-card/chart-card.component';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AdminSidebarComponent } from "../admin-sidebar/admin-sidebar.component";
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule, RecentProjectsComponent, QuickActionsComponent, StatCardComponent, ChartCardComponent],
+  imports: [CommonModule, RouterModule, RecentProjectsComponent, QuickActionsComponent, StatCardComponent, ChartCardComponent, AdminSidebarComponent],
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent {
+  constructor() { }
   popularStyles = [
     { label: 'Modern', value: 36 },
     { label: 'Minimal', value: 27 },
@@ -30,4 +32,5 @@ export class AdminDashboardComponent {
     { month: 'May', projects: 4 },
     { month: 'Jun', projects: 7 }
   ];
+
 }

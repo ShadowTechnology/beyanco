@@ -1,0 +1,52 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+  <!-- <div class="top">
+    <div class="brand">
+      <div class="icon-bg"><i class="far fa-image"></i></div>
+      <span class="brand-title">RoomVision360</span>
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i class="far fa-caret-square-right"></i>
+    </button>
+  </div> -->
+
+  <!-- Scrollable nav area -->
+  <div class="nav-wrapper">
+    <nav class="nav-section">
+      <p class="nav-label">Main</p>
+      <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard">
+        <i class="fas fa-th-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/projects" routerLinkActive="active" title="Projects">
+        <i class="far fa-image"></i>
+        <span>Projects</span>
+      </a>
+      <a routerLink="/newdesign" routerLinkActive="active" title="New Design">
+        <i class="far fa-plus-square"></i>
+        <span>New Design</span>
+      </a>
+      <a routerLink="/analytics" routerLinkActive="active" title="Analytics">
+        <i class="fas fa-chart-line"></i>
+        <span>Analytics</span>
+      </a>
+    </nav>
+
+    <nav class="nav-section">
+      <p class="nav-label">Account</p>
+      <a routerLink="/settings" routerLinkActive="active" title="settings">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Fixed profile at the bottom -->
+  <div class="profile">
+    <div class="avatar">VK</div>
+    <div class="info">
+      <p class="name">Vinoth Kumar</p>
+      <p class="role">Interior Designer</p>
+    </div>
+    <i class="fas fa-sign-out-alt"></i>
+  </div>
+</aside>

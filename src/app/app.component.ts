@@ -31,6 +31,9 @@ export class AppComponent {
   title = 'Beyanco - Real Estate Enhancement Platform';
   constructor(private router: Router) { }
   get showFooter(): boolean {
-    return !this.router.url.includes('/chat');
+    return !(
+      this.router.url.includes('/chat') ||
+      this.router.url.includes('/admin-dashboard')
+    );
   }
 }
