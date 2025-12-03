@@ -1,0 +1,178 @@
+.about-page {
+  font-family: sans-serif;
+  padding-bottom: 80px;
+}
+
+/* Header Section */
+.header-section {
+  text-align: center;
+  background: linear-gradient(#1f2c47, #0e1626);
+  padding: 80px 20px;
+  color: #fff;
+}
+
+.badge-btn {
+  background: #f2c200;
+  border: none;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.header-section p {
+  max-width: 650px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+/* Story Section */
+.story-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  padding: 0 20px;
+}
+
+.story-card {
+  background: #fff;
+  max-width: 900px;
+  padding: 35px 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.story-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.story-card p {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+/* Mission & Vision */
+.mission-vision {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 0 20px;
+}
+
+.mv-card {
+  background: #fff;
+  width: 100%;
+  max-width: 420px;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.mv-card .icon {
+  width: 60px;
+  height: 60px;
+  background: #f2c200;
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px;
+  font-size: 28px;
+}
+
+.mv-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* Values Section */
+.values-section {
+  margin-top: 60px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.values-section h2 {
+  font-size: 26px;
+  margin-bottom: 25px;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.value-box {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.value-box .icon {
+  width: 55px;
+  height: 55px;
+  background: #f2c200;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+}
+
+.value-box h4 {
+  margin-bottom: 8px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* Team Section */
+.team-preview {
+  margin-top: 70px;
+  text-align: center;
+}
+
+.team-btn {
+  background: #f2c200;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* Responsive */
+@media (max-width: 950px) {
+  .mission-vision {
+    flex-direction: column;
+  }
+
+  .values-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .story-card {
+    padding: 25px;
+  }
+}

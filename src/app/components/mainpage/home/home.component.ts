@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { MatIconModule } from '@angular/material/icon';
 import { HealthService } from '../../../services/HealthService.service';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, RouterLink],
   schemas: [NO_ERRORS_SCHEMA],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'

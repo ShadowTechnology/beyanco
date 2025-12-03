@@ -1,0 +1,156 @@
+.announcements-page {
+  font-family: sans-serif;
+  padding-bottom: 80px;
+}
+
+/* Header Section */
+.header-section {
+  text-align: center;
+  background: linear-gradient(#1f2c47, #0e1626);
+  padding: 70px 20px;
+  color: #fff;
+}
+
+.badge-btn {
+  background: #f2c200;
+  border: none;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.header-section p {
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+/* Form Card */
+.form-card {
+  background: #fff;
+  max-width: 850px;
+  margin: 40px auto;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+textarea {
+  height: 120px;
+  resize: none;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #f2c200;
+  outline: none;
+}
+
+/* Row Inputs */
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.input-group {
+  flex: 1;
+}
+
+/* Submit Button */
+.submit-btn {
+  margin-top: 10px;
+  background: #f2c200;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+}
+
+/* Feature Cards */
+.features {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 0 20px;
+}
+
+.feature-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px 35px;
+  text-align: center;
+  border: 1px solid #eee;
+  min-width: 250px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card .icon {
+  width: 55px;
+  height: 55px;
+  background: #f2c200;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px;
+  font-size: 22px;
+}
+
+.feature-card h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.feature-card p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Responsive Media Query */
+@media (max-width: 900px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .features {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .feature-card {
+    width: 100%;
+  }
+
+  .form-card {
+    margin: 30px 15px;
+    padding: 25px;
+  }
+}

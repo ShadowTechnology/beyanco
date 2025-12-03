@@ -1,0 +1,69 @@
+<div class="testimonials-page">
+
+  <!-- Header Section -->
+  <div class="header-section">
+    <button class="badge-btn">Client Success Stories</button>
+    <h1>Testimonials</h1>
+    <p>Hear what our clients say about their experience with Beyanco</p>
+  </div>
+
+  <!-- Testimonial Card -->
+  <div class="testimonial-card">
+
+    <div class="avatar-circle">
+      {{ testimonials[currentIndex].initials }}
+    </div>
+
+    <div class="stars">
+      {{ '★'.repeat(testimonials[currentIndex].rating) }}
+    </div>
+
+    <p class="testimonial-text">
+      "{{ testimonials[currentIndex].message }}"
+    </p>
+
+    <hr />
+
+    <div class="author">
+      <h3>{{ testimonials[currentIndex].name }}</h3>
+      <span>{{ testimonials[currentIndex].role }}</span><br />
+      <span class="company">{{ testimonials[currentIndex].company }}</span>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="slider-controls">
+    <button class="nav-btn" (click)="prevTestimonial()">&lt;</button>
+
+    <div class="dots">
+      <span
+        class="dot"
+        *ngFor="let t of testimonials; let i = index"
+        [ngClass]="{ 'active': i === currentIndex }"
+        (click)="goToSlide(i)">
+      </span>
+    </div>
+
+    <button class="nav-btn" (click)="nextTestimonial()">&gt;</button>
+  </div>
+
+  <p class="page-count">{{ currentIndex + 1 }} of {{ testimonials.length }}</p>
+
+  <!-- Stats Section -->
+  <div class="stats-section">
+    <div class="stat-card">
+      <h2>500+</h2>
+      <p>Happy Clients</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>98%</h2>
+      <p>Satisfaction Rate</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>4.9/5</h2>
+      <p>Average Rating</p>
+    </div>
+  </div>
+</div>

@@ -21,7 +21,15 @@ export class HeaderComponent implements OnInit {
   isPopupOpen = false;
   count = 1;
   totalPrice = 10;
+  selectedCurrency: string = 'INR';
 
+  currencyRates: any = {
+    INR: 1,
+    USD: 0.012,
+    EUR: 0.011,
+    GBP: 0.0095,
+    AUD: 0.018
+  };
   constructor(
     private tokenStorage: TokenStorageService,
     private router: Router,
@@ -53,7 +61,9 @@ export class HeaderComponent implements OnInit {
       });
     }
   }
-
+  onCurrencyChange() {
+    this.updatePrice();
+  }
   logout(event: Event): void {
     event.preventDefault();
     this.tokenStorage.signOut();
@@ -90,9 +100,9 @@ export class HeaderComponent implements OnInit {
     this.totalPrice = this.count * 10;
   }
   updateSlider(event: any) {
-  const slider = event.target;
-  const percent = (this.count / slider.max) * 100;
-  slider.style.setProperty("--percent", percent + "%");
-}
+    const slider = event.target;
+    const percent = (this.count / slider.max) * 100;
+    slider.style.setProperty("--percent", percent + "%");
+  }
 
 }

@@ -216,6 +216,37 @@
 .text-danger {
     color: #f11b1b;
 }
+.currency-selector select {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.currency-selector select:focus {
+  outline: none;
+  border-color: #f2c200;
+  box-shadow: 0 0 3px rgba(242, 194, 0, 0.7);
+}
+
+.currency-selector {
+  margin-left: 10px;
+  list-style: none;
+}
+
+/* For mobile menu */
+@media (max-width: 768px) {
+  .currency-selector {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .currency-selector select {
+    width: 100%;
+  }
+}
 
 @media (max-width: 768px) {
     .main-nav {

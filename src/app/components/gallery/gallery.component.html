@@ -1,0 +1,50 @@
+<div class="images-page">
+
+  <!-- Header -->
+  <div class="header-section">
+    <button class="badge-btn">My Workspace</button>
+    <h1>Your Images</h1>
+    <p>View your uploaded photos and the AI-generated designs created for you.</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button 
+      [class.active]="activeTab === 'uploaded'" 
+      (click)="activeTab = 'uploaded'">
+      Uploaded Images
+    </button>
+
+    <button 
+      [class.active]="activeTab === 'generated'" 
+      (click)="activeTab = 'generated'">
+      Generated Images
+    </button>
+  </div>
+
+  <!-- Uploaded Images -->
+  <div class="gallery-grid" *ngIf="activeTab === 'uploaded'">
+    <div 
+      class="image-card" 
+      *ngFor="let img of uploadedImages" 
+      (click)="openPreview(img)">
+      <img [src]="img" alt="Uploaded Image" />
+    </div>
+  </div>
+
+  <!-- AI Generated Images -->
+  <div class="gallery-grid" *ngIf="activeTab === 'generated'">
+    <div 
+      class="image-card" 
+      *ngFor="let img of generatedImages" 
+      (click)="openPreview(img)">
+      <img [src]="img" alt="Generated Image" />
+    </div>
+  </div>
+
+  <!-- Modal Preview -->
+  <div class="modal" *ngIf="previewImage" (click)="closePreview()">
+    <img [src]="previewImage" class="modal-content" />
+  </div>
+
+</div>

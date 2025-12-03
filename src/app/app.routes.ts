@@ -28,6 +28,13 @@ import { ChatComponent } from './components/mainpage/chat/chat.component';
 import { ProfileComponent } from './components/mainpage/profile/profile.component';
 import { AdminDashboardComponent } from './components/dashboard/admin-dashboard.component';
 import { ProjectsDashboardComponent } from './components/projects-dashboard/projects-dashboard.component';
+import { AnnouncementsComponent } from './components/announcements/announcements.component';
+import { ContactusComponent } from './components/contactus/contactus.component';
+import { TestimonialsComponent } from './components/testimonials/testimonials.component';
+import { AboutusComponent } from './components/aboutus/aboutus.component';
+import { PrivacyComponent } from './components/privacy/privacy.component';
+import { TermsComponent } from './components/terms/terms.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -37,8 +44,14 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'property-upload', component: PropertyUploadComponent },
   { path: 'chat', component: ChatComponent },
-  { path: 'profile', component:ProfileComponent},
-  { path: 'admin-dashboard', component:AdminDashboardComponent},
-  { path: 'project-dashboard', component:ProjectsDashboardComponent},
-
+  { path: 'profile', component: ProfileComponent },
+  { path: 'admin-dashboard', component: AdminDashboardComponent },
+  { path: 'project-dashboard', component: ProjectsDashboardComponent },
+  { path: 'announcement', component: AnnouncementsComponent },
+  { path: 'reachus', component: ContactusComponent },
+  { path: 'testimonials', component: TestimonialsComponent },
+  { path: 'aboutus', component: AboutusComponent },
+  { path: 'privacy', component: PrivacyComponent },
+  { path: 'terms', component: TermsComponent },
+  { path: 'gallery', component: GalleryComponent }
 ];
