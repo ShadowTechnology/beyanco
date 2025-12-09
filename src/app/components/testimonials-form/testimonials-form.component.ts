@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-testimonials',
+  selector: 'app-testimonials-form',
   imports: [CommonModule],
-  templateUrl: './testimonials.component.html',
-  styleUrl: './testimonials.component.css'
+  templateUrl: './testimonials-form.component.html',
+  styleUrl: './testimonials-form.component.css'
 })
-export class TestimonialsComponent {
+export class TestimonialsFormComponent {
   testimonials = [
     {
       name: "Sarah Mitchell",

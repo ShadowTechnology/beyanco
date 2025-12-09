@@ -1,0 +1,50 @@
+<!-- Announcement List Section -->
+<div class="list-section">
+  <!-- Header Section -->
+  <div class="header-section">
+    <button class="badge-btn">Stay Connected</button>
+    <h1>Announcements List</h1>
+    <p>Share important updates and news with the community</p>
+  </div>
+
+  <div class="announcement-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Date</th>
+          <th>Author</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>System Maintenance</td>
+          <td>2025-02-15</td>
+          <td>Admin</td>
+          <td>Our server will undergo maintenance tonight.</td>
+          <td class="actions">
+            <button class="view-btn" (click)="goTo()">View</button>
+            <button class="edit-btn">Edit</button>
+            <button class="delete-btn">Delete</button>
+          </td>
+        </tr>
+
+        <tr>
+          <td>New Feature Launch</td>
+          <td>2025-02-10</td>
+          <td>John</td>
+          <td>Launching new dashboards for users.</td>
+          <td class="actions">
+            <button class="view-btn" (click)="goTo()">View</button>
+            <button class="edit-btn">Edit</button>
+            <button class="delete-btn">Delete</button>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>

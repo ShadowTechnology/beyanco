@@ -1,0 +1,114 @@
+/* Announcement List Section */
+/* Header Section */
+.header-section {
+  text-align: center;
+  background: linear-gradient(#1f2c47, #0e1626);
+  padding: 60px 20px;
+  color: #fff;
+}
+
+.badge-btn {
+  background: #f2c200;
+  border: none;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.header-section p {
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+/* .list-section {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 0 20px;
+} */
+
+.list-section h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* Table Container */
+.announcement-table {
+  overflow-x: auto;
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background: #1f2c47;
+  color: #fff;
+}
+
+thead th {
+  padding: 14px;
+  font-size: 14px;
+  text-align: left;
+}
+
+tbody td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Button Colors */
+.view-btn {
+  background: #1f2c47;
+  color: white;
+}
+
+.edit-btn {
+  background: #f2c200;
+}
+
+.delete-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+/* Hover effects */
+.actions button:hover {
+  opacity: 0.85;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  table {
+    font-size: 13px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}

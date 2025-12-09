@@ -1,0 +1,58 @@
+<div class="pricing-form-page">
+
+    <!-- Header Section -->
+    <div class="header-section">
+        <button class="badge-btn">Create Pricing Plan</button>
+        <h1>Add New Plan</h1>
+        <p>Define pricing options for your Real Estate Enhancement platform</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+        <h2>Plan Details</h2>
+
+        <form>
+
+            <!-- Plan Name -->
+            <label>Plan Name</label>
+            <input type="text" placeholder="Professional" />
+
+            <!-- Price and Currency -->
+            <div class="row">
+                <div class="input-group">
+                    <label>Price</label>
+                    <input type="number" placeholder="79" />
+                </div>
+
+                <div class="input-group">
+                    <label>Currency</label>
+                    <select>
+                        <option value="$">$ - USD</option>
+                        <option value="₹">₹ - INR</option>
+                        <option value="€">€ - EUR</option>
+                        <option value="£">£ - GBP</option>
+                        <option value="¥">¥ - JPY</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <label>Features</label>
+            <textarea placeholder="Example:
+15 Property Enhancements
+Advanced AI Staging
+High-Resolution Output
+Priority Support
+Custom Interior Styles">
+      </textarea>
+
+            <!-- Submit Button -->
+            <button class="submit-btn">Create Plan</button>
+            <button class="view-plans-btn" routerLink="/price-form">
+                View Existing Plans
+            </button>
+
+        </form>
+    </div>
+
+</div>

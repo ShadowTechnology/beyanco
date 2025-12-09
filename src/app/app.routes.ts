@@ -28,13 +28,20 @@ import { ChatComponent } from './components/mainpage/chat/chat.component';
 import { ProfileComponent } from './components/mainpage/profile/profile.component';
 import { AdminDashboardComponent } from './components/dashboard/admin-dashboard.component';
 import { ProjectsDashboardComponent } from './components/projects-dashboard/projects-dashboard.component';
-import { AnnouncementsComponent } from './components/announcements/announcements.component';
-import { ContactusComponent } from './components/contactus/contactus.component';
-import { TestimonialsComponent } from './components/testimonials/testimonials.component';
+import { ContactusFormComponent } from './components/contactus-form/contactus-form.component';
+import { TestimonialsFormComponent } from './components/testimonials-form/testimonials-form.component';
 import { AboutusComponent } from './components/aboutus/aboutus.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { TermsComponent } from './components/terms/terms.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
+import { PriceListComponent } from './components/price-list/price-list.component';
+import { AnnouncementsFormComponent } from './components/announcements-form/announcements-form.component';
+import { AnnouncementsListComponent } from './components/announcements-list/announcements-list.component';
+import { ContactusListComponent } from './components/contactus-list/contactus-list.component';
+import { TestimonialsListComponent } from './components/testimonials-list/testimonials-list.component';
+import { PriceFormComponent } from './components/price-forms/price-form.component';
+import { RolesListComponent } from './components/roles-list/roles-list.component';
+import { RolesFormComponent } from './components/roles-form/roles-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -47,11 +54,18 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: 'project-dashboard', component: ProjectsDashboardComponent },
-  { path: 'announcement', component: AnnouncementsComponent },
-  { path: 'reachus', component: ContactusComponent },
-  { path: 'testimonials', component: TestimonialsComponent },
+  { path: 'announcement-list', component: AnnouncementsListComponent },
+  { path: 'announcement-form', component: AnnouncementsFormComponent },
+  { path: 'contactus-list', component: ContactusListComponent },
+  { path: 'contactus-form', component: ContactusFormComponent },
+  { path: 'testimonials-list', component: TestimonialsListComponent },
+  { path: 'testimonials-form', component: TestimonialsFormComponent },
   { path: 'aboutus', component: AboutusComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'terms', component: TermsComponent },
-  { path: 'gallery', component: GalleryComponent }
+  { path: 'gallery', component: GalleryComponent },
+  { path: 'price-list', component: PriceListComponent },
+  { path: 'price-form', component: PriceFormComponent },
+  { path: 'roles-list', component: RolesListComponent },
+  { path: 'roles-form', component: RolesFormComponent },
 ];

@@ -1,0 +1,127 @@
+/* Pricing Page */
+.pricing-page {
+  font-family: sans-serif;
+  padding-bottom: 80px;
+}
+
+/* Header */
+.pricing-page .header-section {
+  text-align: center;
+  background: linear-gradient(#1f2c47, #0e1626);
+  padding: 70px 20px;
+  color: #fff;
+}
+
+.badge-btn {
+  background: #f2c200;
+  border: none;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* Pricing Wrapper */
+.pricing-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 40px 20px;
+  flex-wrap: wrap;
+}
+
+/* Pricing Cards */
+.pricing-card {
+  background: #fff;
+  width: 300px;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  position: relative;
+  text-align: center;
+  border: 1px solid #eee;
+}
+
+.pricing-card h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 38px;
+  font-weight: 700;
+  color: #1f2c47;
+  margin: 15px 0;
+}
+
+.price span {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Features list */
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.features-list li {
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Buttons */
+.select-btn {
+  background: #1f2c47;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.select-btn:hover {
+  opacity: 0.85;
+}
+
+/* Highlighted Card */
+.featured {
+  border: 2px solid #f2c200;
+  box-shadow: 0 8px 25px rgba(242, 194, 0, 0.3);
+}
+
+.featured .highlighted {
+  background: #f2c200;
+  color: #000;
+}
+
+.tag {
+  background: #f2c200;
+  color: #000;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  position: absolute;
+  top: -10px;
+  right: 15px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .pricing-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pricing-card {
+    width: 90%;
+    max-width: 350px;
+  }
+}

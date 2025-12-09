@@ -1,0 +1,42 @@
+<div class="testimonials-list-page">
+
+  <div class="header-section">
+    <button class="badge-btn">Client Testimonials</button>
+    <h1>Testimonials List</h1>
+    <p>Manage and review all client testimonials submitted to Beyanco</p>
+  </div>
+
+  <div class="list-card">
+    <h2>All Testimonials</h2>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role / Company</th>
+            <th>Rating</th>
+            <th>Message</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let t of testimonials">
+            <td>{{ t.name }}</td>
+            <td>{{ t.role }} &#64; {{ t.company }}</td>
+            <td>{{ t.rating }} ★</td>
+            <td>{{ t.message }}</td>
+
+            <td class="actions">
+              <button class="view-btn" (click)="goTo()">View</button>
+              <button class="edit-btn" >Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

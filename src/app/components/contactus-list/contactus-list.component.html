@@ -1,0 +1,57 @@
+<div class="contact-list-page">
+
+  <div class="header-section">
+    <button class="reach-us-btn">Contacts Us</button>
+    <h1>Contact Messages</h1>
+    <p>View all messages submitted through the contact form</p>
+  </div>
+
+  <div class="list-card">
+    <h2>Messages Received</h2>
+
+    <div class="contact-table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>John Doe</td>
+            <td>john&#64;example.com</td>
+            <td>+1 555-000-1111</td>
+            <td>Need help with my project design.</td>
+            <td>2025-02-15</td>
+            <td class="actions">
+              <button class="view-btn"  (click)="goTo()">View</button>
+              <button class="reply-btn">Reply</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Sarah Parker</td>
+            <td>sarah&#64;example.com</td>
+            <td>+1 555-555-2222</td>
+            <td>I would like pricing details.</td>
+            <td>2025-02-14</td>
+            <td class="actions">
+              <button class="view-btn" (click)="goTo()">View</button>
+              <button class="reply-btn">Reply</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

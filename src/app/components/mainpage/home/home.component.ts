@@ -157,7 +157,7 @@ export class HomeComponent implements OnInit {
     }
   }
   goToChat() {
-    if (this.tokenStorage.getToken()) {
+    if (this.tokenStorage.getToken() && this.tokenStorage.getUser()) {
       this.router.navigate(['/chat']);
     } else {
       this.router.navigate(['/login']);

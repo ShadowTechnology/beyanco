@@ -1,0 +1,163 @@
+.testimonials-page {
+  font-family: sans-serif;
+  padding-bottom: 80px;
+}
+
+/* Header */
+.header-section {
+  text-align: center;
+  background: linear-gradient(#1f2c47, #0e1626);
+  padding: 60px 20px;
+  color: #fff;
+}
+
+.badge-btn {
+  background: #f2c200;
+  border: none;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.header-section p {
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+/* Testimonials List Page */
+.testimonials-list-page {
+  font-family: sans-serif;
+  padding-bottom: 80px;
+}
+
+/* Header reused styling */
+.testimonials-list-page .header-section {
+  text-align: center;
+  background: linear-gradient(#1f2c47, #0e1626);
+  padding: 70px 20px;
+  color: #fff;
+}
+
+.badge-btn {
+  background: #f2c200;
+  border: none;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* List Card */
+.list-card {
+  background: #fff;
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.list-card h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Table */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+thead {
+  background: #1f2c47;
+  color: white;
+}
+
+thead th {
+  padding: 14px;
+  font-size: 14px;
+  text-align: left;
+}
+
+tbody td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.view-btn {
+  background: #1f2c47;
+  color: white;
+}
+
+.edit-btn {
+  background: #f2c200;
+}
+
+.delete-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+tbody tr:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  thead {
+    display: none;
+  }
+
+  tr, td {
+    display: block;
+    width: 100%;
+  }
+
+  tr {
+    margin-bottom: 12px;
+    background: #fafafa;
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #333;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+}
