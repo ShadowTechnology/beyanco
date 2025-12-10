@@ -31,4 +31,10 @@ export class AuthService {
       companyName
     }, httpOptions);
   }
+
+  googleLogin(idToken: string) {
+    return this.http.post<any>(`${environment.backendUrl}/api/auth/google`, {
+      token: idToken
+    });
+  }
 }

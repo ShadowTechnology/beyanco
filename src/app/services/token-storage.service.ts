@@ -31,15 +31,19 @@ export class TokenStorageService {
     return window.localStorage.getItem(TOKEN_KEY);
   }
 
-  // public saveUser(user: any): void {
-  //   // window.localStorage.removeItem(USER_KEY);
-  //   window.localStorage.setItem(USER_KEY, JSON.stringify(user));
-  // }
-
   public saveUser(user: any): void {
+    if (user == null) {     // only block null, not objects
+      console.error("❌ Tried to save null user!");
+      return;
+    }
+
+    console.log("Saving user to localStorage:", user);
+
     window.localStorage.setItem(USER_KEY, JSON.stringify(user));
-    this.loggedIn.next(true);   // ✅ triggers update only after user is stored
+    this.loggedIn.next(true);
   }
+
+
 
   updateUserCredits(newCredits: any): void {
     const user = this.getUser();
@@ -53,10 +57,20 @@ export class TokenStorageService {
   }
 
   public getUser(): any {
-    const user = window.localStorage.getItem(USER_KEY);
-    if (user) {
-      return JSON.parse(user);
+    const user = localStorage.getItem(USER_KEY);
+
+    if (!user) {
+      return null;
     }
-    return null;
+
+    try {
+      return JSON.parse(user);
+    } catch (e) {
+      console.error("⚠ Failed to parse user JSON:", user);
+      localStorage.removeItem(USER_KEY);
+      return null;
+    }
   }
+
+
 }

@@ -1,22 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { TokenStorageService } from '../../services/token-storage.service';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
+
+declare var google: any;
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
-  form: any = {
-    username: null,
-    password: null
-  };
+  @ViewChild('googleBtn', { static: false }) googleBtn!: ElementRef;
+  form: any = { username: null, password: null };
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
@@ -26,7 +27,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
@@ -56,7 +57,42 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  redirectAfterLogin(): void {
-    this.router.navigate(['/dashboard']);
+  ngAfterViewInit() {
+    google.accounts.id.initialize({
+      client_id: environment.googleClientId,
+      callback: (response: any) => this.sendIdTokenToBackend(response.credential)
+    });
+
+    google.accounts.id.renderButton(
+      this.googleBtn.nativeElement,
+      { theme: "filled_blue", size: "large" }
+    );
   }
+
+  sendIdTokenToBackend(idToken: string) {
+    this.authService.googleLogin(idToken).subscribe({
+      next: (data) => {
+        console.log("Backend Login Success", data);
+
+        this.tokenStorage.saveToken(data.token);
+        this.tokenStorage.saveUser(data.user);   // MUST run before other components read it
+        this.isLoginFailed = false;
+        this.isLoggedIn = true;
+        this.roles = this.tokenStorage.getUser().roles;
+        this.redirectAfterLogin();
+      },
+      error: (err) => {
+        console.error("Backend Login Error", err);
+      }
+    });
+  }
+
+  redirectAfterLogin(): void {
+    if (this.roles.includes('ROLE_ADMIN')) {
+      this.router.navigate(['/admin-dashboard']);
+    } else {
+      this.router.navigate(['/home']);
+    }
+  }
+
 }
