@@ -1,13 +1,14 @@
 <div class="hero">
   <div class="hero__overlay"></div>
   <div class="hero__content container">
-    <h1>Luxury Staging Solutions</h1>
-    <h3 class="tagline">From Empty to Extraordinary</h3>
-    <p>Professional staging that maximizes your property's potential</p>
+    <h1>Virtual home staging within seconds</h1>
+    <h3 class="tagline">Create clear, fully furnished property image in a
+      click</h3>
+    <p>Flaunt your space with stunning visuals and bring in more prospects</p>
 
     <div class="hero__buttons">
-      <button class="btn btn-primary" (click)="goToChat()">Try Now</button>
-      <button class="btn btn-light">See Examples</button>
+      <button class="btn btn-primary" (click)="goToChat()">Try for free</button>
+      <button class="btn btn-light">See samples</button>
     </div>
   </div>
 
@@ -60,23 +61,21 @@
 
 <section id="work" class="section work-section-bg">
   <div class="container">
-    <h2 class="section__title _color">How It Works</h2>
-    <p class="section__subtitle subtitle_color">Enhance your real‑estate photos
-      in three simple
-      steps — no artistic talent necessary</p>
+    <h2 class="section__title _color">Here's How it Works</h2>
+    <p class="section__subtitle subtitle_color">Get advanced and professional
+      real estate images in a few steps</p>
 
     <ol class="steps">
       <li class="step">
         <div class="step__num">1</div>
-        <h3 class="step__title">Send your photo</h3>
-        <p class="step__text">Upload the photo you wish to enhance.</p>
+        <h3 class="step__title">Upload your image</h3>
+        <p class="step__text">Upload an image of your space</p>
         <button class="btn btn--sm" type="button">Uploading files</button>
       </li>
       <li class="step">
         <div class="step__num">2</div>
-        <h3 class="step__title">Choose your options</h3>
-        <p class="step__text">Pick retouching type and decor style to match your
-          goal.</p>
+        <h3 class="step__title">Pick your style</h3>
+        <p class="step__text">Modern, scandinavian, british... pick one!</p>
         <div class="step__chips">
           <button class="chip" type="button">Furnish</button>
           <button class="chip" type="button">Modern</button>
@@ -85,9 +84,8 @@
       </li>
       <li class="step">
         <div class="step__num">3</div>
-        <h3 class="step__title">Click on 'Start'</h3>
-        <p class="step__text">Preview the result and fine‑tune with the
-          slider.</p>
+        <h3 class="step__title">Click 'Start'</h3>
+        <p class="step__text">Preview your choice and thinker if necessary</p>
         <button class="btn btn--sm" type="button">Start now</button>
       </li>
     </ol>
@@ -96,9 +94,9 @@
 
 <section id="services" class="section">
   <div class="service-padding">
-    <h2 class="section__title">Our Staging Services</h2>
+    <h2 class="section__title">Our Virtual Staging Services</h2>
     <p class="section__subtitle">Professional staging solutions for every space
-      and budget</p>
+      and Budget</p>
 
     <div class="grid grid--cards">
       <!-- <article class="card active-card--featured">
@@ -134,9 +132,9 @@
 
 <section id="portfolio" class="section section--alt">
   <div class="container">
-    <h2 class="section__title">See the Transformation</h2>
-    <p class="section__subtitle">Witness the power of professional staging with
-      our before and after comparisons</p>
+    <h2 class="section__title">Experience The Transformation</h2>
+    <p class="section__subtitle">Experience the efficiency of virtual interior
+      staging with our before/after high-resolution pictures</p>
 
     <div class="grid grid--ba">
       <div class="ba-card" *ngFor="let item of transformations; let i = index"
@@ -166,58 +164,35 @@
 </section>
 <section id="pricing" class="section">
   <div class="container">
-    <h2 class="section__title">Our Affordable Pricing Plans</h2>
-    <p class="section__subtitle">Choose the plan that suits you best</p>
-
-    <!-- <div class="pricing-toggle">
-      <button class="toggle-btn active">Photo</button>
-      <button class="toggle-btn">Video</button>
-      <button class="toggle-btn">Photo + Video <span>-15%</span></button>
-    </div> -->
+    <h2 class="section__title">Our Pricing Plans</h2>
+    <p class="section__subtitle">Choose a plan that suits you</p>
 
     <div class="billing-toggle">
-      <button class="toggle-btn">Per month</button>
-      <button class="toggle-btn active">Per year</button>
+      <button
+        class="toggle-btn"
+        [class.active]="billingType === 'month'"
+        (click)="setBilling('month')">
+        Monthly plan
+      </button>
+
+      <button
+        class="toggle-btn"
+        [class.active]="billingType === 'year'"
+        (click)="setBilling('year')">
+        Yearly plan
+      </button>
     </div>
 
     <div class="grid grid--cards pricing-grid">
-      <article class="card pricing-card">
-        <h3 class="pricing-title">Occasional</h3>
-        <p class="price">$28.5</p>
-        <ul class="pricing-features">
-          <li>One-time payment</li>
-          <li>5 photos to redo</li>
-          <li>No hidden fees</li>
-          <li>Commercial use</li>
-        </ul>
-        <button class="btn pricing-btn">Get my photos</button>
-      </article>
+      <article class="card pricing-card"
+        *ngFor="let plan of pricing[billingType]">
+        <h3 class="pricing-title">{{ plan.title }}</h3>
+        <p class="price" [innerHTML]="plan.price"></p>
 
-      <article class="card pricing-card featured">
-        <h3 class="pricing-title">Star of home staging</h3>
-        <p class="price">$32.5 <span>/month</span></p>
         <ul class="pricing-features">
-          <li>1 individual license</li>
-          <li>Interior & exterior renovation unlimited</li>
-          <li>Removal of objects unlimited</li>
-          <li>Blue sky unlimited</li>
-          <li>Improved quality unlimited</li>
-          <li>15 photos of empty spaces furnished</li>
-          <li>20 lead generations</li>
-          <li>Commercial use</li>
+          <li *ngFor="let feature of plan.features">{{ feature }}</li>
         </ul>
-        <button class="btn pricing-btn">Get my photos</button>
-      </article>
 
-      <article class="card pricing-card">
-        <h3 class="pricing-title">Mini</h3>
-        <p class="price">$18.3 <span>/month</span></p>
-        <ul class="pricing-features">
-          <li>1 individual license</li>
-          <li>10 photos to redo</li>
-          <li>No hidden fees</li>
-          <li>Commercial use</li>
-        </ul>
         <button class="btn pricing-btn">Get my photos</button>
       </article>
     </div>
@@ -227,52 +202,97 @@
 <section id="cta" class="section cta">
   <div class="container cta__box">
     <div>
-      <h2 class="cta__title">Ready to Transform Your Space?</h2>
+      <h2 class="cta__title">Ready to Customize Your Space?</h2>
       <p class="cta__subtitle">Join thousands of satisfied customers who have
         successfully staged their properties.</p>
     </div>
     <div class="cta__actions">
-      <a class="btn btn-get-start" href="#">Get Started Today</a>
+      <a class="btn btn-get-start" (click)="goToChat()">Get Started Today</a>
       <!-- <a class="btn btn--ghost" href="#portfolio">View Portfolio</a> -->
     </div>
   </div>
 </section>
+<section class="section testimonials-page">
+  <h2 class="section__title">What Our Clients Say</h2>
+  <p class="section__subtitle">Hear from people who used our service</p>
 
+  <!-- Testimonial Card -->
+  <div class="testimonial-card">
+
+    <div class="avatar-circle">
+      {{ testimonials[TestiminialCurrentIndex].initials }}
+    </div>
+
+    <div class="stars">
+      {{ '★'.repeat(testimonials[TestiminialCurrentIndex].rating) }}
+    </div>
+
+    <p class="testimonial-text">
+      "{{ testimonials[TestiminialCurrentIndex].message }}"
+    </p>
+
+    <hr />
+
+    <div class="author">
+      <h3>{{ testimonials[TestiminialCurrentIndex].name }}</h3>
+      <span>{{ testimonials[TestiminialCurrentIndex].role }}</span><br />
+      <span class="company">{{ testimonials[TestiminialCurrentIndex].company }}</span>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="slider-controls">
+    <button class="nav-btn" (click)="prevTestimonial()">&lt;</button>
+
+    <div class="dots">
+      <span
+        class="dot"
+        *ngFor="let t of testimonials; let i = index"
+        [ngClass]="{ 'active': i === TestiminialCurrentIndex }"
+        (click)="goToTestimonialSlide(i)">
+      </span>
+    </div>
+
+    <button class="nav-btn" (click)="nextTestimonial()">&gt;</button>
+  </div>
+
+  <p class="page-count">{{ TestiminialCurrentIndex + 1 }} of {{ testimonials.length }}</p>
+
+</section>
 <section class="updates-section">
   <div class="container">
 
     <h2 class="section-title">Stay Connected</h2>
-    <p class="section__subtitle">Stay informed with our latest announcements,
-      updates, and customer stories.
+    <p class="section__subtitle">Get our lates updates!
     </p>
     <div class="updates-grid">
 
-      <div class="update-card">
+      <!-- <div class="update-card">
         <div class="icon-box">
           <i class="fas fa-bullhorn"></i>
         </div>
-        <h3>Announcement</h3>
+        <h3>Announcements</h3>
         <p>Our updates & events to the public</p>
         <a routerLink="/announcement" class="view-link">View all →</a>
-      </div>
+      </div> -->
 
       <div class="update-card">
         <div class="icon-box">
           <i class="fas fa-envelope-open-text"></i>
         </div>
-        <h3>Contact Us</h3>
-        <p>Ask your queries & send feedbacks</p>
-        <a routerLink="/contactus-form" class="view-link">View all →</a>
+        <h3>Reach Our to Us</h3>
+        <p>Send your queries and feedbacks</p>
+        <a routerLink="/contactus-form" class="view-link">Get in Touch →</a>
       </div>
 
-      <div class="update-card">
+      <!-- <div class="update-card">
         <div class="icon-box">
           <i class="fas fa-comments"></i>
         </div>
         <h3>Testimonials</h3>
         <p>What our customers say about us</p>
         <a routerLink="/testimonials" class="view-link">View all →</a>
-      </div>
+      </div> -->
 
     </div>
 

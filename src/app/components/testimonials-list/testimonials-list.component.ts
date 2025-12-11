@@ -15,7 +15,7 @@ export class TestimonialsListComponent {
       id: 1,
       name: "John Doe",
       role: "Designer",
-      company: "Beyanco",
+      company: "Beyanco AI",
       rating: 5,
       message: "Amazing service! Loved the experience!"
     },

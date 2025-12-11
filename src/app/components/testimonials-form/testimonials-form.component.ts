@@ -15,7 +15,7 @@ export class TestimonialsFormComponent {
       company: "Premium Properties NYC",
       initials: "SM",
       rating: 5,
-      message: `Beyanco transformed our listings completely. The professional staging helped us 
+      message: `Beyanco AI transformed our listings completely. The professional staging helped us 
                 sell properties 40% faster than the market average. Their attention to detail 
                 and understanding of luxury aesthetics is unmatched.`
     },

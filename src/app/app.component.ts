@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ import { FooterComponent } from './components/footer/footer.component';
     </main>
     <app-footer *ngIf="showFooter"></app-footer>
   `,
-  styles: `
+  styles: [`
     :host {
       display: block;
       min-height: 100vh;
@@ -25,11 +26,18 @@ import { FooterComponent } from './components/footer/footer.component';
     main {
       min-height: calc(100vh - 70px - 350px);
     }
-  `
+  `]
 })
 export class AppComponent {
-  title = 'Beyanco - Real Estate Enhancement Platform';
-  constructor(private router: Router) { }
+  title = 'Beyanco AI - Real estate interior visualization tool';
+
+  constructor(private router: Router) {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+  }
   get showFooter(): boolean {
     return !(
       this.router.url.includes('/chat') ||
