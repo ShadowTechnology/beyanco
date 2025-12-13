@@ -1,23 +1,19 @@
 <div class="hero">
   <div class="hero__overlay"></div>
   <div class="hero__content container">
-    <h1>Virtual home staging within seconds</h1>
-    <h3 class="tagline">Create clear, fully furnished property image in a
-      click</h3>
-    <p>Flaunt your space with stunning visuals and bring in more prospects</p>
+    <h1>Virtual Home-staging Within Seconds</h1>
+    <h3 class="tagline">Create clear, fully-furnished property images in a click.</h3>
+    <p>Flaunt your space with stunning visuals and bring in more prospects.</p>
 
     <div class="hero__buttons">
       <button class="btn btn-primary" (click)="goToChat()">Try for free</button>
-      <button class="btn btn-light">See samples</button>
+      <button class="btn btn-light">See Samples</button>
     </div>
   </div>
 
   <div class="hero__mini-slider">
     <div class="slider-wrapper">
-      <div
-        class="slide-card"
-        *ngFor="let item of herosectionSlider; let i = index"
-        [class.active]="i === currentIndex"
+      <div class="slide-card" *ngFor="let item of herosectionSlider; let i = index" [class.active]="i === currentIndex"
         [class.prev]="i === prevIndex">
         <div class="ba-card" [style.--pos.%]="sliderValues[i]">
           <div class="ba-media">
@@ -26,12 +22,7 @@
             <div class="ba-divider">
               <span class="ba-handle"></span>
             </div>
-            <input
-              class="ba-range"
-              type="range"
-              min="0"
-              max="100"
-              [value]="sliderValues[i]"
+            <input class="ba-range" type="range" min="0" max="100" [value]="sliderValues[i]"
               (input)="onSlider(i, $event)" />
             <span class="ba-label ba-label--before">Before</span>
             <span class="ba-label ba-label--after">After</span>
@@ -44,10 +35,7 @@
       <button class="nav-btn prev" (click)="prevSlide()">&#10094;</button>
 
       <div class="dots">
-        <span
-          class="dot"
-          *ngFor="let t of herosectionSlider; let i = index"
-          [class.active]="i === currentIndex"
+        <span class="dot" *ngFor="let t of herosectionSlider; let i = index" [class.active]="i === currentIndex"
           (click)="goToSlide(i)"></span>
       </div>
       <!-- <button class="play-btn" (click)="toggleAutoPlay()">
@@ -85,7 +73,7 @@
       <li class="step">
         <div class="step__num">3</div>
         <h3 class="step__title">Click 'Start'</h3>
-        <p class="step__text">Preview your choice and thinker if necessary</p>
+        <p class="step__text">Preview your choice and tinker if necessary</p>
         <button class="btn btn--sm" type="button">Start now</button>
       </li>
     </ol>
@@ -96,7 +84,7 @@
   <div class="service-padding">
     <h2 class="section__title">Our Virtual Staging Services</h2>
     <p class="section__subtitle">Professional staging solutions for every space
-      and Budget</p>
+      and budget</p>
 
     <div class="grid grid--cards">
       <!-- <article class="card active-card--featured">
@@ -133,22 +121,17 @@
 <section id="portfolio" class="section section--alt">
   <div class="container">
     <h2 class="section__title">Experience The Transformation</h2>
-    <p class="section__subtitle">Experience the efficiency of virtual interior
-      staging with our before/after high-resolution pictures</p>
+    <p class="section__subtitle">Witness the power of our virtual home-staging tool</p>
 
     <div class="grid grid--ba">
-      <div class="ba-card" *ngFor="let item of transformations; let i = index"
-        [style.--pos.%]="sliderValues[i]">
+      <div class="ba-card" *ngFor="let item of transformations; let i = index" [style.--pos.%]="sliderValues[i]">
         <div class="ba-media">
-          <img class="ba-img ba-img--before" [src]="item.before"
-            alt="Before {{ item.title }}" />
-          <img class="ba-img ba-img--after" [src]="item.after"
-            alt="After {{ item.title }}" />
+          <img class="ba-img ba-img--before" [src]="item.before" alt="Before {{ item.title }}" />
+          <img class="ba-img ba-img--after" [src]="item.after" alt="After {{ item.title }}" />
           <div class="ba-divider" aria-hidden="true">
             <span class="ba-handle"></span>
           </div>
-          <input class="ba-range" type="range" min="0" max="100"
-            [value]="sliderValues[i]" (input)="onSlider(i, $event)"
+          <input class="ba-range" type="range" min="0" max="100" [value]="sliderValues[i]" (input)="onSlider(i, $event)"
             aria-label="Reveal after image" />
           <span class="ba-label ba-label--before">Before</span>
           <span class="ba-label ba-label--after">After</span>
@@ -167,24 +150,28 @@
     <h2 class="section__title">Our Pricing Plans</h2>
     <p class="section__subtitle">Choose a plan that suits you</p>
 
-    <div class="billing-toggle">
-      <button
-        class="toggle-btn"
-        [class.active]="billingType === 'month'"
-        (click)="setBilling('month')">
+    <!-- <div class="billing-toggle">
+      <button class="toggle-btn" [class.active]="billingType === 'month'" (click)="setBilling('month')">
         Monthly plan
       </button>
 
-      <button
-        class="toggle-btn"
-        [class.active]="billingType === 'year'"
-        (click)="setBilling('year')">
+      <button class="toggle-btn" [class.active]="billingType === 'year'" (click)="setBilling('year')">
         Yearly plan
+      </button>
+    </div> -->
+    <div class="billing-toggle">
+      <button class="toggle-btn" (click)="changeBilling('month')" [class.active]="billingType === 'month'">
+        Monthly
+      </button>
+
+      <button class="toggle-btn" (click)="changeBilling('year')" [class.active]="billingType === 'year'">
+        Yearly
       </button>
     </div>
 
+
     <div class="grid grid--cards pricing-grid">
-      <article class="card pricing-card"
+      <!-- <article class="card pricing-card"
         *ngFor="let plan of pricing[billingType]">
         <h3 class="pricing-title">{{ plan.title }}</h3>
         <p class="price" [innerHTML]="plan.price"></p>
@@ -193,7 +180,24 @@
           <li *ngFor="let feature of plan.features">{{ feature }}</li>
         </ul>
 
-        <button class="btn pricing-btn">Get my photos</button>
+        <button class="btn pricing-btn" >Get my photos</button>
+      </article> -->
+      <article class="card pricing-card" *ngFor="let plan of filteredPlans">
+        <h3 class="pricing-title">{{ plan.name }}</h3>
+        <p class="price">
+          {{ getCurrencySymbol(plan.currency) }}{{ plan.price }}
+          <span *ngIf="plan.duration === 'monthly'">/month</span>
+          <span *ngIf="plan.duration === 'yearly'">/year</span>
+        </p>
+        <ul class="pricing-features">
+          <li *ngFor="let feature of getFeatures(plan)">
+            {{ feature }}
+          </li>
+        </ul>
+        <button class="btn pricing-btn" [disabled]="hasActiveForPlan(plan.id!)" (click)="buy(plan)">
+          {{ hasActiveForPlan(plan.id!) ? 'Already Subscribed' : 'Get my photos' }}
+        </button>
+
       </article>
     </div>
   </div>
@@ -214,7 +218,7 @@
 </section>
 <section class="section testimonials-page">
   <h2 class="section__title">What Our Clients Say</h2>
-  <p class="section__subtitle">Hear from people who used our service</p>
+  <p class="section__subtitle">Hear from people who have used our services.</p>
 
   <!-- Testimonial Card -->
   <div class="testimonial-card">
@@ -245,11 +249,8 @@
     <button class="nav-btn" (click)="prevTestimonial()">&lt;</button>
 
     <div class="dots">
-      <span
-        class="dot"
-        *ngFor="let t of testimonials; let i = index"
-        [ngClass]="{ 'active': i === TestiminialCurrentIndex }"
-        (click)="goToTestimonialSlide(i)">
+      <span class="dot" *ngFor="let t of testimonials; let i = index"
+        [ngClass]="{ 'active': i === TestiminialCurrentIndex }" (click)="goToTestimonialSlide(i)">
       </span>
     </div>
 
@@ -263,7 +264,7 @@
   <div class="container">
 
     <h2 class="section-title">Stay Connected</h2>
-    <p class="section__subtitle">Get our lates updates!
+    <p class="section__subtitle">Get our latest updates!
     </p>
     <div class="updates-grid">
 
@@ -280,8 +281,8 @@
         <div class="icon-box">
           <i class="fas fa-envelope-open-text"></i>
         </div>
-        <h3>Reach Our to Us</h3>
-        <p>Send your queries and feedbacks</p>
+        <h3>Reach Us</h3>
+        <p>Send your queries and feedback</p>
         <a routerLink="/contactus-form" class="view-link">Get in Touch →</a>
       </div>
 

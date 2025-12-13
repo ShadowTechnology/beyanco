@@ -1,16 +1,26 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
 html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme((color: (theme-type: light,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
+}
+
+/* Snackbar styles */
+.snackbar-success {
+  background-color: #28a745 !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.snackbar-error {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  font-weight: 600;
 }

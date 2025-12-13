@@ -1,35 +1,37 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { PricingService } from '../../services/pricing.service';
 
 @Component({
   selector: 'app-price-list',
-  imports: [RouterModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './price-list.component.html',
-  styleUrl: './price-list.component.css'
+  styleUrls: ['./price-list.component.css']
 })
-export class PriceListComponent {
-  name: any;
-  price: any;
-  currency: any;
-  features: any;
+export class PriceListComponent implements OnInit {
 
-  currencies = [
-    { symbol: "$", label: "USD" },
-    { symbol: "₹", label: "INR" },
-    { symbol: "€", label: "EUR" },
-    { symbol: "£", label: "GBP" },
-    { symbol: "¥", label: "JPY" }
-  ];
+  plans: any[] = [];
 
-  createPlan() {
-    const plan = {
-      name: this.name,
-      price: this.price,
-      currency: this.currency,
-      features: this.features.split("\n")
-    };
+  constructor(private pricingService: PricingService, private router: Router) {}
 
-    console.log("Created Plan:", plan);
+  ngOnInit(): void {
+    this.loadPlans();
   }
 
+  loadPlans() {
+    this.pricingService.getPlans().subscribe({
+      next: (data) => (this.plans = data),
+      error: (err) => console.error(err)
+    });
+  }
+
+  view(plan: any) {
+    this.router.navigate(['/plans/view', plan.id]);
+  }
+
+  edit(plan: any) {
+    this.router.navigate(['/plans/edit', plan.id]);
+  }
 }

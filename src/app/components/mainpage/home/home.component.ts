@@ -4,7 +4,14 @@ import { Router, RouterLink } from '@angular/router';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { MatIconModule } from '@angular/material/icon';
 import { HealthService } from '../../../services/HealthService.service';
+import { PaymentService } from '../../../services/PaymentService';
+import { Plan } from '../../../models/Plan.model';
+import { Subscription } from '../../../models/subscription.model';
+import { PricingService } from '../../../services/pricing.service';
+import { SubscriptionService } from '../../../services/subscription.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
+declare var Razorpay: any;
 @Component({
   selector: 'app-home',
   imports: [CommonModule, MatIconModule, RouterLink],
@@ -23,23 +30,23 @@ export class HomeComponent implements OnInit {
     { imageUrl: 'assets/images/banner3.jpg' }
   ];
   services = [
-    { icon: 'fas fa-house', title: 'Living Room', text: 'Furnish your living area with contemporary fitting, exuding elegance!' },
-    { icon: 'fa-solid fa-kitchen-set', title: 'Kitchen', text: 'Modern kitchen interiors, bringing style and utility to your space' },
-    { icon: 'fa-solid fa-bed', title: 'Bedroom', text: 'Design cozy and comfort-oriented bedroom space' },
-    { icon: 'fa-solid fa-couch', title: 'Furniture Schemes', text: "Use advanced color palettes to enhance your property's appeal"},
-    { icon: 'fa-solid fa-palette', title: 'Color Coordination', text: 'Expert color schemes that enhance your property\'s appeal' },
+    { icon: 'fas fa-house', title: 'Living Room', text: 'Furnish your living area with contemporary fittings, exuding elegance!' },
+    { icon: 'fa-solid fa-kitchen-set', title: 'Kitchen', text: 'Modern kitchen interiors, bringing style and utility to your space.' },
+    { icon: 'fa-solid fa-bed', title: 'Bedroom', text: 'Design cozy and comfort-oriented bedroom spaces.' },
+    { icon: 'fa-solid fa-couch', title: 'Furniture Schemes', text: "Elevate your space with apt furniture placement." },
+    { icon: 'fa-solid fa-palette', title: 'Color Coordination', text: 'Use expert color schemes to enhance your property\'s appeal.' },
     // { icon: 'fa-solid fa-desktop', title: 'Virtual Staging', text: 'AI-powered staging for stunning visual transformations.' },
   ];
   transformations = [
     {
       title: 'Living Room Enhancements',
-      desc: 'From a vacant space to a sophisticated lounge with modern decor and warm-lit furnishings',
+      desc: 'From empty space to a sophisticated lounge with modern decor and warm-lit furnishings.',
       before: 'https://gravelmag.com/wp-content/uploads/2022/02/spanish-16.jpg',
       after: 'https://belleabodes.com/wp-content/uploads/2024/01/Emma-Stone-Spanish-Style-House-Living-Room-Get-the-Look-1024x682.jpg'
     },
     {
       title: 'Kitchen Renovation',
-      desc: 'Modular kitchen with high-end appliances and a build-in pantry.',
+      desc: 'Choose from a variety of modern kitchen styles with state-of-the-art appliances and elegant design.',
       before: 'https://mudosikitchenandbath.com/wp-content/uploads/2023/01/Rolling-Cart.jpg',
       after: 'https://organizeddad.com/wp-content/uploads/2022/04/dl.beatsnoop.com-1649008255-3.jpg'
     }
@@ -83,7 +90,7 @@ export class HomeComponent implements OnInit {
 
   sliderValues: number[] = this.transformations.map(() => 50);
   healthStatus: any;
-    testimonials = [
+  testimonials = [
     {
       name: "Sarah Mitchell",
       role: "Real Estate Agent",
@@ -129,6 +136,10 @@ export class HomeComponent implements OnInit {
   ];
 
   TestiminialCurrentIndex = 0;
+  plans: Plan[] = [];
+  mySubs: Subscription[] = [];
+  loading = false;
+  user: any;
 
   nextTestimonial() {
     this.TestiminialCurrentIndex = (this.TestiminialCurrentIndex + 1) % this.testimonials.length;
@@ -143,66 +154,72 @@ export class HomeComponent implements OnInit {
 
   billingType: 'month' | 'year' = 'month';
 
-  pricing = {
-    month: [
-      {
-        title: 'Single simulation',
-        price: '$28.5',
-        features: ['One-time payment', '5 photos to redo', 'No hidden fees', 'Commercial use']
-      },
-      {
-        title: 'Premium plan',
-        price: '$32.5 /month',
-        features: [
-          '1 individual license',
-          'Interior & exterior renovation unlimited',
-          'Removal of objects unlimited',
-          'Blue sky unlimited',
-          'Improved quality unlimited',
-          '15 photos of empty spaces furnished',
-          '20 lead generations',
-          'Commercial use'
-        ]
-      },
-      {
-        title: 'Minimal plan',
-        price: '$18.3 /month',
-        features: ['1 individual license', '10 photos to redo', 'No hidden fees', 'Commercial use']
-      }
-    ],
-    year: [
-      {
-        title: 'Occasional',
-        price: '$285 /year',
-        features: ['One-time payment', '5 photos to redo', 'No hidden fees', 'Commercial use']
-      },
-      {
-        title: 'Star of home staging',
-        price: '$320 /year',
-        features: [
-          '1 individual license',
-          'Unlimited renovation edits',
-          'Unlimited object removal',
-          'Blue sky unlimited',
-          'Improved quality unlimited',
-          '20 furnished photos',
-          '40 lead generations',
-          'Commercial use'
-        ]
-      },
-      {
-        title: 'Minimal plan',
-        price: '$180 /year',
-        features: ['1 individual license', '10 photos to redo', 'No hidden fees', 'Commercial use']
-      }
-    ]
-  };
+  // pricing = {
+  //   month: [
+  //     {
+  //       title: 'Single simulation',
+  //       price: '$28.5',
+  //       features: ['One-time payment', '5 photos to redo', 'No hidden fees', 'Commercial use']
+  //     },
+  //     {
+  //       title: 'Premium plan',
+  //       price: '$32.5 /month',
+  //       features: [
+  //         '1 individual license',
+  //         'Interior & exterior renovation unlimited',
+  //         'Removal of objects unlimited',
+  //         'Blue sky unlimited',
+  //         'Improved quality unlimited',
+  //         '15 photos of empty spaces furnished',
+  //         '20 lead generations',
+  //         'Commercial use'
+  //       ]
+  //     },
+  //     {
+  //       title: 'Minimal plan',
+  //       price: '$18.3 /month',
+  //       features: ['1 individual license', '10 photos to redo', 'No hidden fees', 'Commercial use']
+  //     }
+  //   ],
+  //   year: [
+  //     {
+  //       title: 'Occasional',
+  //       price: '$285 /year',
+  //       features: ['One-time payment', '5 photos to redo', 'No hidden fees', 'Commercial use']
+  //     },
+  //     {
+  //       title: 'Star of home staging',
+  //       price: '$320 /year',
+  //       features: [
+  //         '1 individual license',
+  //         'Unlimited renovation edits',
+  //         'Unlimited object removal',
+  //         'Blue sky unlimited',
+  //         'Improved quality unlimited',
+  //         '20 furnished photos',
+  //         '40 lead generations',
+  //         'Commercial use'
+  //       ]
+  //     },
+  //     {
+  //       title: 'Minimal plan',
+  //       price: '$180 /year',
+  //       features: ['1 individual license', '10 photos to redo', 'No hidden fees', 'Commercial use']
+  //     }
+  //   ]
+  // };
 
+
+  filteredPlans: any[] = [];
 
   constructor(
     private router: Router,
     private tokenStorage: TokenStorageService,
-    private healthService: HealthService
+    private healthService: HealthService,
+    private paymentService: PaymentService,
+    private pricingService: PricingService,
+    private subscriptionService: SubscriptionService,
+    private snackBar: MatSnackBar
   ) {
     // Check if user is already logged in
     // if (this.tokenStorage.getToken()) {
@@ -219,8 +236,12 @@ export class HomeComponent implements OnInit {
     //   error: (err) => {
     //     console.error('❌ Error fetching health check:', err);
     //   }
-    // });
+    // });  
+    if (this.tokenStorage.getToken()) {
+      this.user = this.tokenStorage.getUser();
+    }
     this.sliderValues = this.transformations.map(() => 50);
+    this.loadPlans();
   }
   goToTestimonialSlide(index: number) {
     this.TestiminialCurrentIndex = index;
@@ -253,6 +274,154 @@ export class HomeComponent implements OnInit {
     } else {
       clearInterval(this.autoPlayInterval);
     }
+  }
+
+  loadPlans() {
+    this.pricingService.getPlans().subscribe({
+      next: (plans) => {
+        // ✅ only ACTIVE plans
+        this.plans = plans.filter((p: any) => p.active === true);
+
+        this.filterByBillingType();
+      },
+      error: (err) => console.error('Failed to load plans', err)
+    });
+  }
+
+  getCurrencySymbol(currency: string): string {
+    if (!currency) return '';
+    return currency.split(' ')[0]; // "$ - USD" → "$"
+  }
+
+
+  filterByBillingType() {
+    this.filteredPlans = this.plans.filter(plan =>
+      this.billingType === 'month'
+        ? plan.duration === 'monthly'
+        : plan.duration === 'yearly'
+    );
+  }
+
+  changeBilling(type: 'month' | 'year') {
+    this.billingType = type;
+    this.filterByBillingType();
+  }
+
+  getFeatures(plan: any): string[] {
+    if (Array.isArray(plan.description)) {
+      return plan.description;
+    }
+    if (typeof plan.description === 'string') {
+      return plan.description.split(',');
+    }
+    return [];
+  }
+
+
+  loadMySubscriptions() {
+    this.subscriptionService.getMySubscriptions().subscribe({
+      next: (res: any) => {
+        // ✅ subscriptions list
+        this.mySubs = res || [];
+
+        // ✅ update credits in local storage
+        if (res.creditsRemaining !== undefined && res.creditsRemaining !== null) {
+          this.tokenStorage.updateUserCredits(res.creditsRemaining);
+        }
+      },
+      error: err => {
+        console.warn('No subscriptions or failed to fetch', err);
+        this.mySubs = [];
+      }
+    });
+  }
+
+
+  hasActiveForPlan(planId: number) {
+    return this.mySubs.some(s => s.planId === planId && s.status === 'ACTIVE');
+  }
+
+  buy(plan: Plan) {
+    // ✅ FIXED login check
+    if (!this.tokenStorage.getToken() || !this.tokenStorage.getUser()) {
+      this.showError('Please login to purchase a plan');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if (this.hasActiveForPlan(plan.id!)) {
+      this.showError('You already have an active subscription for this plan.');
+      return;
+    }
+
+    const payload = {
+      amount: plan.price,
+      planName: plan.name,
+      planId: plan.id,
+      userId: this.user.id,
+      userName: this.user.name,
+      userEmail: this.user.email
+    };
+
+    this.loading = true;
+
+    this.paymentService.createOrder(payload).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+
+        if (!res.success) {
+          this.showError('Order creation failed: ' + (res.message || ''));
+          return;
+        }
+
+        const options = {
+          key: res.key,
+          amount: res.amount,
+          currency: 'INR',
+          name: 'Beyanco AI',
+          description: plan.name + ' plan',
+          order_id: res.orderId,
+          handler: (response: any) => this.onPaymentSuccess(response, plan),
+          prefill: {
+            name: this.user.name,
+            email: this.user.email
+          }
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+      },
+      error: (err: any) => {
+        this.loading = false;
+        console.error(err);
+        this.showError('Could not create order');
+      }
+    });
+  }
+
+  onPaymentSuccess(response: any, plan: Plan) {
+    // attach planId and planName so backend can associate
+    const payload = {
+      ...response,
+      planId: plan.id,
+      planName: plan.name
+    };
+
+    this.paymentService.verifyPayment(payload).subscribe({
+      next: (result: any) => {
+        if (result.success) {
+          this.showSuccess('Payment verified and subscription activated!');
+          // reload subscriptions to reflect new active subscription
+          this.loadMySubscriptions();
+        } else {
+          this.showError('Verification failed: ' + (result.message || ''));
+        }
+      },
+      error: (err: any) => {
+        console.error('Verification error', err);
+        this.showError('Verification failed: ' + (err.message || err));
+      }
+    });
   }
 
   /* Before/After drag slider */
@@ -314,5 +483,23 @@ export class HomeComponent implements OnInit {
   ];
   setBilling(type: 'month' | 'year') {
     this.billingType = type;
+  }
+  /* Snackbar helpers */
+  private showSuccess(message: string) {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+      panelClass: ['snackbar-success'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
+  }
+
+  private showError(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 4000,
+      panelClass: ['snackbar-error'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
   }
 }

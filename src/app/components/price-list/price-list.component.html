@@ -1,58 +1,51 @@
-<div class="pricing-form-page">
+<div class="plans-page">
 
-    <!-- Header Section -->
-    <div class="header-section">
-        <button class="badge-btn">Create Pricing Plan</button>
-        <h1>Add New Plan</h1>
-        <p>Define pricing options for your Real Estate Enhancement platform</p>
-    </div>
+  <!-- Header Section -->
+  <div class="plans-header">
+    <h1>Pricing Plans</h1>
+    <button class="add-btn" routerLink="/plans/create">+ Add New Plan</button>
+  </div>
 
-    <!-- Form Card -->
-    <div class="form-card">
-        <h2>Plan Details</h2>
+  <!-- Plans Table -->
+  <div class="plans-table" *ngIf="plans.length > 0; else noPlans">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Plan Name</th>
+          <th>Price</th>
+          <th>Currency</th>
+          <th>Duration</th>
+          <th>Status</th>
+          <th style="width: 140px;">Actions</th>
+        </tr>
+      </thead>
 
-        <form>
+      <tbody>
+        <tr *ngFor="let plan of plans; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ plan.name }}</td>
+          <td>{{ plan.price }}</td>
+          <td>{{ plan.currency }}</td>
+          <td>{{ plan.duration | titlecase }}</td>
+          <td>
+            <span class="badge" [class.active]="plan.active" [class.inactive]="!plan.active">
+              {{ plan.active ? "Active" : "Inactive" }}
+            </span>
+          </td>
 
-            <!-- Plan Name -->
-            <label>Plan Name</label>
-            <input type="text" placeholder="Professional" />
+          <td>
+            <button class="view-btn" (click)="view(plan)">View</button>
+            <button class="edit-btn" (click)="edit(plan)">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-            <!-- Price and Currency -->
-            <div class="row">
-                <div class="input-group">
-                    <label>Price</label>
-                    <input type="number" placeholder="79" />
-                </div>
-
-                <div class="input-group">
-                    <label>Currency</label>
-                    <select>
-                        <option value="$">$ - USD</option>
-                        <option value="₹">₹ - INR</option>
-                        <option value="€">€ - EUR</option>
-                        <option value="£">£ - GBP</option>
-                        <option value="¥">¥ - JPY</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Features -->
-            <label>Features</label>
-            <textarea placeholder="Example:
-15 Property Enhancements
-Advanced AI Staging
-High-Resolution Output
-Priority Support
-Custom Interior Styles">
-      </textarea>
-
-            <!-- Submit Button -->
-            <button class="submit-btn">Create Plan</button>
-            <button class="view-plans-btn" routerLink="/price-form">
-                View Existing Plans
-            </button>
-
-        </form>
-    </div>
+  <!-- When no plans exist -->
+  <ng-template #noPlans>
+    <p class="no-data">No pricing plans found. Click "Add New Plan" to create one.</p>
+  </ng-template>
 
 </div>

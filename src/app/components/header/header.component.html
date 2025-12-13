@@ -12,6 +12,8 @@
                 </li>
                 <!-- <li *ngIf="isLoggedIn"><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
             <li *ngIf="isLoggedIn"><a routerLink="/property-upload" routerLinkActive="active">Upload</a></li> -->
+                <li *ngIf="isLoggedIn && roles.includes('ROLE_ADMIN')"><a routerLink="/admin-dashboard"
+                        routerLinkActive="active">Admin</a></li>
                 <li *ngIf="isLoggedIn"><a routerLink="/chat"
                         routerLinkActive="active">Chat</a></li>
                 <li *ngIf="isLoggedIn"><a routerLink="/profile"

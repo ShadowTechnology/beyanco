@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
     GBP: 0.0095,
     AUD: 0.018
   };
+  roles: string[] = [];
   constructor(
     private tokenStorage: TokenStorageService,
     private router: Router,
@@ -44,6 +45,7 @@ export class HeaderComponent implements OnInit {
         const user = this.tokenStorage.getUser();
         this.userId = user?.id;
         this.loadCredit(this.userId);
+        this.roles = this.tokenStorage.getUser().roles;
       }
     });
   }

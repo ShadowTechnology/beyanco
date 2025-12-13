@@ -39,7 +39,7 @@ import { AnnouncementsFormComponent } from './components/announcements-form/anno
 import { AnnouncementsListComponent } from './components/announcements-list/announcements-list.component';
 import { ContactusListComponent } from './components/contactus-list/contactus-list.component';
 import { TestimonialsListComponent } from './components/testimonials-list/testimonials-list.component';
-import { PriceFormComponent } from './components/price-forms/price-form.component';
+import { PriceFormComponent } from './components/price-form/price-form.component';
 import { RolesListComponent } from './components/roles-list/roles-list.component';
 import { RolesFormComponent } from './components/roles-form/roles-form.component';
 
@@ -65,6 +65,10 @@ export const routes: Routes = [
   { path: 'terms', component: TermsComponent },
   { path: 'gallery', component: GalleryComponent },
   { path: 'price-list', component: PriceListComponent },
+  { path: 'plans', component: PriceListComponent },
+  { path: 'plans/create', component: PriceFormComponent },
+  { path: 'plans/view/:id', component: PriceFormComponent }, // optional
+  { path: 'plans/edit/:id', component: PriceFormComponent },  // optional
   { path: 'price-form', component: PriceFormComponent },
   { path: 'roles-list', component: RolesListComponent },
   { path: 'roles-form', component: RolesFormComponent },

@@ -1,0 +1,75 @@
+<div class="pricing-form-page">
+
+    <div class="header-section">
+        <button class="badge-btn">
+            {{ id ? 'Edit Pricing Plan' : 'Create Pricing Plan' }}
+        </button>
+        <h1>{{ id ? 'Update Plan' : 'Add New Plan' }}</h1>
+        <p>Define pricing options for your Real Estate Enhancement platform</p>
+    </div>
+
+    <div class="form-card">
+        <h2>Plan Details</h2>
+
+        <form>
+            <label>Plan Name</label>
+            <input type="text" [(ngModel)]="name" name="name" />
+
+            <div class="row">
+                <div class="input-group">
+                    <label>Price</label>
+                    <input type="number" [(ngModel)]="price" name="price" />
+                </div>
+
+                <div class="input-group">
+                    <label>Currency</label>
+                    <select [(ngModel)]="currency" name="currency">
+                        <option *ngFor="let c of currencies" [value]="c.symbol + ' - ' + c.label">
+                            {{ c.symbol }} - {{ c.label }}
+                        </option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <label>Duration</label>
+                    <select [(ngModel)]="duration" name="duration">
+                        <option *ngFor="let d of durations" [value]="d.value">
+                            {{ d.label }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Credits</label>
+                    <input type="number" [(ngModel)]="credits" name="credits" />
+                </div>
+            </div>
+
+            <label>Features</label>
+            <textarea [(ngModel)]="features" name="features"></textarea>
+
+            <label>Plan Status</label>
+
+            <div class="toggle-wrapper">
+                <span class="status-text">{{ active ? 'Active' : 'Inactive' }}</span>
+
+                <label class="switch">
+                    <input type="checkbox" [(ngModel)]="active" name="active" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+
+            <button type="button" class="submit-btn" (click)="savePlan()">
+                {{ id ? 'Update Plan' : 'Create Plan' }}
+            </button>
+
+            <button class="view-plans-btn" routerLink="/plans">
+                View Existing Plans
+            </button>
+        </form>
+    </div>
+
+</div>
