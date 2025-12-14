@@ -23,6 +23,21 @@ export class GalleryComponent {
     'assets/dashboard/living-room.jpg'
   ];
 
+  beforeAfterImages = [
+    { before: 'assets/images/before1.png', after: 'assets/images/after1.png' },
+    { before: 'assets/images/before2.png', after: 'assets/images/after2.png' }
+  ];
+
+  sliderValues: number[] = [];
+
+  constructor() {
+    this.sliderValues = this.beforeAfterImages.map(() => 50);
+  }
+
+  onSlider(i: number, event: any) {
+    this.sliderValues[i] = +event.target.value;
+  }
+
   previewImage: string | null = null;
 
   openPreview(img: string) {

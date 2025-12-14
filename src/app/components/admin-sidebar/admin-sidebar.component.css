@@ -114,7 +114,7 @@
     flex: 1;
     overflow-y: auto;
     padding-right: 0.25rem;
-    margin-top: 40%;
+    /* margin-top: 40%; */
 }
 
 .sidebar .nav-wrapper .nav-section {

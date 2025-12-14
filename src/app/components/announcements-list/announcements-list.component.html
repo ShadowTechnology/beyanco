@@ -1,10 +1,6 @@
-<!-- Announcement List Section -->
 <div class="list-section">
-  <!-- Header Section -->
-  <div class="header-section">
-    <button class="badge-btn">Stay Connected</button>
-    <h1>Announcements List</h1>
-    <p>Share important updates and news with the community</p>
+  <div class="page-header-modern">
+    <h2>Announcements List</h2>
   </div>
 
   <div class="announcement-table">
@@ -26,8 +22,9 @@
           <td>Admin</td>
           <td>Our server will undergo maintenance tonight.</td>
           <td class="actions">
-            <button class="view-btn" (click)="goTo()">View</button>
-            <button class="edit-btn">Edit</button>
+            <button class="view-btn"
+              [routerLink]="['../announcement-form']">View</button>
+            <button class="edit-btn" [routerLink]="['../announcement-form']">Edit</button>
             <button class="delete-btn">Delete</button>
           </td>
         </tr>
@@ -38,8 +35,9 @@
           <td>John</td>
           <td>Launching new dashboards for users.</td>
           <td class="actions">
-            <button class="view-btn" (click)="goTo()">View</button>
-            <button class="edit-btn">Edit</button>
+            <button class="view-btn"
+              [routerLink]="['../announcement-form']">View</button>
+            <button class="edit-btn" [routerLink]="['../announcement-form']">Edit</button>
             <button class="delete-btn">Delete</button>
           </td>
         </tr>

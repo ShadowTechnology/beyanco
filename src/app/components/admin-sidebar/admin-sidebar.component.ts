@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { HeaderTitleService } from '../../services/header-title-service.service';
+import { TokenStorageService } from '../../services/token-storage.service';
 
 @Component({
   selector: 'app-admin-sidebar',
@@ -12,10 +13,10 @@ import { HeaderTitleService } from '../../services/header-title-service.service'
 export class AdminSidebarComponent {
 
   collapsed = false;
-
+  currentUser: any = {};
   @Output() collapseChanged = new EventEmitter<boolean>();
 
-  constructor(private router: Router, private headerTitleService: HeaderTitleService) { }
+  constructor(private router: Router, private tokenStorage: TokenStorageService, private headerTitleService: HeaderTitleService) { }
 
   toggleSidebar() {
     this.collapsed = !this.collapsed;
@@ -23,6 +24,7 @@ export class AdminSidebarComponent {
   }
 
   ngOnInit() {
+     this.currentUser = this.tokenStorage.getUser();
     this.router.events.subscribe(event => {
 
       if (event instanceof NavigationEnd) {
@@ -30,6 +32,13 @@ export class AdminSidebarComponent {
         // this.changeTitleBasedOnRoute(currentRoute);
       }
 
+    });
+  }
+  logout(event: Event): void {
+    event.preventDefault();
+    this.tokenStorage.signOut();
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
     });
   }
 

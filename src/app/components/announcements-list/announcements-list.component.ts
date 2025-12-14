@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-announcements-list',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './announcements-list.component.html',
   styleUrl: './announcements-list.component.css'
 })

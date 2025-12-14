@@ -197,3 +197,31 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.page-header-modern {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.page-header-modern h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1b1f;
+}
+
+.page-header-modern p {
+  color: #666;
+}
+
+/* .list-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+} */
+.list-card h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
+}

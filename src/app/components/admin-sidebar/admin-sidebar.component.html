@@ -1,39 +1,40 @@
 <aside class="sidebar" [class.collapsed]="collapsed">
-  <!-- <div class="top">
+  <div class="top">
     <div class="brand">
-      <div class="icon-bg"><i class="far fa-image"></i></div>
-      <span class="brand-title">RoomVision360</span>
+      <img src="assets/favicon.jpg" alt="Beyanco AI">
+      <!-- <div class="icon-bg"><i class="far fa-image"></i></div>
+      <span class="brand-title">RoomVision360</span> -->
     </div>
-    <button class="toggle-btn" (click)="toggleSidebar()">
+    <!-- <button class="toggle-btn" (click)="toggleSidebar()">
       <i class="far fa-caret-square-right"></i>
-    </button>
-  </div> -->
+    </button> -->
+  </div>
 
   <!-- Scrollable nav area -->
   <div class="nav-wrapper">
     <nav class="nav-section">
       <p class="nav-label">Main</p>
-      <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard">
+      <a routerLink="admin-dashboardContent" routerLinkActive="active" title="Dashboard">
         <i class="fas fa-th-large"></i>
         <span>Dashboard</span>
       </a>
-      <a routerLink="/aboutus" routerLinkActive="active" title="About Us">
+      <a routerLink="aboutus" routerLinkActive="active" title="About Us">
         <i class="fa-regular fa-address-card"></i>
         <span>About Us</span>
       </a>
-      <a routerLink="/contactus" routerLinkActive="active" title="Contact us">
+      <a routerLink="contactus-list" routerLinkActive="active" title="Contact us">
         <i class="fa-regular fa-id-badge"></i>
         <span>Contact us</span>
       </a>
-      <a routerLink="/gallery" routerLinkActive="active" title="Gallery">
+      <a routerLink="gallery" routerLinkActive="active" title="Gallery">
         <i class="fa-regular fa-images"></i>
         <span>Gallery</span>
       </a>
-      <a routerLink="/blogs" routerLinkActive="active" title="Blogs">
+      <a routerLink="#" routerLinkActive="active" title="Blogs">
         <i class="fa-regular fa-square"></i>
         <span>Blogs</span>
       </a>
-      <a routerLink="/price-list" routerLinkActive="active" title="Price">
+      <a routerLink="price-list" routerLinkActive="active" title="Price">
         <i class="fas fa-dollar-sign"></i>
         <span>Price</span>
       </a>
@@ -41,31 +42,31 @@
 
     <nav class="nav-section">
       <p class="nav-label">Settings</p>
-      <a routerLink="/users" routerLinkActive="active" title="Users">
+      <a routerLink="#" routerLinkActive="active" title="Users">
         <i class="far fa-user"></i>
         <span>Users</span>
       </a>
-      <a routerLink="/roles-list" routerLinkActive="active" title="Roles">
+      <a routerLink="roles-list" routerLinkActive="active" title="Roles">
         <i class="far fa-sun"></i>
         <span>Roles</span>
       </a>
-      <a routerLink="/profile" routerLinkActive="active" title="Profile">
+      <a routerLink="users" routerLinkActive="active" title="Profile">
         <i class="far fa-user-circle"></i>
         <span>Profile</span>
       </a>
     </nav>
     <nav class="nav-section">
       <p class="nav-label">Advertisement</p>
-      <a routerLink="/announcement-list" routerLinkActive="active"
+      <a routerLink="announcement-list" routerLinkActive="active"
         title="Announcement">
         <i class="fa-regular fa-lightbulb"></i>
         <span>Announcement</span>
       </a>
-      <a routerLink="/contactus-list" routerLinkActive="active" title="Contact Us">
+      <a routerLink="contactus-list" routerLinkActive="active" title="Contact Us">
         <i class="fa-regular fa-id-badge"></i>
         <span>Contact Us</span>
       </a>
-      <a routerLink="/testimonials-list" routerLinkActive="active"
+      <a routerLink="testimonials-list" routerLinkActive="active"
         title="Testimonials">
         <i class="fa-regular fa-comment-dots"></i>
         <span>Testimonials</span>
@@ -75,11 +76,11 @@
 
   <!-- Fixed profile at the bottom -->
   <div class="profile">
-    <div class="avatar">VK</div>
+    <div class="avatar">{{ currentUser.firstName.slice(0,2).toUpperCase()}}</div>
     <div class="info">
-      <p class="name">Vinoth Kumar</p>
-      <p class="role">Interior Designer</p>
+      <p class="name">{{ currentUser.firstName || currentUser.username }}</p>
+      <p class="role">{{currentUser.roles[0]}}</p>
     </div>
-    <i class="fas fa-sign-out-alt"></i>
+    <i class="fas fa-sign-out-alt" (click)="logout($event)"></i>
   </div>
 </aside>

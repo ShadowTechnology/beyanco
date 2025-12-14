@@ -56,22 +56,6 @@
   opacity: 0.9;
 }
 
-/* List Card */
-.list-card {
-  background: #fff;
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-
-.list-card h2 {
-  margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: 700;
-}
-
 /* Table */
 .contact-table-wrapper {
   overflow-x: auto;

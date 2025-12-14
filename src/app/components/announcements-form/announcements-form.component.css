@@ -1,37 +1,7 @@
-.announcements-page {
-  font-family: sans-serif;
-  padding-bottom: 80px;
-}
-
-/* Header Section */
-.header-section {
-  text-align: center;
-  background: linear-gradient(#1f2c47, #0e1626);
-  padding: 60px 20px;
-  color: #fff;
-}
-
-.badge-btn {
-  background: #f2c200;
-  border: none;
-  padding: 6px 20px;
-  border-radius: 20px;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-.header-section p {
-  max-width: 600px;
-  margin: 0 auto;
-  opacity: 0.9;
-}
-
 /* Form Card */
 .form-card {
   background: #fff;
-  max-width: 850px;
-  margin: 40px auto;
-  padding: 35px;
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
@@ -97,7 +67,6 @@ textarea:focus {
   display: flex;
   justify-content: center;
   gap: 25px;
-  padding: 0 20px;
 }
 
 .feature-card {

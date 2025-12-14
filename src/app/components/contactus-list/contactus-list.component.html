@@ -1,14 +1,9 @@
 <div class="contact-list-page">
-
-  <div class="header-section">
-    <button class="reach-us-btn">Contacts Us</button>
-    <h1>Contact Messages</h1>
-    <p>View all messages submitted through the contact form</p>
+  <div class="page-header-modern">
+    <h2>Contacts Us List</h2>
   </div>
 
   <div class="list-card">
-    <h2>Messages Received</h2>
-
     <div class="contact-table-wrapper">
       <table>
         <thead>
@@ -30,7 +25,7 @@
             <td>Need help with my project design.</td>
             <td>2025-02-15</td>
             <td class="actions">
-              <button class="view-btn"  (click)="goTo()">View</button>
+              <button class="view-btn"  [routerLink]="['../contactus-form']">View</button>
               <button class="reply-btn">Reply</button>
               <button class="delete-btn">Delete</button>
             </td>
@@ -43,7 +38,7 @@
             <td>I would like pricing details.</td>
             <td>2025-02-14</td>
             <td class="actions">
-              <button class="view-btn" (click)="goTo()">View</button>
+              <button class="view-btn" [routerLink]="['../contactus-form']">View</button>
               <button class="reply-btn">Reply</button>
               <button class="delete-btn">Delete</button>
             </td>

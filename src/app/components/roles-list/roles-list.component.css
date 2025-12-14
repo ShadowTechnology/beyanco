@@ -1,41 +1,20 @@
-.roles-list-page .header-section {
-  text-align: center;
-  background: linear-gradient(#1f2c47, #0e1626);
-  padding: 70px 20px;
-  color: #fff;
-}
-
-.badge-btn {
-  background: #f2c200;
-  border: none;
-  padding: 6px 20px;
-  border-radius: 20px;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-.list-card {
-  background: #fff;
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-}
-
 /* Table */
 .table-wrapper {
   overflow-x: auto;
 }
-
 table {
   width: 100%;
   border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
 thead {
   background: #1f2c47;
   color: #fff;
+  text-align: left;
 }
 
 thead th {
@@ -72,7 +51,11 @@ tbody td {
   padding: 10px 20px;
   border-radius: 8px;
   border: none;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+}
+
+td.actions button {
+  margin-right: 10px;
 }

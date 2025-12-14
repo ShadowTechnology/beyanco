@@ -1,69 +1,3 @@
-.testimonials-page {
-  font-family: sans-serif;
-  padding-bottom: 80px;
-}
-
-/* Header */
-.header-section {
-  text-align: center;
-  background: linear-gradient(#1f2c47, #0e1626);
-  padding: 60px 20px;
-  color: #fff;
-}
-
-.badge-btn {
-  background: #f2c200;
-  border: none;
-  padding: 6px 20px;
-  border-radius: 20px;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-.header-section p {
-  max-width: 600px;
-  margin: 0 auto;
-  opacity: 0.9;
-}
-/* Testimonials List Page */
-.testimonials-list-page {
-  font-family: sans-serif;
-  padding-bottom: 80px;
-}
-
-/* Header reused styling */
-.testimonials-list-page .header-section {
-  text-align: center;
-  background: linear-gradient(#1f2c47, #0e1626);
-  padding: 70px 20px;
-  color: #fff;
-}
-
-.badge-btn {
-  background: #f2c200;
-  border: none;
-  padding: 6px 20px;
-  border-radius: 20px;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-/* List Card */
-.list-card {
-  background: #fff;
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 35px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.list-card h2 {
-  margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: 700;
-}
-
 /* Table */
 .table-wrapper {
   overflow-x: auto;
@@ -75,6 +9,7 @@ table {
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
 thead {
@@ -133,7 +68,8 @@ tbody tr:hover {
     display: none;
   }
 
-  tr, td {
+  tr,
+  td {
     display: block;
     width: 100%;
   }

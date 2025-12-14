@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-testimonials-list',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './testimonials-list.component.html',
   styleUrl: './testimonials-list.component.css'
 })
@@ -20,8 +20,8 @@ export class TestimonialsListComponent {
       message: "Amazing service! Loved the experience!"
     },
   ];
-  goTo() {
-    this.router.navigate(['/testimonials-form'])
-  }
+  // goTo() {
+  //   this.router.navigate(['testimonials-form'])
+  // }
 
 }

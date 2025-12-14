@@ -39,9 +39,10 @@ import { AnnouncementsFormComponent } from './components/announcements-form/anno
 import { AnnouncementsListComponent } from './components/announcements-list/announcements-list.component';
 import { ContactusListComponent } from './components/contactus-list/contactus-list.component';
 import { TestimonialsListComponent } from './components/testimonials-list/testimonials-list.component';
-import { PriceFormComponent } from './components/price-form/price-form.component';
 import { RolesListComponent } from './components/roles-list/roles-list.component';
 import { RolesFormComponent } from './components/roles-form/roles-form.component';
+import { AdminDashboardContentComponent } from './components/admin-dashboard/admin-dashboardcontent.component';
+import { PriceFormComponent } from './components/price-form/price-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -52,24 +53,36 @@ export const routes: Routes = [
   { path: 'property-upload', component: PropertyUploadComponent },
   { path: 'chat', component: ChatComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: 'admin-dashboard', component: AdminDashboardComponent },
-  { path: 'project-dashboard', component: ProjectsDashboardComponent },
-  { path: 'announcement-list', component: AnnouncementsListComponent },
-  { path: 'announcement-form', component: AnnouncementsFormComponent },
-  { path: 'contactus-list', component: ContactusListComponent },
   { path: 'contactus-form', component: ContactusFormComponent },
-  { path: 'testimonials-list', component: TestimonialsListComponent },
-  { path: 'testimonials-form', component: TestimonialsFormComponent },
-  { path: 'aboutus', component: AboutusComponent },
+  {
+    path: 'admin-dashboard',
+    component: AdminDashboardComponent,
+    children: [
+      { path: '', redirectTo: 'admin-dashboardContent', pathMatch: 'full' },
+      { path: 'admin-dashboardContent', component: AdminDashboardContentComponent },
+      { path: 'aboutus', component: AboutusComponent },
+      { path: 'contactus-list', component: ContactusListComponent },
+      { path: 'contactus-form', component: ContactusFormComponent },
+      { path: 'gallery', component: GalleryComponent },
+      { path: 'blogs', component: TestimonialsListComponent },
+      { path: 'users', component: ProfileComponent },
+      { path: 'roles-list', component: RolesListComponent },
+      { path: 'roles-form', component: RolesFormComponent },
+      { path: 'announcement-list', component: AnnouncementsListComponent },
+      { path: 'announcement-form', component: AnnouncementsFormComponent },
+      { path: 'testimonials-list', component: TestimonialsListComponent },
+      { path: 'testimonials-form', component: TestimonialsFormComponent },
+      { path: 'price-list', component: PriceListComponent },
+      { path: 'price-form', component: PriceFormComponent },
+      { path: 'plans', component: PriceListComponent },
+      { path: 'plans/create', component: PriceFormComponent },
+      { path: 'plans/view/:id', component: PriceFormComponent }, // optional
+      { path: 'plans/edit/:id', component: PriceFormComponent },  // optional
+    ]
+  },
+
+  { path: 'project-dashboard', component: ProjectsDashboardComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'terms', component: TermsComponent },
-  { path: 'gallery', component: GalleryComponent },
-  { path: 'price-list', component: PriceListComponent },
-  { path: 'plans', component: PriceListComponent },
-  { path: 'plans/create', component: PriceFormComponent },
-  { path: 'plans/view/:id', component: PriceFormComponent }, // optional
-  { path: 'plans/edit/:id', component: PriceFormComponent },  // optional
-  { path: 'price-form', component: PriceFormComponent },
-  { path: 'roles-list', component: RolesListComponent },
-  { path: 'roles-form', component: RolesFormComponent },
 ];
+

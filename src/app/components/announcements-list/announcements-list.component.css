@@ -22,22 +22,9 @@
   opacity: 0.9;
 }
 
-/* .list-section {
-  max-width: 1000px;
-  margin: 50px auto;
-  padding: 0 20px;
-} */
-
-.list-section h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 700;
-}
-
 /* Table Container */
 .announcement-table {
   overflow-x: auto;
-  padding: 20px;
 }
 
 table {
