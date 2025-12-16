@@ -399,6 +399,7 @@ img {
   color: #fff;
   font-size: 1.1rem;
   margin-right: 10px;
+  flex-shrink: 0;
 }
 
 .card--featured .card__icon {
@@ -930,10 +931,10 @@ img {
   margin: .15rem;
 }
 
-.cta {
+/* .cta {
   background: #fff;
-  /* padding-bottom: 0; */
-}
+  padding-bottom: 0;
+} */
 
 .cta__box {
   background: #0b1220;
@@ -996,6 +997,7 @@ img {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
   transition: 0.3s ease;
   width: 50%;
+  cursor: pointer;
 }
 
 .updates-section .update-card:hover {
@@ -1138,5 +1140,13 @@ img {
   .slider-wrapper {
     width: 85%;
     height: 180px;
+  }
+}
+@media (max-width: 576px) {
+  .card__icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+    border-radius: 0.6rem;
   }
 }

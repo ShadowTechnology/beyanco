@@ -43,6 +43,7 @@ import { RolesListComponent } from './components/roles-list/roles-list.component
 import { RolesFormComponent } from './components/roles-form/roles-form.component';
 import { AdminDashboardContentComponent } from './components/admin-dashboard/admin-dashboardcontent.component';
 import { PriceFormComponent } from './components/price-form/price-form.component';
+import { StagingShowcaseComponent } from './components/staging-showcase/staging-showcase.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -84,5 +85,6 @@ export const routes: Routes = [
   { path: 'project-dashboard', component: ProjectsDashboardComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'terms', component: TermsComponent },
+  { path: 'staging', component: StagingShowcaseComponent }
 ];
 

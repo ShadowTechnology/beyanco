@@ -1,0 +1,63 @@
+<section class="staging-section">
+    <h2>Furniture to capture any mood</h2>
+    <p class="subtitle">
+        Mix and match styles to attract any buyer with our vast catalog of
+        <strong>18,000+ furniture pieces</strong>
+    </p>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button
+            *ngFor="let tab of tabs"
+            [class.active]="tab === activeTab"
+            (click)="setTab(tab)">
+            {{ tab }}
+        </button>
+    </div>
+
+    <!-- Image Card -->
+    <div class="image-card">
+
+        <!-- Before / After Toggle -->
+        <div class="toggle">
+            <button
+                [class.active]="viewMode === 'before'"
+                (click)="setView('before')">
+                Before
+            </button>
+            <button
+                [class.active]="viewMode === 'after'"
+                (click)="setView('after')">
+                After
+            </button>
+        </div>
+
+        <!-- Image -->
+        <img
+            [src]="currentImage"
+            alt="Virtual Staging"
+            class="fade-img" />
+
+        <!-- Navigation -->
+        <button class="nav left" (click)="prev()">‹</button>
+        <button class="nav right" (click)="next()">›</button>
+
+    </div>
+
+    <!-- CTA -->
+    <button class="cta-btn">
+        Try for free →
+    </button>
+</section>
+<section class="business-growth">
+    <h2>Grow your business with virtual staging today</h2>
+    <p>
+        Join thousands of real estate professionals enhancing their listings
+        with
+        AI-powered virtual staging.
+    </p>
+
+    <button class="cta-btn large" routerLink="/chat">
+        Apply Design →
+    </button>
+</section>

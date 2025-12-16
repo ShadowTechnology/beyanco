@@ -29,7 +29,7 @@ import { filter } from 'rxjs/operators';
   `]
 })
 export class AppComponent {
-  title = 'Beyanco AI - Real estate interior visualization tool';
+  title = 'Beyanco AI - Real Estate Interior Visualization Tool';
 
   constructor(private router: Router) {
     this.router.events

@@ -30,11 +30,11 @@ export class HomeComponent implements OnInit {
     { imageUrl: 'assets/images/banner3.jpg' }
   ];
   services = [
-    { icon: 'fas fa-house', title: 'Living Room', text: 'Furnish your living area with contemporary fittings, exuding elegance!' },
-    { icon: 'fa-solid fa-kitchen-set', title: 'Kitchen', text: 'Modern kitchen interiors, bringing style and utility to your space.' },
-    { icon: 'fa-solid fa-bed', title: 'Bedroom', text: 'Design cozy and comfort-oriented bedroom spaces.' },
-    { icon: 'fa-solid fa-couch', title: 'Furniture Schemes', text: "Elevate your space with apt furniture placement." },
-    { icon: 'fa-solid fa-palette', title: 'Color Coordination', text: 'Use expert color schemes to enhance your property\'s appeal.' },
+    { icon: 'fas fa-house', title: 'Living Room', text: 'Furnish your living area with contemporary fittings, exuding elegance!', route:'/staging' },
+    { icon: 'fa-solid fa-kitchen-set', title: 'Kitchen', text: 'Modern kitchen interiors, bringing style and utility to your space.', route:'/staging' },
+    { icon: 'fa-solid fa-bed', title: 'Bedroom', text: 'Design cozy and comfort-oriented bedroom spaces.', route:'/staging' },
+    { icon: 'fa-solid fa-couch', title: 'Furniture Schemes', text: "Elevate your space with apt furniture placement.", route:'/staging' },
+    { icon: 'fa-solid fa-palette', title: 'Color Coordination', text: 'Use expert color schemes to enhance your property\'s appeal.', route:'/staging' },
     // { icon: 'fa-solid fa-desktop', title: 'Virtual Staging', text: 'AI-powered staging for stunning visual transformations.' },
   ];
   transformations = [

@@ -225,3 +225,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   font-size: 22px;
   font-weight: 700;
 }
+.logo img {
+    width: 20%;
+}

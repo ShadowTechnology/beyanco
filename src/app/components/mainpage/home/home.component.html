@@ -7,7 +7,7 @@
 
     <div class="hero__buttons">
       <button class="btn btn-primary" (click)="goToChat()">Try for free</button>
-      <button class="btn btn-light">See Samples</button>
+      <button class="btn btn-light" routerLink="/staging">See Samples</button>
     </div>
   </div>
 
@@ -99,8 +99,8 @@
         <button class="card-active-link" type="button">Learn More &nbsp; <i class="fas fa-arrow-right"></i></button>
       </article> -->
 
-      <article class="card active-card--featured" *ngFor="let s of services">
-        <div class="d-flex-card">
+      <article class="card active-card--featured" *ngFor="let s of services" [routerLink]="s.route">
+        <div class="d-flex-card" >
           <div class="card__icon">
             <i [class]="s.icon"></i>
           </div>
@@ -277,13 +277,13 @@
         <a routerLink="/announcement" class="view-link">View all →</a>
       </div> -->
 
-      <div class="update-card">
+      <div class="update-card" routerLink="/contactus-form">
         <div class="icon-box">
           <i class="fas fa-envelope-open-text"></i>
         </div>
         <h3>Reach Us</h3>
         <p>Send your queries and feedback</p>
-        <a routerLink="/contactus-form" class="view-link">Get in Touch →</a>
+        <!-- <a  class="view-link">Get in Touch →</a> -->
       </div>
 
       <!-- <div class="update-card">
