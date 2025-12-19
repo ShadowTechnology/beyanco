@@ -89,7 +89,7 @@ export class ChatComponent implements AfterViewChecked {
     'American', 'British', 'French', 'Italian', 'Japanese', 'Scandinavian',
     'German', 'Spanish', 'Dutch', 'Australian', 'Swiss', 'Moroccan', 'Turkish', 'Russian'
   ];
-  tools = ['Magic Eraser', 'Compare Version', 'Add Element'];
+  tools = [ 'Compare Version', 'Add Element'];
   elements = [
     { name: 'Add Lighting', prompt: 'Add ambient lighting fixtures to enhance the room atmosphere' },
     { name: 'Add Plants', prompt: 'Add indoor plants and greenery to bring life to the space' },

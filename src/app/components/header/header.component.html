@@ -27,12 +27,17 @@
                 <li *ngIf="isLoggedIn"><a href="#" (click)="logout($event)"
                         class="logout-btn">Logout</a></li>
 
-                <li class="credit-badge"
+                <!-- <li class="credit-badge"
                     *ngIf="isLoggedIn && userCredits !== null"
                     [class.low]="userCredits <= 0" (click)="togglePopup()">
                     Credits: {{ userCredits }}
+                </li> -->
+                <li class="credit-badge"
+                    *ngIf="isLoggedIn && userCredits !== null"
+                    [class.low]="userCredits <= 0">
+                    Credits: {{ userCredits }}
                 </li>
-                <li class="currency-selector" *ngIf="isLoggedIn">
+                <!-- <li class="currency-selector" *ngIf="isLoggedIn">
                     <select [(ngModel)]="selectedCurrency"
                         (change)="onCurrencyChange()">
                         <option value="INR">₹ INR</option>
@@ -41,7 +46,7 @@
                         <option value="GBP">£ GBP</option>
                         <option value="AUD">A$ AUD</option>
                     </select>
-                </li>
+                </li> -->
             </ul>
         </nav>
 

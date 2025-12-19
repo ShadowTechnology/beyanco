@@ -122,7 +122,7 @@
     transition: 0.3s;
 }
 
-.credit-badge {
+/* .credit-badge {
     margin-left: auto;
     background: #f7c222;
     color: #000;
@@ -135,7 +135,24 @@
     align-self: center;
     margin-top: -6px;
     cursor: pointer;
+} */
+
+.credit-badge {
+  margin-left: auto;
+  background: #f7c222;
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  height: fit-content;
+  align-self: center;
+  margin-top: -6px;
+  cursor: pointer;
+  white-space: nowrap; /* 👈 prevents wrapping */
 }
+
 
 .credit-badge.low {
     background: #d7263d;
