@@ -970,45 +970,61 @@ img {
 }
 
 .updates-section {
-  padding: 60px 0;
+  padding: 60px 16px;
   background: #f8fafc;
 }
 
-.updates-section .section-title {
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.section-title {
   text-align: center;
   font-size: 28px;
   font-weight: 700;
-  margin: 0 0 .4rem;
+  margin-bottom: 6px;
   color: #0a0a0a;
 }
 
-.updates-section .updates-grid {
+.section__subtitle {
+  text-align: center;
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 35px;
+}
+
+/* GRID */
+.updates-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+  gap: 24px;
   justify-items: center;
 }
 
-.updates-section .update-card {
-  background: #ffffff;
+/* CARD */
+.update-card {
+  width: 100%;
+  max-width: 360px;
+  background: #fff;
   border-radius: 14px;
-  padding: 30px 25px;
+  padding: 30px 24px;
   text-align: center;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  transition: 0.3s ease;
-  width: 50%;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
-.updates-section .update-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.10);
+.update-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
 }
 
-.updates-section .update-card .icon-box {
+/* ICON */
+.icon-box {
   width: 60px;
   height: 60px;
-  margin: 0 auto 15px;
+  margin: 0 auto 16px;
   background: #ffbb22;
   border-radius: 50%;
   display: flex;
@@ -1016,32 +1032,51 @@ img {
   justify-content: center;
 }
 
-.updates-section .update-card .icon-box i {
+.icon-box i {
   font-size: 22px;
   color: #111;
 }
 
-.updates-section .update-card h3 {
+/* TEXT */
+.update-card h3 {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
-.updates-section .update-card p {
+.update-card p {
   font-size: 14px;
   color: #555;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
-.updates-section .update-card .view-link {
+.view-link {
   font-size: 14px;
   color: #005bbb;
   font-weight: 600;
   text-decoration: none;
 }
 
-.updates-section .update-card .view-link:hover {
+.view-link:hover {
   text-decoration: underline;
+}
+
+/* MOBILE */
+@media (max-width: 576px) {
+  .section-title {
+    font-size: 24px;
+  }
+
+  .update-card {
+    padding: 24px 18px;
+  }
+}
+
+/* TABLET */
+@media (min-width: 768px) {
+  .updates-section {
+    padding: 80px 24px;
+  }
 }
 
 
@@ -1142,6 +1177,7 @@ img {
     height: 180px;
   }
 }
+
 @media (max-width: 576px) {
   .card__icon {
     width: 44px;
