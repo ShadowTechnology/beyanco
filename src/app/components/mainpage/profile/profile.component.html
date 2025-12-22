@@ -7,48 +7,49 @@
   </div>
 
   <div class="profile-layout" *ngIf="!isLoading">
-    <div class="card profile-card" *ngIf="!isEditing">
+    <div class="card profile-card">
       <div class="card-header">
         <h3><i class="far fa-user"></i> Profile Information</h3>
         <button class="edit-btn" (click)="toggleEdit()"><i class="fa-solid fa-pen-to-square"></i> {{ isEditing ? 'Cancel'
           : 'Edit' }}</button>
       </div>
-
-      <div class="profile-info">
-        <div class="avatar">
-          <span class="avatar-text">J</span>
+      <div *ngIf="!isEditing">
+        <div class="profile-info">
+          <div class="avatar">
+            <span class="avatar-text">J</span>
+          </div>
+          <div class="user-details">
+            <h4 class="username">{{ currentUser.username }}</h4>
+            <span class="update-text">Update your profile photo</span>
+          </div>
         </div>
-        <div class="user-details">
-          <h4 class="username">{{ currentUser.username }}</h4>
-          <span class="update-text">Update your profile photo</span>
+        <div class="field">
+          <label><i class="far fa-user"></i> Username</label>
+          <p>{{ currentUser.username }}</p>
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-envelope"></i> Email</label>
+          <p>{{ currentUser.email }}</p>
+        </div>
+        <div class="field">
+          <label><i class="far fa-user"></i> Name</label>
+          <p>{{ currentUser.name || 'Not provided' }}</p>
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-mobile"></i> Phone</label>
+          <p>{{ currentUser.phone || 'Not provided' }}</p>
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-building"></i> Company</label>
+          <p>{{ currentUser.company || 'Not provided' }}</p>
+        </div>
+        <div class="roles">
+          <label><i class="fa-solid fa-shield"></i> Roles</label>
+          <span class="role-tag admin">{{userRoles}}</span>
+          <span class="role-tag dev">Developer</span>
         </div>
       </div>
-      <div class="field">
-        <label><i class="far fa-user"></i> Username</label>
-        <p>{{ currentUser.username }}</p>
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-envelope"></i> Email</label>
-        <p>{{ currentUser.email }}</p>
-      </div>
-      <div class="field">
-        <label><i class="far fa-user"></i> Name</label>
-        <p>{{ currentUser.name || 'Not provided' }}</p>
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-mobile"></i> Phone</label>
-        <p>{{ currentUser.phone || 'Not provided' }}</p>
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-building"></i> Company</label>
-        <p>{{ currentUser.company || 'Not provided' }}</p>
-      </div>
-      <div class="roles">
-        <label><i class="fa-solid fa-shield"></i> Roles</label>
-        <span class="role-tag admin">{{userRoles}}</span>
-        <span class="role-tag dev">Developer</span>
-      </div>
-      <form class="profile-form" *ngIf="isEditing" (submit)="updateProfile()">
+      <form *ngIf="isEditing" class="profile-form" (ngSubmit)="updateProfile()">
         <div class="profile-field">
           <label for="name">Name</label>
           <input type="text" id="name" name="name" [(ngModel)]="form.name"
@@ -82,7 +83,7 @@
         <h3><i class="fa-solid fa-credit-card"></i> Subscription</h3>
         <p class="plan">Current Plan</p>
         <p class="pro">{{ getSubscriptionPlan()
-            }}</p>
+          }}</p>
         <p class="credits">Credits Remaining</p>
         <h2 class="credit-count">{{ currentUser.creditsRemaining || 0 }}</h2>
         <p class="credits">Next Billing Date:</p>

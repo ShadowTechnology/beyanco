@@ -16,16 +16,16 @@
                         routerLinkActive="active">Admin</a></li>
                 <li *ngIf="isLoggedIn"><a routerLink="/chat"
                         routerLinkActive="active">Chat</a></li>
-                <li *ngIf="isLoggedIn"><a routerLink="/profile"
-                        routerLinkActive="active">Profile</a></li>
+                <!-- <li *ngIf="isLoggedIn"><a routerLink="/profile"
+                        routerLinkActive="active">Profile</a></li> -->
                 <li *ngIf="!isLoggedIn"><a routerLink="/login"
                         routerLinkActive="active" class="login-btn">Login</a>
                 </li>
                 <li *ngIf="!isLoggedIn"><a routerLink="/register"
                         routerLinkActive="active"
                         class="register-btn">Register</a></li>
-                <li *ngIf="isLoggedIn"><a href="#" (click)="logout($event)"
-                        class="logout-btn">Logout</a></li>
+                <!-- <li *ngIf="isLoggedIn"><a href="#" (click)="logout($event)"
+                        class="logout-btn">Logout</a></li> -->
 
                 <!-- <li class="credit-badge"
                     *ngIf="isLoggedIn && userCredits !== null"
@@ -36,6 +36,17 @@
                     *ngIf="isLoggedIn && userCredits !== null"
                     [class.low]="userCredits <= 0">
                     Credits: {{ userCredits }}
+                </li>
+                <li class="profile-dropdown" *ngIf="isLoggedIn">
+                    <div class="profile-trigger" (click)="toggleProfileMenu($event)">
+                        <img src="/assets/favicon.png" alt="Profile" class="profile-img" />
+                        <span class="arrow">&#9662;</span>
+                    </div>
+                    <div class="profile-menu" *ngIf="isProfileMenuOpen">
+                        <a routerLink="/profile">Profile</a>
+                        <!-- <a >Change Password</a> -->
+                        <a (click)="logout($event)">Logout</a>
+                    </div>
                 </li>
                 <!-- <li class="currency-selector" *ngIf="isLoggedIn">
                     <select [(ngModel)]="selectedCurrency"

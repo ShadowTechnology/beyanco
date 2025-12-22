@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
   count = 1;
   totalPrice = 10;
   selectedCurrency: string = 'INR';
-
+  isProfileMenuOpen = false;
   currencyRates: any = {
     INR: 1,
     USD: 0.012,
@@ -90,10 +90,26 @@ export class HeaderComponent implements OnInit {
     }
   }
   @HostListener('document:click', ['$event'])
-  clickOutside(event: any) {
-    const target = event.target.closest('.filter-card, .credit-badge');
-    if (!target) this.isPopupOpen = false;
+  handleDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    // Close credit popup
+    if (!target.closest('.filter-card') && !target.closest('.credit-badge')) {
+      this.isPopupOpen = false;
+    }
+
+    // Close profile dropdown
+    if (!target.closest('.profile-dropdown')) {
+      this.isProfileMenuOpen = false;
+    }
   }
+
+
+  // @HostListener('document:click', ['$event'])
+  // clickOutside(event: any) {
+  //   const target = event.target.closest('.filter-card, .credit-badge');
+  //   if (!target) this.isPopupOpen = false;
+  // }
 
   togglePopup() {
     this.isPopupOpen = !this.isPopupOpen;
@@ -106,5 +122,8 @@ export class HeaderComponent implements OnInit {
     const percent = (this.count / slider.max) * 100;
     slider.style.setProperty("--percent", percent + "%");
   }
-
+  toggleProfileMenu(event: Event) {
+    event.stopPropagation();
+    this.isProfileMenuOpen = !this.isProfileMenuOpen;
+  }
 }
