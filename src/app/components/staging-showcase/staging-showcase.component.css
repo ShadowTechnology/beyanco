@@ -1,4 +1,6 @@
-/* Section */
+/* ================================
+   STAGING SECTION
+================================ */
 .staging-section {
     text-align: center;
     padding: 80px 16px;
@@ -18,7 +20,9 @@
     font-size: 16px;
 }
 
-/* Tabs */
+/* ================================
+   TABS
+================================ */
 .tabs {
     display: flex;
     justify-content: center;
@@ -37,6 +41,10 @@
     transition: all 0.2s ease;
 }
 
+.tabs button:hover {
+    background: #f8fafc;
+}
+
 .tabs button.active {
     border-color: #f5b400;
     background: #fff7db;
@@ -44,22 +52,37 @@
     font-weight: 600;
 }
 
-/* Image Card */
+/* ================================
+   IMAGE CARD (FIXED SIZE + RESPONSIVE)
+================================ */
 .image-card {
     position: relative;
     max-width: 1000px;
+    width: 100%;
     margin: 0 auto 40px;
     border-radius: 18px;
     overflow: hidden;
-    background: #000000;
+    background: #000;
+
+    /* FIXED RESPONSIVE SIZE */
+    aspect-ratio: 22 / 9;
+    max-height: 560px;
 }
 
+/* Image */
 .image-card img {
+    position: absolute;
+    inset: 0;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
+    animation: fade 0.4s ease-in-out;
 }
 
-/* Before / After Toggle */
+/* ================================
+   BEFORE / AFTER TOGGLE
+================================ */
 .image-card .toggle {
     position: absolute;
     top: 16px;
@@ -68,6 +91,7 @@
     background: rgba(0, 0, 0, 0.6);
     border-radius: 8px;
     overflow: hidden;
+    z-index: 2;
 }
 
 .image-card .toggle button {
@@ -76,6 +100,7 @@
     background: transparent;
     border: none;
     cursor: pointer;
+    font-size: 14px;
 }
 
 .image-card .toggle button.active {
@@ -83,7 +108,9 @@
     font-weight: 600;
 }
 
-/* Navigation Arrows */
+/* ================================
+   NAVIGATION ARROWS
+================================ */
 .image-card .nav {
     position: absolute;
     top: 50%;
@@ -95,6 +122,8 @@
     height: 40px;
     border-radius: 50%;
     cursor: pointer;
+    z-index: 2;
+    font-size: 20px;
 }
 
 .image-card .nav.left {
@@ -105,7 +134,13 @@
     right: 16px;
 }
 
-/* CTA Button */
+.image-card .nav:hover {
+    background: rgba(15, 23, 42, 1);
+}
+
+/* ================================
+   CTA BUTTON
+================================ */
 .cta-btn {
     background: linear-gradient(135deg, #1e293b, #0f172a);
     color: #ffffff;
@@ -115,96 +150,142 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.cta-btn.large {
+    padding: 16px 36px;
+    font-size: 17px;
 }
 
 .cta-btn:hover {
     opacity: 0.9;
 }
-.trust-strip {
-  text-align: center;
-  margin-top: 40px;
-}
 
-.trust-strip .rating {
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.trust-strip .features {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  flex-wrap: wrap;
-  font-size: 14px;
-  color: #475569;
-}
-
+/* ================================
+   BUSINESS GROWTH SECTION
+================================ */
 .business-growth {
-  text-align: center;
-  padding: 80px 16px;
-  background: #ffffff;
+    text-align: center;
+    padding: 80px 16px;
+    background: #ffffff;
 }
 
 .business-growth h2 {
-  font-size: 36px;
-  margin-bottom: 12px;
+    font-size: 36px;
+    margin-bottom: 12px;
+    color: #0f172a;
 }
 
 .business-growth p {
-  color: #64748b;
-  max-width: 640px;
-  margin: 0 auto 24px;
+    color: #64748b;
+    max-width: 640px;
+    margin: 0 auto 24px;
 }
 
+/* ================================
+   TRUST STRIP
+================================ */
+.trust-strip {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.trust-strip .rating {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.trust-strip .features {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: #475569;
+}
+
+/* ================================
+   BENEFITS
+================================ */
 .benefits {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
-  padding: 0 16px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    padding: 0 16px 80px;
 }
 
 .benefit-card {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  text-align: center;
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    text-align: center;
 }
 
+/* ================================
+   FINAL CTA
+================================ */
 .final-cta {
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: #ffffff;
-  padding: 60px 16px;
-  border-radius: 24px;
-  margin: 0 16px 80px;
-  text-align: center;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #ffffff;
+    padding: 60px 16px;
+    border-radius: 24px;
+    margin: 0 16px 80px;
+    text-align: center;
 }
 
 .final-cta p {
-  color: #cbd5f5;
+    color: #cbd5f5;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .staging-section h2 {
-        font-size: 30px;
-    }
-
-    .image-card {
-        border-radius: 12px;
-    }
-}
-
-.fade-img {
-    animation: fade 0.4s ease-in-out;
-}
-
+/* ================================
+   ANIMATION
+================================ */
 @keyframes fade {
     from {
         opacity: 0.6;
     }
-
     to {
         opacity: 1;
+    }
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+    .staging-section h2 {
+        font-size: 28px;
+    }
+
+    .business-growth h2 {
+        font-size: 28px;
+    }
+
+    .image-card {
+        aspect-ratio: 4 / 3;
+        border-radius: 12px;
+    }
+
+    .image-card .nav {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-card {
+        aspect-ratio: 1 / 1;
+    }
+
+    .tabs {
+        gap: 8px;
+    }
+
+    .tabs button {
+        padding: 6px 14px;
+        font-size: 14px;
     }
 }
