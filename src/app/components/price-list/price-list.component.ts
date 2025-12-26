@@ -28,10 +28,10 @@ export class PriceListComponent implements OnInit {
   }
 
   view(plan: any) {
-    this.router.navigate(['/plans/view', plan.id]);
+    this.router.navigate(['/admin-dashboard/plans/view', plan.id]);
   }
 
   edit(plan: any) {
-    this.router.navigate(['/plans/edit', plan.id]);
+    this.router.navigate(['/admin-dashboard/plans/edit', plan.id]);
   }
 }

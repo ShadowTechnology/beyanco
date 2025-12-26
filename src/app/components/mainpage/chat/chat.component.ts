@@ -80,7 +80,7 @@ export class ChatComponent implements AfterViewChecked {
   currentOriginalImage: string | null = null;
   currentGeneratedImage: string | null = null;
   selectedElement = '';
-  selectedTool = 'Magic Eraser';
+  selectedTool = '';
 
   // Data lists
   rooms = ['Kitchen', 'Bedroom', 'Living Room', 'Bathroom', 'Dining', 'Study', 'Office', 'Garage'];
@@ -89,7 +89,7 @@ export class ChatComponent implements AfterViewChecked {
     'American', 'British', 'French', 'Italian', 'Japanese', 'Scandinavian',
     'German', 'Spanish', 'Dutch', 'Australian', 'Swiss', 'Moroccan', 'Turkish', 'Russian'
   ];
-  tools = [ 'Compare Version', 'Add Element'];
+  tools = [  'Compare Version', 'Add Element'];
   elements = [
     { name: 'Add Lighting', prompt: 'Add ambient lighting fixtures to enhance the room atmosphere' },
     { name: 'Add Plants', prompt: 'Add indoor plants and greenery to bring life to the space' },
@@ -503,12 +503,12 @@ export class ChatComponent implements AfterViewChecked {
 
     if (this.userCredits > 0) {
       const text = this.composerDescription.trim();
-      if (!text && !this.pendingImages().length) return;
+      // if (!text || !this.pendingImages().length) return;
 
-      if (this.pendingFiles.length === 0 && this.pendingImages().length > 0) {
-        alert('To generate images, please upload a valid photo first.');
-        return;
-      }
+      // if (this.pendingFiles.length === 0 && this.pendingImages().length > 0) {
+      //   alert('To generate images, please upload a valid photo first.');
+      //   return;
+      // }
 
       const userMsg: ChatMessage = {
         id: crypto.randomUUID(),
@@ -523,19 +523,19 @@ export class ChatComponent implements AfterViewChecked {
       this.messages.update(list => [...list, userMsg]);
       this.shouldScrollToBottom = true;
 
-      if (this.pendingFiles.length > 0) {
+      // if (this.pendingFiles.length > 0) {
         this.uploadToBackend(userMsg, text);
-      } else {
-        const aiResponse: ChatMessage = {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          text: 'To generate images, please upload a photo first. You can click the settings icon to upload images.',
-          timestamp: new Date()
-        };
-        this.messages.update(list => [...list, aiResponse]);
-        this.shouldScrollToBottom = true;
-        this.clearComposer();
-      }
+      // } else {
+      //   const aiResponse: ChatMessage = {
+      //     id: crypto.randomUUID(),
+      //     role: 'assistant',
+      //     text: 'To generate images, please upload a photo first. You can click the settings icon to upload images.',
+      //     timestamp: new Date()
+      //   };
+      //   this.messages.update(list => [...list, aiResponse]);
+      //   this.shouldScrollToBottom = true;
+      //   this.clearComposer();
+      // }
     } else {
       this.openCreditPopup();
     }

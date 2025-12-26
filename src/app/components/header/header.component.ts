@@ -45,7 +45,9 @@ export class HeaderComponent implements OnInit {
         const user = this.tokenStorage.getUser();
         this.userId = user?.id;
         this.loadCredit(this.userId);
-        this.roles = this.tokenStorage.getUser().roles;
+        if(user?.roles) {
+          this.roles = user.roles;
+        }
       }
     });
   }
