@@ -1,0 +1,84 @@
+/* Page Header */
+.page-header-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-header-modern h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2c47;
+}
+
+/* Table */
+.table-wrapper {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background: #1f2c47;
+  color: #fff;
+  text-align: left;
+}
+
+thead th {
+  padding: 12px;
+  font-size: 14px;
+}
+
+tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Action Buttons */
+.actions button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.view-btn {
+  background: #f2c200;
+}
+
+.delete-btn {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.primary-btn {
+  background: #f2c200;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+td.actions button {
+  margin-right: 10px;
+}
+
+/* Loading and No Data */
+.loading, .no-data {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+}

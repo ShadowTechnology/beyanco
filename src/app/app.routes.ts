@@ -44,6 +44,8 @@ import { RolesFormComponent } from './components/roles-form/roles-form.component
 import { AdminDashboardContentComponent } from './components/admin-dashboard/admin-dashboardcontent.component';
 import { PriceFormComponent } from './components/price-form/price-form.component';
 import { StagingShowcaseComponent } from './components/staging-showcase/staging-showcase.component';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -79,6 +81,9 @@ export const routes: Routes = [
       { path: 'plans/create', component: PriceFormComponent },
       { path: 'plans/view/:id', component: PriceFormComponent }, // optional
       { path: 'plans/edit/:id', component: PriceFormComponent },  // optional
+      { path: 'user-list', component: UserListComponent },
+      { path: 'user-form', component: UserFormComponent },
+      { path: 'user-form/:id', component: UserFormComponent },
     ]
   },
 

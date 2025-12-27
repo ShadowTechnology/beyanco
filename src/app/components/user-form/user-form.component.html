@@ -1,0 +1,83 @@
+<div class="page-header-modern">
+    <h2>{{ isEditMode ? 'Edit User' : 'Add New User' }}</h2>
+</div>
+
+<div class="modern-card" *ngIf="!loading">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <div class="group">
+                <label>Username *</label>
+                <input type="text" formControlName="username" placeholder="Enter username" />
+            </div>
+            <div class="group">
+                <label>Email *</label>
+                <input type="email" formControlName="email" placeholder="Enter email" />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="group">
+                <label>First Name</label>
+                <input type="text" formControlName="firstName" placeholder="Enter first name" />
+            </div>
+            <div class="group">
+                <label>Last Name</label>
+                <input type="text" formControlName="lastName" placeholder="Enter last name" />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="group">
+                <label>Company Name</label>
+                <input type="text" formControlName="companyName" placeholder="Enter company name" />
+            </div>
+            <!-- <div class="group">
+        <label>Mobile *</label>
+        <input type="tel" formControlName="mobile" placeholder="Enter mobile number" />
+      </div> -->
+            <div class="group">
+                <label>creditsRemaining *</label>
+                <input type="number" formControlName="creditsRemaining" placeholder="Enter credits remaining" />
+            </div>
+
+        </div>
+
+        <!-- <div class="group">
+      <label>Company</label>
+      <input type="text" formControlName="company" placeholder="Enter company" />
+    </div> -->
+
+        <div class="group">
+            <label>Roles</label>
+
+            <label>
+                <input type="checkbox" value="ROLE_USER" [checked]="userForm.value.roles.includes('ROLE_USER')"
+                    (change)="onRoleChange($event)">
+                User
+            </label>
+
+            <label>
+                <input type="checkbox" value="ROLE_ADMIN" [checked]="userForm.value.roles.includes('ROLE_ADMIN')"
+                    (change)="onRoleChange($event)">
+                Admin
+            </label>
+
+            <label>
+                <input type="checkbox" value="ROLE_MODERATOR"
+                    [checked]="userForm.value.roles.includes('ROLE_MODERATOR')" (change)="onRoleChange($event)">
+                Moderator
+            </label>
+        </div>
+s
+
+
+        <div class="form-actions">
+            <button type="submit" class="submit-modern" [disabled]="!userForm.valid">Save User</button>
+            <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<div *ngIf="loading" class="loading">
+    Loading...
+</div>

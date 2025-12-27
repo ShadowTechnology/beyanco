@@ -8,7 +8,7 @@ export interface User {
   subscriptionType?: string;
   subscriptionStatus?: string;
   creditsRemaining?: number;
-  roles: string[];
+  roles: any[];
   mobile: number;
   company: string;
 }

@@ -1,0 +1,50 @@
+<div class="user-list-page">
+  <div class="page-header-modern">
+    <h2>Users List</h2>
+    <button class="primary-btn" routerLink="../user-form">
+      + Create New User
+    </button>
+  </div>
+
+  <div class="table-wrapper" *ngIf="!loading">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <!-- <th>Company</th> -->
+          <th>Subscription</th>
+          <th>Roles</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <!-- <td>{{ user.company }}</td> -->
+          <td>{{ user.subscriptionType }} ({{ user.subscriptionStatus }})</td>
+          <td>{{ user.roles[0]?.name }}</td>
+          <td class="actions">
+            <button class="view-btn" [routerLink]="['../user-form', user.id]">Edit</button>
+            <button class="delete-btn" (click)="deleteUser(user.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Loading users...
+  </div>
+
+  <div *ngIf="!loading && users.length === 0" class="no-data">
+    No users found.
+  </div>
+</div>

@@ -1,0 +1,106 @@
+/* Page Header */
+.page-header-modern {
+  margin-bottom: 20px;
+}
+
+.page-header-modern h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2c47;
+}
+
+/* Form Card */
+.modern-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* Form Groups */
+.group {
+  margin-bottom: 22px;
+}
+
+.group label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.group input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  transition: 0.25s;
+}
+
+.group input:focus {
+  border-color: #7b61ff;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.2);
+}
+
+/* Form Row for two columns */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .group {
+  flex: 1;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.submit-modern {
+  flex: 1;
+  padding: 14px;
+  background: #ffbb00;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-modern:hover {
+  opacity: 0.9;
+}
+
+.submit-modern:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  padding: 14px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #5a6268;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+}
