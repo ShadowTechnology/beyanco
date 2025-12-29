@@ -67,7 +67,7 @@ export class UserService {
 
   // ✅ Create user
   createUser(user: Partial<User>): Observable<User> {
-    return this.http.post<User>(`${API_URL}`, user, {
+    return this.http.post<User>(`${API_URL}create`, user, {
       headers: this.getAuthHeaders()
     });
   }
