@@ -156,15 +156,17 @@
   border-radius: 8px;
   font-size: 0.8rem;
   color: #fff;
+  width: 100px;
+  text-align: center;
 }
 
 .role-tag.admin {
   background: #007bff;
 }
 
-.role-tag.dev {
+/* .role-tag.dev {
   background: #31363ffd;
-}
+} */
 
 .profile-form {
   margin-top: 1.5rem;

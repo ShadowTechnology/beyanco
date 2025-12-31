@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit {
         const user = this.tokenStorage.getUser();
         this.userId = user?.id;
         this.loadCredit(this.userId);
-        if(user?.roles) {
+        if (user?.roles) {
           this.roles = user.roles;
         }
       }
@@ -76,35 +76,56 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  // toggleMenu(): void {
+  //   this.isMobileMenuActive = !this.isMobileMenuActive;
+  //   const navElement = document.querySelector('.main-nav');
+  //   const toggleElement = document.querySelector('.mobile-menu-toggle');
+
+  //   if (navElement && toggleElement) {
+  //     if (this.isMobileMenuActive) {
+  //       navElement.classList.add('active');
+  //       toggleElement.classList.add('active');
+  //     } else {
+  //       navElement.classList.remove('active');
+  //       toggleElement.classList.remove('active');
+  //     }
+  //   }
+  // }
   toggleMenu(): void {
     this.isMobileMenuActive = !this.isMobileMenuActive;
-    const navElement = document.querySelector('.main-nav');
-    const toggleElement = document.querySelector('.mobile-menu-toggle');
-
-    if (navElement && toggleElement) {
-      if (this.isMobileMenuActive) {
-        navElement.classList.add('active');
-        toggleElement.classList.add('active');
-      } else {
-        navElement.classList.remove('active');
-        toggleElement.classList.remove('active');
-      }
-    }
   }
+
+  closeMenu(): void {
+    this.isMobileMenuActive = false;
+  }
+
   @HostListener('document:click', ['$event'])
   handleDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
 
-    // Close credit popup
-    if (!target.closest('.filter-card') && !target.closest('.credit-badge')) {
+    if (
+      this.isMobileMenuActive &&
+      !target.closest('.mobile-drawer') &&
+      !target.closest('.hamburger')
+    ) {
+      this.isMobileMenuActive = false;
+    }
+
+    if (
+      !target.closest('.filter-card') &&
+      !target.closest('.credits-pill') &&
+      !target.closest('.drawer-credits')
+    ) {
       this.isPopupOpen = false;
     }
 
-    // Close profile dropdown
-    if (!target.closest('.profile-dropdown')) {
+    if (
+      !target.closest('.profile-wrapper')
+    ) {
       this.isProfileMenuOpen = false;
     }
   }
+
 
 
   // @HostListener('document:click', ['$event'])

@@ -1,7 +1,7 @@
 <aside class="sidebar" [class.collapsed]="collapsed">
   <div class="top">
     <div class="brand">
-      <img src="assets/Clinet_logo.jpg" alt="Beyanco AI">
+      <img src="full_logo.jpg" alt="Beyanco AI">
       <!-- <div class="icon-bg"><i class="far fa-image"></i></div>
       <span class="brand-title">RoomVision360</span> -->
     </div>
@@ -15,27 +15,27 @@
     <nav class="nav-section">
       <p class="nav-label">Main</p>
       <a routerLink="admin-dashboardContent" routerLinkActive="active" title="Dashboard">
-        <i class="fas fa-th-large"></i>
+        <i class="fa-solid fa-gauge"></i>
         <span>Dashboard</span>
       </a>
       <a routerLink="aboutus" routerLinkActive="active" title="About Us">
-        <i class="fa-regular fa-address-card"></i>
+        <i class="fa-solid fa-address-card"></i>
         <span>About Us</span>
       </a>
       <a routerLink="contactus-list" routerLinkActive="active" title="Contact us">
-        <i class="fa-regular fa-id-badge"></i>
+       <i class="fa-solid fa-address-book"></i>
         <span>Contact us</span>
       </a>
       <a routerLink="gallery" routerLinkActive="active" title="Gallery">
-        <i class="fa-regular fa-images"></i>
+        <i class="fa-solid fa-photo-film"></i>
         <span>Gallery</span>
       </a>
       <a routerLink="#" routerLinkActive="active" title="Blogs">
-        <i class="fa-regular fa-square"></i>
+        <i class="fa-solid fa-blog"></i>
         <span>Blogs</span>
       </a>
       <a routerLink="price-list" routerLinkActive="active" title="Price">
-        <i class="fas fa-dollar-sign"></i>
+        <i class="fa-solid fa-money-bill"></i>
         <span>Price</span>
       </a>
     </nav>
@@ -43,15 +43,15 @@
     <nav class="nav-section">
       <p class="nav-label">Settings</p>
       <a routerLink="user-list" routerLinkActive="active" title="Users">
-        <i class="far fa-user"></i>
+        <i class="fa fa-user"></i>
         <span>Users</span>
       </a>
       <a routerLink="roles-list" routerLinkActive="active" title="Roles">
-        <i class="far fa-sun"></i>
+        <i class="fa fa-sun"></i>
         <span>Roles</span>
       </a>
       <a routerLink="users" routerLinkActive="active" title="Profile">
-        <i class="far fa-user-circle"></i>
+        <i class="fa fa-user-circle"></i>
         <span>Profile</span>
       </a>
     </nav>
@@ -59,16 +59,16 @@
       <p class="nav-label">Advertisement</p>
       <a routerLink="announcement-list" routerLinkActive="active"
         title="Announcement">
-        <i class="fa-regular fa-lightbulb"></i>
+       <i class="fa-solid fa-bullhorn"></i>
         <span>Announcement</span>
       </a>
       <a routerLink="contactus-list" routerLinkActive="active" title="Contact Us">
-        <i class="fa-regular fa-id-badge"></i>
+       <i class="fa-solid fa-address-book"></i>
         <span>Contact Us</span>
       </a>
       <a routerLink="testimonials-list" routerLinkActive="active"
         title="Testimonials">
-        <i class="fa-regular fa-comment-dots"></i>
+        <i class="fa-brands fa-rocketchat"></i>
         <span>Testimonials</span>
       </a>
     </nav>
@@ -81,6 +81,6 @@
       <p class="name">{{ currentUser.firstName || currentUser.username }}</p>
       <p class="role">{{currentUser.roles[0]}}</p>
     </div>
-    <i class="fas fa-sign-out-alt" (click)="logout($event)"></i>
+    <i class="fa-solid fa-arrow-right-from-bracket"  (click)="logout($event)"></i>
   </div>
 </aside>

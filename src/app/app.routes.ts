@@ -46,6 +46,7 @@ import { PriceFormComponent } from './components/price-form/price-form.component
 import { StagingShowcaseComponent } from './components/staging-showcase/staging-showcase.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
+import { BlogsComponent } from './components/blogs/blogs.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -57,6 +58,7 @@ export const routes: Routes = [
   { path: 'chat', component: ChatComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'contactus-form', component: ContactusFormComponent },
+  { path: 'our-blogs', component: BlogsComponent },
   {
     path: 'admin-dashboard',
     component: AdminDashboardComponent,

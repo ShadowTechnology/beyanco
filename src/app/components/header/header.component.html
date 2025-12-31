@@ -1,86 +1,101 @@
-<header class="main-header">
-    <div class="container">
-        <div class="logo-container">
-            <a routerLink="/" class="logo"><img src="full_logo.jpg" alt="Beyanco AI"></a>
-            <p class="tagline">Real Estate Interior Visualization Tool</p>
+<header class="app-header">
+  <div class="header-inner">
+
+    <!-- Logo -->
+    <a routerLink="/" class="brand">
+      <img src="full_logo.jpg" alt="Beyanco AI" />
+    </a>
+
+    <!-- RIGHT SECTION -->
+    <div class="right-section">
+
+      <!-- Desktop Navigation -->
+      <nav class="nav-links">
+        <a routerLink="/home" routerLinkActive="active">Home</a>
+        <a *ngIf="isLoggedIn && roles.includes('ROLE_ADMIN')"
+          routerLink="/admin-dashboard"
+          routerLinkActive="active">Admin</a>
+        <a *ngIf="isLoggedIn"
+          routerLink="/chat"
+          routerLinkActive="active">Chat</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="header-actions">
+
+        <!-- ✅ CREDITS (CLICKABLE, DESKTOP ONLY) -->
+        <div
+          class="credits-pill desktop-only"
+          *ngIf="isLoggedIn && userCredits !== null"
+          [class.low]="userCredits <= 0"
+          (click)="togglePopup()">
+          ⚡ Credits: {{ userCredits }}
         </div>
 
-        <nav class="main-nav">
-            <ul>
-                <li><a routerLink="/home" routerLinkActive="active"
-                        [routerLinkActiveOptions]="{exact: true}">Home</a>
-                </li>
-                <!-- <li *ngIf="isLoggedIn"><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
-            <li *ngIf="isLoggedIn"><a routerLink="/property-upload" routerLinkActive="active">Upload</a></li> -->
-                <li *ngIf="isLoggedIn && roles.includes('ROLE_ADMIN')"><a routerLink="/admin-dashboard"
-                        routerLinkActive="active">Admin</a></li>
-                <li *ngIf="isLoggedIn"><a routerLink="/chat"
-                        routerLinkActive="active">Chat</a></li>
-                <!-- <li *ngIf="isLoggedIn"><a routerLink="/profile"
-                        routerLinkActive="active">Profile</a></li> -->
-                <li *ngIf="!isLoggedIn"><a routerLink="/login"
-                        routerLinkActive="active" class="login-btn">Login</a>
-                </li>
-                <!-- <li *ngIf="!isLoggedIn"><a routerLink="/register"
-                        routerLinkActive="active"
-                        class="register-btn">Register</a></li> -->
-                <!-- <li *ngIf="isLoggedIn"><a href="#" (click)="logout($event)"
-                        class="logout-btn">Logout</a></li> -->
+        <!-- Profile -->
+        <div class="profile-wrapper" *ngIf="isLoggedIn">
+          <div class="profile-trigger" (click)="toggleProfileMenu($event)">
+            <img src="/assets/favicon.png" class="profile-avatar" />
+            <span class="dropdown-arrow">▾</span>
+          </div>
 
-                <!-- <li class="credit-badge"
-                    *ngIf="isLoggedIn && userCredits !== null"
-                    [class.low]="userCredits <= 0" (click)="togglePopup()">
-                    Credits: {{ userCredits }}
-                </li> -->
-                <li class="credit-badge"
-                    *ngIf="isLoggedIn && userCredits !== null"
-                    [class.low]="userCredits <= 0">
-                    Credits: {{ userCredits }}
-                </li>
-                <li class="profile-dropdown" *ngIf="isLoggedIn">
-                    <div class="profile-trigger" (click)="toggleProfileMenu($event)">
-                        <img src="/assets/favicon.png" alt="Profile" class="profile-img" />
-                        <span class="arrow">&#9662;</span>
-                    </div>
-                    <div class="profile-menu" *ngIf="isProfileMenuOpen">
-                        <a routerLink="/profile">Profile</a>
-                        <!-- <a >Change Password</a> -->
-                        <a (click)="logout($event)">Logout</a>
-                    </div>
-                </li>
-                <!-- <li class="currency-selector" *ngIf="isLoggedIn">
-                    <select [(ngModel)]="selectedCurrency"
-                        (change)="onCurrencyChange()">
-                        <option value="INR">₹ INR</option>
-                        <option value="USD">$ USD</option>
-                        <option value="EUR">€ EUR</option>
-                        <option value="GBP">£ GBP</option>
-                        <option value="AUD">A$ AUD</option>
-                    </select>
-                </li> -->
-            </ul>
-        </nav>
+          <div class="profile-menu" *ngIf="isProfileMenuOpen">
+            <a routerLink="/profile">Profile</a>
+            <a (click)="logout($event)">Logout</a>
+          </div>
+        </div>
 
-        <div class="mobile-menu-toggle" (click)="toggleMenu()">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-        <div class="filter-card" *ngIf="isPopupOpen">
-            <h3 class="filter-title">{{ count }} Photos</h3>
-            <input
-                type="range"
-                min="1"
-                max="200"
-                [(ngModel)]="count"
-                (input)="updatePrice()"
-                class="range-slider" />
-            <p class="price-text">
-                Price: <strong class="text-danger">₹{{ totalPrice }}</strong>
-            </p>
-            <div class="action-area">
-                <button class="buy-btn">Buy Now</button>
-            </div>
-        </div>
+        <!-- Hamburger -->
+        <button
+          class="hamburger"
+          (click)="toggleMenu(); $event.stopPropagation()"
+          [class.open]="isMobileMenuActive">
+          <span></span><span></span><span></span>
+        </button>
+
+      </div>
     </div>
+  </div>
+
+  <!-- MOBILE DRAWER -->
+  <div class="mobile-drawer" [class.open]="isMobileMenuActive">
+    <a routerLink="/home" (click)="closeMenu()">Home</a>
+    <a *ngIf="isLoggedIn && roles.includes('ROLE_ADMIN')"
+      routerLink="/admin-dashboard"
+      (click)="closeMenu()">Admin</a>
+    <a *ngIf="isLoggedIn"
+      routerLink="/chat"
+      (click)="closeMenu()">Chat</a>
+
+    <!-- Credits (MOBILE – clickable too) -->
+    <div
+      class="drawer-credits"
+      *ngIf="isLoggedIn && userCredits !== null"
+      [class.low]="userCredits <= 0"
+      (click)="togglePopup(); closeMenu()">
+      ⚡ Credits: {{ userCredits }}
+    </div>
+  </div>
+
+  <!-- ✅ CREDIT POPUP (RESTORED) -->
+  <div class="filter-card" *ngIf="isPopupOpen">
+    <h3 class="filter-title">{{ count }} Photos</h3>
+
+    <input
+      type="range"
+      min="1"
+      max="200"
+      [(ngModel)]="count"
+      (input)="updatePrice()"
+      class="range-slider" />
+
+    <p class="price-text">
+      Price:
+      <strong class="text-danger">₹{{ totalPrice }}</strong>
+    </p>
+
+    <div class="action-area">
+      <button class="buy-btn">Buy Now</button>
+    </div>
+  </div>
 </header>

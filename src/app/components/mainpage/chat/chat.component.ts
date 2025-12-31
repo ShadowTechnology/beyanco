@@ -17,6 +17,7 @@ interface ChatMessage {
   text: string;
   timestamp: Date;
   images?: string[];
+  description?: string;
   room?: string;
   meta?: string[];
   style?: string;
@@ -33,12 +34,14 @@ interface ChatMessage {
 export class ChatComponent implements AfterViewChecked {
   @ViewChild('scrollArea') scrollArea?: ElementRef;
   @ViewChild('textareaRef') textareaRef?: ElementRef;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  showAddMenu = false;
 
   // UI state
   previewUrls: string[] = [];
   isUploading = false;
   errorMessage: any;
-  sidebarCollapsed = false;
+  sidebarCollapsed = true;
   mobileSidebarOpen = false;
   showPopup = false;
   showImagePopup = false;
@@ -89,7 +92,7 @@ export class ChatComponent implements AfterViewChecked {
     'American', 'British', 'French', 'Italian', 'Japanese', 'Scandinavian',
     'German', 'Spanish', 'Dutch', 'Australian', 'Swiss', 'Moroccan', 'Turkish', 'Russian'
   ];
-  tools = [  'Compare Version', 'Add Element'];
+  tools = ['Compare Version', 'Add Element'];
   elements = [
     { name: 'Add Lighting', prompt: 'Add ambient lighting fixtures to enhance the room atmosphere' },
     { name: 'Add Plants', prompt: 'Add indoor plants and greenery to bring life to the space' },
@@ -116,6 +119,12 @@ export class ChatComponent implements AfterViewChecked {
     const order = ['Today', 'Yesterday', 'Older'];
     return order.indexOf(a.key) - order.indexOf(b.key);
   };
+  // ---- Swipe gesture (mobile sidebar) ----
+  private touchStartX = 0;
+  private touchStartY = 0;
+  private touchEndX = 0;
+  private readonly swipeThreshold = 70; // px
+  private readonly edgeThreshold = 40;  // px from left edge
 
   constructor(
     private router: Router,
@@ -125,6 +134,45 @@ export class ChatComponent implements AfterViewChecked {
     private cdRef: ChangeDetectorRef
   ) {
     this.loadChats();
+  }
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent) {
+    if (window.innerWidth > 768) return; // only mobile
+
+    const touch = event.changedTouches[0];
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+  }
+
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(event: TouchEvent) {
+    if (window.innerWidth > 768) return; // only mobile
+
+    const touch = event.changedTouches[0];
+    this.touchEndX = touch.clientX;
+
+    this.handleSwipeGesture();
+  }
+  private handleSwipeGesture() {
+    const deltaX = this.touchEndX - this.touchStartX;
+
+    // 👉 OPEN sidebar (swipe right from left edge)
+    if (
+      deltaX > this.swipeThreshold &&
+      this.touchStartX < this.edgeThreshold &&
+      !this.mobileSidebarOpen
+    ) {
+      this.mobileSidebarOpen = true;
+      return;
+    }
+
+    // 👈 CLOSE sidebar (swipe left)
+    if (
+      deltaX < -this.swipeThreshold &&
+      this.mobileSidebarOpen
+    ) {
+      this.mobileSidebarOpen = false;
+    }
   }
 
   ngAfterViewChecked() {
@@ -148,6 +196,20 @@ export class ChatComponent implements AfterViewChecked {
     if (!clickedInsideToolbar && this.activeTool && !target.closest('.tool-panel')) {
       this.closeTool();
     }
+  }
+
+  toggleAddMenu(event: MouseEvent) {
+    event.stopPropagation();
+    this.showAddMenu = !this.showAddMenu;
+  }
+
+  triggerFileInput() {
+    this.showAddMenu = false;
+    this.fileInput.nativeElement.click();
+  }
+  @HostListener('document:click')
+  closeAddMenu() {
+    this.showAddMenu = false;
   }
 
   // ---------- Thumbnail / Compare helpers ----------
@@ -232,7 +294,13 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   // ---------- Navigation ----------
-  toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; }
+  toggleSidebar() {
+    if (window.innerWidth <= 768) {
+      this.mobileSidebarOpen = !this.mobileSidebarOpen;
+      return;
+    }
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
   toggleMobileSidebar() { this.mobileSidebarOpen = !this.mobileSidebarOpen; }
   goToProfile() { this.router.navigate(['/profile']); }
 
@@ -259,8 +327,21 @@ export class ChatComponent implements AfterViewChecked {
     this.showPopup = true;
     this.properties = [];
   }
+  private resetCompareState() {
+    this.compareBoxes = Array(this.numCompareBoxes).fill(null);
+    this.compareThumbnails.set([]);
+    this.visibleThumbnails = [];
+    this.thumbnailBatch = 10;
+    this.activeTool = null;
+    this.selectedTool = '';
+    this.compareMode = 'horizontal';
+  }
 
   openConversation(chatId: number) {
+     if (window.innerWidth <= 768) {
+    this.mobileSidebarOpen = false;
+  }
+    this.resetCompareState();
     this.chatId = chatId;
     this.activeConversationId.set(chatId);
     this.isLoadingChat = true;
@@ -319,12 +400,12 @@ export class ChatComponent implements AfterViewChecked {
           generatedImageUrl: p.generatedImageUrl || ''
         }));
 
-        // Populate compare thumbnails
-        this.compareThumbnails.update(() => {
-          return this.properties
+        // Populate compare thumbnails (fresh per chat)
+        this.compareThumbnails.update(() =>
+          this.properties
             .map(pr => pr.generatedImageUrl || pr.originalImageUrl)
-            .filter(Boolean);
-        });
+            .filter(Boolean)
+        );
 
         this.updateVisibleThumbnails();
         this.isLoadingProperties = false;
@@ -406,6 +487,7 @@ export class ChatComponent implements AfterViewChecked {
     this.showImagePopup = false;
     this.currentImage = null;
     this.activeTool = null;
+    this.compareBoxes = Array(this.numCompareBoxes).fill(null);
   }
 
   // ---------- Tools ----------
@@ -524,7 +606,7 @@ export class ChatComponent implements AfterViewChecked {
       this.shouldScrollToBottom = true;
 
       // if (this.pendingFiles.length > 0) {
-        this.uploadToBackend(userMsg, text);
+      this.uploadToBackend(userMsg, text);
       // } else {
       //   const aiResponse: ChatMessage = {
       //     id: crypto.randomUUID(),
@@ -536,8 +618,21 @@ export class ChatComponent implements AfterViewChecked {
       //   this.shouldScrollToBottom = true;
       //   this.clearComposer();
       // }
-    } else {
+      this.clearComposerUI();
+    }
+    else {
       this.openCreditPopup();
+    }
+  }
+  private clearComposerUI() {
+    this.composerDescription = '';
+    this.pendingImages.set([]);
+    this.pendingFiles = [];
+    this.showAddMenu = false;
+
+    if (this.textareaRef?.nativeElement) {
+      this.textareaRef.nativeElement.value = '';
+      this.textareaRef.nativeElement.style.height = 'auto';
     }
   }
 
@@ -942,6 +1037,13 @@ export class ChatComponent implements AfterViewChecked {
       return null;
     }
   }
+isSidebarExpanded(): boolean {
+  if (window.innerWidth <= 768) {
+    return this.mobileSidebarOpen;
+  }
+  return !this.sidebarCollapsed;
+}
+
 
   // private async convertBase64ToFile(base64: string, filename: string): Promise<File | null> {
   //   try {
@@ -984,15 +1086,37 @@ export class ChatComponent implements AfterViewChecked {
     if (!this.currentImage) return;
     alert('Feedback recorded. We will improve!');
   }
-
-  downloadImage() {
+  async downloadImage() {
     if (!this.currentImage) return;
 
-    const link = document.createElement('a');
-    link.href = this.currentImage;
-    link.download = `beyanco-design-${Date.now()}.png`;
-    link.click();
+    try {
+      const response = await fetch(this.currentImage);
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `beyanco-design-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download image.');
+    }
   }
+
+  // downloadImage() {
+  //   if (!this.currentImage) return;
+
+  //   const link = document.createElement('a');
+  //   link.href = this.currentImage;
+  //   link.download = `beyanco-design-${Date.now()}.png`;
+  //   link.click();
+  // }
 
   shareImage() {
     if (!this.currentImage) return;

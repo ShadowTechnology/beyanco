@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from "@angular/router";
 
 @Component({
@@ -15,27 +15,29 @@ export class StagingShowcaseComponent {
   activeTab = 'Living Rooms';
 
   viewMode: 'before' | 'after' = 'after';
-  currentIndex = 0;
 
-  // Images per tab
   gallery: any = {
-    'Living Rooms': [
-      { before: 'assets/beforeimages/A1.jpg', after: 'assets/afterimages/A1-1.png' }
-    ],
-    'Bedrooms': [
-      { before: 'assets/beforeimages/A4.jpg', after: 'assets/afterimages/A4-4.png' }
-    ],
-    'Dining Rooms': [
-      { before: 'assets/beforeimages/A9.jpg', after: 'assets/afterimages/A9-9.jpg' }
-    ],
-    'Offices': [
-      { before: 'assets/beforeimages/A7.jpg', after: 'assets/afterimages/A7-7.jpg' }
-    ]
+    'Living Rooms': {
+      before: 'assets/beforeimages/A1.jpg',
+      after: 'assets/afterimages/A1-1.png'
+    },
+    'Bedrooms': {
+      before: 'assets/beforeimages/A4.jpg',
+      after: 'assets/afterimages/A4-4.png'
+    },
+    'Dining Rooms': {
+      before: 'assets/beforeimages/A9.jpg',
+      after: 'assets/afterimages/A9-9.jpg'
+    },
+    'Offices': {
+      before: 'assets/beforeimages/A7.jpg',
+      after: 'assets/afterimages/A7-7.jpg'
+    }
   };
 
   setTab(tab: string) {
     this.activeTab = tab;
-    this.currentIndex = 0; // reset slider
+    this.viewMode = 'after';
   }
 
   setView(mode: 'before' | 'after') {
@@ -43,18 +45,19 @@ export class StagingShowcaseComponent {
   }
 
   next() {
-    const images = this.gallery[this.activeTab];
-    this.currentIndex = (this.currentIndex + 1) % images.length;
+    this.toggleView();
   }
 
   prev() {
-    const images = this.gallery[this.activeTab];
-    this.currentIndex =
-      this.currentIndex === 0 ? images.length - 1 : this.currentIndex - 1;
+    this.toggleView();
+  }
+
+  toggleView() {
+    this.viewMode = this.viewMode === 'after' ? 'before' : 'after';
   }
 
   get currentImage() {
-    const images = this.gallery[this.activeTab];
-    return images[this.currentIndex][this.viewMode];
+    return this.gallery[this.activeTab][this.viewMode];
   }
 }
+

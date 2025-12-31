@@ -2,7 +2,8 @@
   <div class="hero__overlay"></div>
   <div class="hero__content container">
     <h1>Virtual Home-staging Within Seconds</h1>
-    <h3 class="tagline">Create clear, fully-furnished property images in a click.</h3>
+    <h3 class="tagline">Create clear, fully-furnished property images in a
+      click.</h3>
     <p>Flaunt your space with stunning visuals and bring in more prospects.</p>
 
     <div class="hero__buttons">
@@ -13,7 +14,9 @@
 
   <div class="hero__mini-slider">
     <div class="slider-wrapper">
-      <div class="slide-card" *ngFor="let item of herosectionSlider; let i = index" [class.active]="i === currentIndex"
+      <div class="slide-card"
+        *ngFor="let item of herosectionSlider; let i = index"
+        [class.active]="i === currentIndex"
         [class.prev]="i === prevIndex">
         <div class="ba-card" [style.--pos.%]="sliderValues[i]">
           <div class="ba-media">
@@ -22,7 +25,8 @@
             <div class="ba-divider">
               <span class="ba-handle"></span>
             </div>
-            <input class="ba-range" type="range" min="0" max="100" [value]="sliderValues[i]"
+            <input class="ba-range" type="range" min="0" max="100"
+              [value]="sliderValues[i]"
               (input)="onSlider(i, $event)" />
             <span class="ba-label ba-label--before">Before</span>
             <span class="ba-label ba-label--after">After</span>
@@ -35,7 +39,8 @@
       <button class="nav-btn prev" (click)="prevSlide()">&#10094;</button>
 
       <div class="dots">
-        <span class="dot" *ngFor="let t of herosectionSlider; let i = index" [class.active]="i === currentIndex"
+        <span class="dot" *ngFor="let t of herosectionSlider; let i = index"
+          [class.active]="i === currentIndex"
           (click)="goToSlide(i)"></span>
       </div>
       <!-- <button class="play-btn" (click)="toggleAutoPlay()">
@@ -99,8 +104,8 @@
         <button class="card-active-link" type="button">Learn More &nbsp; <i class="fas fa-arrow-right"></i></button>
       </article> -->
 
-      <article class="card active-card--featured" *ngFor="let s of services" [routerLink]="s.route">
-        <div class="d-flex-card" >
+      <article class="card active-card--featured" *ngFor="let s of services" [routerLink]="s.route" [queryParams]="{ tab: s.tab }">
+        <div class="d-flex-card">
           <div class="card__icon">
             <i [class]="s.icon"></i>
           </div>
@@ -121,17 +126,22 @@
 <section id="portfolio" class="section section--alt">
   <div class="container">
     <h2 class="section__title">Experience The Transformation</h2>
-    <p class="section__subtitle">Witness the power of our virtual home-staging tool</p>
+    <p class="section__subtitle">Witness the power of our virtual home-staging
+      tool</p>
 
     <div class="grid grid--ba">
-      <div class="ba-card" *ngFor="let item of transformations; let i = index" [style.--pos.%]="sliderValues[i]">
+      <div class="ba-card" *ngFor="let item of transformations; let i = index"
+        [style.--pos.%]="sliderValues[i]">
         <div class="ba-media">
-          <img class="ba-img ba-img--before" [src]="item.before" alt="Before {{ item.title }}" />
-          <img class="ba-img ba-img--after" [src]="item.after" alt="After {{ item.title }}" />
+          <img class="ba-img ba-img--before" [src]="item.before"
+            alt="Before {{ item.title }}" />
+          <img class="ba-img ba-img--after" [src]="item.after"
+            alt="After {{ item.title }}" />
           <div class="ba-divider" aria-hidden="true">
             <span class="ba-handle"></span>
           </div>
-          <input class="ba-range" type="range" min="0" max="100" [value]="sliderValues[i]" (input)="onSlider(i, $event)"
+          <input class="ba-range" type="range" min="0" max="100"
+            [value]="sliderValues[i]" (input)="onSlider(i, $event)"
             aria-label="Reveal after image" />
           <span class="ba-label ba-label--before">Before</span>
           <span class="ba-label ba-label--after">After</span>
@@ -160,15 +170,16 @@
       </button>
     </div> -->
     <div class="billing-toggle">
-      <button class="toggle-btn" (click)="changeBilling('month')" [class.active]="billingType === 'month'">
+      <button class="toggle-btn" (click)="changeBilling('month')"
+        [class.active]="billingType === 'month'">
         Monthly
       </button>
 
-      <button class="toggle-btn" (click)="changeBilling('year')" [class.active]="billingType === 'year'">
+      <button class="toggle-btn" (click)="changeBilling('year')"
+        [class.active]="billingType === 'year'">
         Yearly
       </button>
     </div>
-
 
     <div class="grid grid--cards pricing-grid">
       <!-- <article class="card pricing-card"
@@ -194,8 +205,10 @@
             {{ feature }}
           </li>
         </ul>
-        <button class="btn pricing-btn" [disabled]="hasActiveForPlan(plan.id!)" (click)="buy(plan)">
-          {{ hasActiveForPlan(plan.id!) ? 'Already Subscribed' : 'Get my photos' }}
+        <button class="btn pricing-btn" [disabled]="hasActiveForPlan(plan.id!)"
+          (click)="buy(plan)">
+          {{ hasActiveForPlan(plan.id!) ? 'Already Subscribed' : 'Get my photos'
+          }}
         </button>
 
       </article>
@@ -224,7 +237,8 @@
   <div class="testimonial-card">
 
     <div class="avatar-circle">
-      {{ testimonials[TestiminialCurrentIndex].initials }}
+      <!-- {{ testimonials[TestiminialCurrentIndex].initials }} -->
+      <img src="assets/user.png" alt="User Profile">
     </div>
 
     <div class="stars">
@@ -240,7 +254,8 @@
     <div class="author">
       <h3>{{ testimonials[TestiminialCurrentIndex].name }}</h3>
       <span>{{ testimonials[TestiminialCurrentIndex].role }}</span><br />
-      <span class="company">{{ testimonials[TestiminialCurrentIndex].company }}</span>
+      <span class="company">{{ testimonials[TestiminialCurrentIndex].company
+        }}</span>
     </div>
   </div>
 
@@ -250,14 +265,16 @@
 
     <div class="dots">
       <span class="dot" *ngFor="let t of testimonials; let i = index"
-        [ngClass]="{ 'active': i === TestiminialCurrentIndex }" (click)="goToTestimonialSlide(i)">
+        [ngClass]="{ 'active': i === TestiminialCurrentIndex }"
+        (click)="goToTestimonialSlide(i)">
       </span>
     </div>
 
     <button class="nav-btn" (click)="nextTestimonial()">&gt;</button>
   </div>
 
-  <p class="page-count">{{ TestiminialCurrentIndex + 1 }} of {{ testimonials.length }}</p>
+  <p class="page-count">{{ TestiminialCurrentIndex + 1 }} of {{
+    testimonials.length }}</p>
 
 </section>
 <section class="updates-section">
@@ -279,7 +296,7 @@
 
       <div class="update-card">
         <div class="icon-box">
-          <i class="fas fa-envelope-open-text"></i>
+          <i class="fa-regular fa-envelope"></i>
         </div>
         <h3 routerLink="/contactus-form">Reach Us</h3>
         <p>Send your queries and feedback</p>

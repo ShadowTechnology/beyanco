@@ -1,9 +1,6 @@
-/* ================================
-   STAGING SECTION
-================================ */
 .staging-section {
     text-align: center;
-    padding: 80px 16px;
+    padding: 60px 16px;
     background: #ffffff;
 }
 
@@ -20,9 +17,6 @@
     font-size: 16px;
 }
 
-/* ================================
-   TABS
-================================ */
 .tabs {
     display: flex;
     justify-content: center;
@@ -52,9 +46,6 @@
     font-weight: 600;
 }
 
-/* ================================
-   IMAGE CARD (FIXED SIZE + RESPONSIVE)
-================================ */
 .image-card {
     position: relative;
     max-width: 1000px;
@@ -63,10 +54,8 @@
     border-radius: 18px;
     overflow: hidden;
     background: #000;
-
-    /* FIXED RESPONSIVE SIZE */
-    aspect-ratio: 22 / 9;
-    max-height: 560px;
+    aspect-ratio: 18 / 9;
+    /* max-height: 560px; */
 }
 
 /* Image */
@@ -80,9 +69,6 @@
     animation: fade 0.4s ease-in-out;
 }
 
-/* ================================
-   BEFORE / AFTER TOGGLE
-================================ */
 .image-card .toggle {
     position: absolute;
     top: 16px;
@@ -108,9 +94,6 @@
     font-weight: 600;
 }
 
-/* ================================
-   NAVIGATION ARROWS
-================================ */
 .image-card .nav {
     position: absolute;
     top: 50%;
@@ -138,9 +121,6 @@
     background: rgba(15, 23, 42, 1);
 }
 
-/* ================================
-   CTA BUTTON
-================================ */
 .cta-btn {
     background: linear-gradient(135deg, #1e293b, #0f172a);
     color: #ffffff;
@@ -162,12 +142,9 @@
     opacity: 0.9;
 }
 
-/* ================================
-   BUSINESS GROWTH SECTION
-================================ */
 .business-growth {
     text-align: center;
-    padding: 80px 16px;
+    padding: 60px 16px;
     background: #ffffff;
 }
 
@@ -183,9 +160,6 @@
     margin: 0 auto 24px;
 }
 
-/* ================================
-   TRUST STRIP
-================================ */
 .trust-strip {
     text-align: center;
     margin-top: 40px;
@@ -205,9 +179,6 @@
     color: #475569;
 }
 
-/* ================================
-   BENEFITS
-================================ */
 .benefits {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -223,9 +194,6 @@
     text-align: center;
 }
 
-/* ================================
-   FINAL CTA
-================================ */
 .final-cta {
     background: linear-gradient(135deg, #0f172a, #1e293b);
     color: #ffffff;
@@ -239,9 +207,6 @@
     color: #cbd5f5;
 }
 
-/* ================================
-   ANIMATION
-================================ */
 @keyframes fade {
     from {
         opacity: 0.6;
@@ -251,9 +216,6 @@
     }
 }
 
-/* ================================
-   RESPONSIVE
-================================ */
 @media (max-width: 768px) {
     .staging-section h2 {
         font-size: 28px;

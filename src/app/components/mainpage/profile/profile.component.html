@@ -9,7 +9,7 @@
   <div class="profile-layout" *ngIf="!isLoading">
     <div class="card profile-card">
       <div class="card-header">
-        <h3><i class="far fa-user"></i> Profile Information</h3>
+        <h3><i class="fa fa-user"></i> Profile Information</h3>
         <button class="edit-btn" (click)="toggleEdit()"><i class="fa-solid fa-pen-to-square"></i> {{ isEditing ? 'Cancel'
           : 'Edit' }}</button>
       </div>
@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="field">
-          <label><i class="far fa-user"></i> Username</label>
+          <label><i class="fa fa-user"></i> Username</label>
           <p>{{ currentUser.username }}</p>
         </div>
         <div class="field">
@@ -32,7 +32,7 @@
           <p>{{ currentUser.email }}</p>
         </div>
         <div class="field">
-          <label><i class="far fa-user"></i> Name</label>
+          <label><i class="fa fa-user"></i> Name</label>
           <p>{{ currentUser.name || 'Not provided' }}</p>
         </div>
         <div class="field">
@@ -46,7 +46,7 @@
         <div class="roles">
           <label><i class="fa-solid fa-shield"></i> Roles</label>
           <span class="role-tag admin">{{userRoles}}</span>
-          <span class="role-tag dev">Developer</span>
+          <!-- <span class="role-tag dev">Developer</span> -->
         </div>
       </div>
       <form *ngIf="isEditing" class="profile-form" (ngSubmit)="updateProfile()">

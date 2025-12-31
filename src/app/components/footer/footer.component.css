@@ -25,6 +25,15 @@
     color: white;
 }
 
+.brand img {
+    height: 50px;
+    transition: transform 0.2s ease;
+}
+
+.brand:hover img {
+    transform: scale(1.05);
+}
+
 .footer-logo p {
     color: #ccc;
     font-size: 0.9rem;

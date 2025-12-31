@@ -22,7 +22,6 @@ img {
   display: block;
 }
 
-
 .container {
   width: min(1120px, 92%);
   margin-inline: auto;
@@ -202,12 +201,13 @@ img {
 
 .nav-btn {
   background: rgba(255, 255, 255, 0.9);
-  padding: 0.5rem 1rem;
+  padding: 11px;
   border-radius: 50px;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 13px;
   transition: 0.3s;
+  width: 40px;
 }
 
 .nav-btn:hover {
@@ -407,7 +407,7 @@ img {
 }
 
 .card__title {
-  margin: .25rem 0 .25rem;
+  margin: 0 0 .25rem;
   font-size: 1.02rem;
 }
 
@@ -746,6 +746,7 @@ img {
   margin: 0 auto 10px;
   font-weight: 700;
   font-size: 20px;
+  padding: 5px;
 }
 
 .stars {
@@ -795,16 +796,6 @@ img {
   margin-top: 20px;
 }
 
-.nav-btn {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: none;
-  background: #fff;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-  font-size: 16px;
-  cursor: pointer;
-}
 
 .dots {
   display: flex;
@@ -1102,15 +1093,19 @@ img {
     padding: 4rem 1rem;
   }
 
+  .nav-btn {
+    padding: 10px;
+    width: 36px;
+  }
+
   .hero__content h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .hero__controls {
     bottom: 15px;
     gap: 1rem;
   }
-
 }
 
 @media (max-width: 480px) {
@@ -1184,5 +1179,6 @@ img {
     height: 44px;
     font-size: 1rem;
     border-radius: 0.6rem;
+    margin-top: 5px;
   }
 }
