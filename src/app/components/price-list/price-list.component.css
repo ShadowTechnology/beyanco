@@ -1,5 +1,4 @@
 .plans-page {
-  /* padding: 30px; */
   font-family: sans-serif;
 }
 
@@ -20,25 +19,41 @@
   font-weight: 600;
 }
 
-.plans-table table {
-  width: 100%;
-  border-collapse: collapse;
+.plans-table {
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1);
 }
 
-table th {
-  background: #1f2c47;
-  color: #fff;
-  padding: 12px;
-  text-align: left;
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 60px 1.5fr 1fr 1fr 1fr 1fr 1.5fr;
+  align-items: center;
 }
 
-table td {
+.table-header {
+  background: #1f2c47;
+  color: #fff;
+  font-weight: 600;
+}
+
+.table-header > div {
+  padding: 12px;
+}
+
+.plans-viewport {
+  height: 470px;
+}
+
+.table-row > div {
   padding: 12px;
   border-bottom: 1px solid #ddd;
+}
+
+.table-row:hover {
+  background: #f8f9fb;
 }
 
 .badge {

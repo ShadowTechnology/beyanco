@@ -8,44 +8,49 @@
 
   <!-- Plans Table -->
   <div class="plans-table" *ngIf="plans.length > 0; else noPlans">
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Plan Name</th>
-          <th>Price</th>
-          <th>Currency</th>
-          <th>Duration</th>
-          <th>Status</th>
-          <th style="width: 140px;">Actions</th>
-        </tr>
-      </thead>
+    <div class="table-header">
+      <div>#</div>
+      <div>Plan Name</div>
+      <div>Price</div>
+      <div>Currency</div>
+      <div>Duration</div>
+      <div>Status</div>
+      <div>Actions</div>
+    </div>
+    <cdk-virtual-scroll-viewport
+      class="plans-viewport"
+      itemSize="10">
 
-      <tbody>
-        <tr *ngFor="let plan of plans; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ plan.name }}</td>
-          <td>{{ plan.price }}</td>
-          <td>{{ plan.currency }}</td>
-          <td>{{ plan.duration | titlecase }}</td>
-          <td>
-            <span class="badge" [class.active]="plan.active" [class.inactive]="!plan.active">
-              {{ plan.active ? "Active" : "Inactive" }}
-            </span>
-          </td>
+      <div
+        class="table-row"
+        *cdkVirtualFor="let plan of plans; let i = index">
+        <div>{{ i + 1 }}</div>
+        <div>{{ plan.name }}</div>
+        <div>{{ plan.price }}</div>
+        <div>{{ plan.currency }}</div>
+        <div>{{ plan.duration | titlecase }}</div>
 
-          <td>
-            <button class="view-btn" (click)="view(plan)">View</button>
-            <button class="edit-btn" (click)="edit(plan)">Edit</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <div>
+          <span
+            class="badge"
+            [class.active]="plan.active"
+            [class.inactive]="!plan.active">
+            {{ plan.active ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+
+        <div>
+          <button class="view-btn" (click)="view(plan)">View</button>
+          <button class="edit-btn" (click)="edit(plan)">Edit</button>
+        </div>
+
+      </div>
+
+    </cdk-virtual-scroll-viewport>
   </div>
 
-  <!-- When no plans exist -->
   <ng-template #noPlans>
-    <p class="no-data">No pricing plans found. Click "Add New Plan" to create one.</p>
+    <p class="no-data">No pricing plans found.</p>
   </ng-template>
 
 </div>
