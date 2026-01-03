@@ -1,84 +1,107 @@
-/* Page Header */
-.page-header-modern {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.page-header-modern h2 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
-  color: #1f2c47;
-}
-
-/* Table */
-.table-wrapper {
-  overflow-x: auto;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
+/* Wrapper */
+.plans-table {
   background: #fff;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1);
 }
 
-thead {
+/* Header & Rows */
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns:
+    80px 
+    1.2fr
+    2fr 
+    1.2fr 
+    1.2fr 
+    1.2fr 
+    1fr 
+    160px;
+  align-items: end;
+  /* min-width: 1200px;  */
+}
+
+/* Header */
+.table-header {
   background: #1f2c47;
   color: #fff;
-  text-align: left;
+  font-weight: 600;
 }
 
-thead th {
+.table-header > div {
   padding: 12px;
-  font-size: 14px;
+  white-space: nowrap;
 }
 
-tbody td {
+/* Virtual Scroll */
+.plans-viewport {
+  height: 470px;
+}
+
+/* Rows */
+.table-row > div {
   padding: 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Action Buttons */
-.actions button {
+.table-row:hover {
+  background: #f8f9fb;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Buttons */
+.view-btn,
+.edit-btn {
   padding: 6px 12px;
-  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
   font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
-  border: none;
+  white-space: nowrap;
 }
 
 .view-btn {
+  background: #0e1626;
+  color: white;
+}
+
+.edit-btn {
   background: #f2c200;
+  color: black;
 }
 
-.delete-btn {
-  background: #e74c3c;
-  color: #fff;
-}
-
-.primary-btn {
-  background: #f2c200;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: none;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-td.actions button {
-  margin-right: 10px;
-}
-
-/* Loading and No Data */
-.loading, .no-data {
+/* No Data */
+.no-data {
   text-align: center;
   padding: 40px;
-  font-size: 16px;
-  color: #666;
+  font-size: 18px;
+  color: #777;
+}
+.primary-btn {
+    background: #f2c200;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.table-scroll-wrapper {
+  overflow-x: auto;
+}
+
+.table-header,
+.table-row {
+  width: 100%;
 }

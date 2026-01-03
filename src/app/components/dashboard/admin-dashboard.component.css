@@ -1,128 +1,192 @@
-.dashboard {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 1rem;
-}
-
-.dashboard .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
-}
-
-.dashboard .bottom-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-}
-
-.dashboard .bottom-grid app-recent-projects,
-.dashboard .bottom-grid app-quick-actions {
-    background: #ffffff;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-
-/* --- Start Cards --- */
-
-.start-cards-1 {
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-    border-left: 6px solid #16a34a;
-}
-
-.start-cards-2 {
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-    border-left: 6px solid #0d9488;
-}
-
-.start-cards-3 {
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-    border-left: 6px solid #4f46e5;
-}
-
-.start-cards-4 {
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-    border-left: 6px solid #dc2626;
-}
-
-
-/* --- Charts Grid --- */
-
-.charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-
-/* --- Vertical Bar Chart --- */
-
-.vertical-bar-chart {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    height: 150px;
-    padding: 1rem 0;
-    gap: 1rem;
-}
-
-.vertical-bar-chart .bar-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 40px;
-}
-
-.vertical-bar-chart .bar-group .bar {
-    width: 100%;
-    height: 100px; /* fallback if binding fails */
-    background-color: #f7c222;
-    border-radius: 0.25rem 0.25rem 0 0;
-    transition: height 0.3s ease;
-}
-
-.vertical-bar-chart .bar-group .label {
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-    color: #475569;
-    text-align: center;
-}
-
-/* Orange variant */
-.vertical-bar-chart.orange .bar-group .bar {
-    background-color: #ea580c !important;
-}
+/* ===============================
+   ROOT DASHBOARD LAYOUT
+================================ */
 
 .dashboard-layout {
   display: flex;
-  height: 100vh;
   width: 100%;
+  height: 100vh;
   background: #f9fafb;
+  overflow: hidden; /* prevent double scroll */
 }
 
-/* Sidebar */
+/* ===============================
+   SIDEBAR
+================================ */
+
 .sidebar {
   width: 250px;
   min-width: 250px;
-  border-right: 1px solid #e5e7eb;
+  max-width: 250px;
+  flex-shrink: 0;
+  height: 100vh;
   background: #fdfdfd;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
 }
 
-/* Dashboard Content */
+/* ===============================
+   DASHBOARD CONTENT
+================================ */
+
 .dashboard-content {
   flex: 1;
-  /* overflow-y: auto; */
+  min-width: 0; /* IMPORTANT: prevents overflow */
+  height: 100vh;
+  overflow-y: auto;
   padding: 1.5rem;
+  background: #f9fafb;
 }
 
-/* Ensure your existing CSS still works */
+/* ===============================
+   DASHBOARD INNER
+================================ */
+
 .dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   width: 100%;
+}
+
+/* ===============================
+   STATS GRID
+================================ */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===============================
+   START CARDS
+================================ */
+
+.start-cards-1 {
+  border-left: 6px solid #16a34a;
+  border-radius: 6px;
+}
+
+.start-cards-2 {
+  border-left: 6px solid #0d9488;
+  border-radius: 6px;
+}
+
+.start-cards-3 {
+  border-left: 6px solid #4f46e5;
+  border-radius: 6px;
+}
+
+.start-cards-4 {
+  border-left: 6px solid #dc2626;
+  border-radius: 6px;
+}
+
+/* ===============================
+   BOTTOM GRID
+================================ */
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.bottom-grid app-recent-projects,
+.bottom-grid app-quick-actions {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* ===============================
+   CHARTS GRID
+================================ */
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===============================
+   VERTICAL BAR CHART
+================================ */
+
+.vertical-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 150px;
+  padding: 1rem 0;
+  gap: 1rem;
+}
+
+.vertical-bar-chart .bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+}
+
+.vertical-bar-chart .bar-group .bar {
+  width: 100%;
+  height: 100px;
+  background-color: #f7c222;
+  border-radius: 0.25rem 0.25rem 0 0;
+  transition: height 0.3s ease;
+}
+
+.vertical-bar-chart .bar-group .label {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #475569;
+  text-align: center;
+}
+
+/* Orange Variant */
+.vertical-bar-chart.orange .bar-group .bar {
+  background-color: #ea580c !important;
+}
+
+/* ===============================
+   COMMON CARD STYLING
+================================ */
+
+.card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* ===============================
+   MOBILE RESPONSIVE
+================================ */
+
+@media (max-width: 1024px) {
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .dashboard-content {
+    padding: 1rem;
+  }
 }

@@ -1,4 +1,5 @@
 <div class="user-list-page">
+
   <div class="page-header-modern">
     <h2>Users List</h2>
     <button class="primary-btn" routerLink="../user-form">
@@ -6,45 +7,52 @@
     </button>
   </div>
 
-  <div class="table-wrapper" *ngIf="!loading">
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Username</th>
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <!-- <th>Company</th> -->
-          <th>Subscription</th>
-          <th>Roles</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of users">
-          <td>{{ user.id }}</td>
-          <td>{{ user.username }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.firstName }}</td>
-          <td>{{ user.lastName }}</td>
-          <!-- <td>{{ user.company }}</td> -->
-          <td>{{ user.subscriptionType }} ({{ user.subscriptionStatus }})</td>
-          <td>{{ user.roles[0]?.name }}</td>
-          <td class="actions">
-            <button class="view-btn" [routerLink]="['../user-form', user.id]">Edit</button>
-            <button class="delete-btn" (click)="deleteUser(user.id)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="plans-table" *ngIf="!loading && users.length">
+
+    <!-- Header -->
+    <div class="table-header">
+      <div>ID</div>
+      <div>User Name</div>
+      <div>Email</div>
+      <div>First Name</div>
+      <div>Last Name</div>
+      <!-- <td>{{ user.company }}</td> -->
+      <div>Subscription</div>
+      <div>Roles</div>
+      <div>Actions</div>
+    </div>
+
+    <!-- Virtual Scroll -->
+    <cdk-virtual-scroll-viewport
+      class="plans-viewport"
+      itemSize="56">
+
+      <div
+        class="table-row"
+        *cdkVirtualFor="let user of users">
+
+        <div>{{ user.id }}</div>
+        <div>{{ user.username }}</div>
+        <div>{{ user.email }}</div>
+        <div>{{ user.firstName }}</div>
+        <div>{{ user.lastName }}</div>
+        <!-- <th>Company</th> -->
+        <div>{{ user.subscriptionType }} ({{ user.subscriptionStatus }})</div>
+        <div>{{ user.roles[0]?.name }}</div>
+
+        <div class="actions">
+          <button class="view-btn"
+            [routerLink]="['../user-form', user.id]">Edit</button>
+          <button class="edit-btn"
+            (click)="deleteUser(user.id)">Delete</button>
+        </div>
+
+      </div>
+
+    </cdk-virtual-scroll-viewport>
   </div>
 
-  <div *ngIf="loading" class="loading">
-    Loading users...
-  </div>
+  <p class="no-data" *ngIf="loading">Loading users...</p>
+  <p class="no-data" *ngIf="!loading && !users.length">No users found.</p>
 
-  <div *ngIf="!loading && users.length === 0" class="no-data">
-    No users found.
-  </div>
 </div>
