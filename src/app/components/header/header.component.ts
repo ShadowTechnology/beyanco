@@ -51,6 +51,9 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
+  ngDoCheck() {
+    console.log('Profile:', this.isProfileMenuOpen);
+  }
 
   loadCredit(id: number): void {
     if (id > 0) {
@@ -93,16 +96,23 @@ export class HeaderComponent implements OnInit {
   // }
   toggleMenu(): void {
     this.isMobileMenuActive = !this.isMobileMenuActive;
+    this.isProfileMenuOpen = false;
+    this.isPopupOpen = false;
   }
+
 
   closeMenu(): void {
     this.isMobileMenuActive = false;
+  }
+  closeProfileMenu() {
+    this.isProfileMenuOpen = false;
   }
 
   @HostListener('document:click', ['$event'])
   handleDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
 
+    // Close mobile menu
     if (
       this.isMobileMenuActive &&
       !target.closest('.mobile-drawer') &&
@@ -111,7 +121,9 @@ export class HeaderComponent implements OnInit {
       this.isMobileMenuActive = false;
     }
 
+    // Close credits popup
     if (
+      this.isPopupOpen &&
       !target.closest('.filter-card') &&
       !target.closest('.credits-pill') &&
       !target.closest('.drawer-credits')
@@ -119,12 +131,15 @@ export class HeaderComponent implements OnInit {
       this.isPopupOpen = false;
     }
 
+    // Close profile menu
     if (
+      this.isProfileMenuOpen &&
       !target.closest('.profile-wrapper')
     ) {
       this.isProfileMenuOpen = false;
     }
   }
+
 
 
 
@@ -136,6 +151,7 @@ export class HeaderComponent implements OnInit {
 
   togglePopup() {
     this.isPopupOpen = !this.isPopupOpen;
+    this.isProfileMenuOpen = false;
   }
   updatePrice() {
     this.totalPrice = this.count * 10;
@@ -149,4 +165,6 @@ export class HeaderComponent implements OnInit {
     event.stopPropagation();
     this.isProfileMenuOpen = !this.isProfileMenuOpen;
   }
+
+
 }

@@ -12,6 +12,8 @@
       <!-- Desktop Navigation -->
       <nav class="nav-links">
         <a routerLink="/home" routerLinkActive="active">Home</a>
+        <a routerLink="/login" *ngIf="!isLoggedIn"
+          routerLinkActive="active">Login / Register</a>
         <a *ngIf="isLoggedIn && roles.includes('ROLE_ADMIN')"
           routerLink="/admin-dashboard"
           routerLinkActive="active">Admin</a>
@@ -40,16 +42,18 @@
           </div>
 
           <div class="profile-menu" *ngIf="isProfileMenuOpen">
-            <a routerLink="/profile">Profile</a>
+            <a routerLink="/profile" (click)="closeProfileMenu()">Profile</a>
             <a (click)="logout($event)">Logout</a>
           </div>
+
         </div>
 
         <!-- Hamburger -->
         <button
           class="hamburger"
-          (click)="toggleMenu(); $event.stopPropagation()"
+          (click)="toggleMenu()"
           [class.open]="isMobileMenuActive">
+
           <span></span><span></span><span></span>
         </button>
 
@@ -59,6 +63,8 @@
 
   <!-- MOBILE DRAWER -->
   <div class="mobile-drawer" [class.open]="isMobileMenuActive">
+    <a routerLink="/login" *ngIf="!isLoggedIn" (click)="closeMenu()"
+      routerLinkActive="active">Login / Register</a>
     <a routerLink="/home" (click)="closeMenu()">Home</a>
     <a *ngIf="isLoggedIn && roles.includes('ROLE_ADMIN')"
       routerLink="/admin-dashboard"
