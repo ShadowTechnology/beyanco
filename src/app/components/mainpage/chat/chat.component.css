@@ -115,7 +115,7 @@ button.new-chat-btn1 {
   text-transform: uppercase;
   margin: 0.75rem 1.5rem;
   letter-spacing: 1px;
-  height: 6rem;
+  height: 9rem;
 }
 
 .history-list {
@@ -412,6 +412,7 @@ button.new-chat-btn1 {
   font-weight: 600;
   display: flex;
   align-items: center;
+  white-space: nowrap;
   gap: 8px;
   cursor: pointer;
   transition: all 0.3s;
@@ -563,7 +564,7 @@ button.new-chat-btn1 {
 .upload-area {
   border: 2px dashed #e2e8f0;
   border-radius: 14px;
-  padding: 2rem 1rem;
+  padding: 0.5rem;
   text-align: center;
   background: #fbfdff;
   transition: all 0.2s ease;
@@ -575,6 +576,7 @@ button.new-chat-btn1 {
   gap: 0.4rem;
   color: #475569;
   cursor: pointer;
+  justify-items: center;
 }
 
 /* Icon */
@@ -665,7 +667,7 @@ button.new-chat-btn1 {
 
 /* Textarea Specific */
 .form-group .form-textarea {
-  min-height: 110px;
+  min-height: 100px;
   resize: vertical;
 }
 
@@ -1214,6 +1216,21 @@ button.new-chat-btn1 {
   font-size: 16px !important;
 }
 
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-select {
+  height: 44px;
+  border-radius: 8px;
+}
 
 /* Small fade animation for panels */
 @keyframes fadeIn {
@@ -1329,5 +1346,8 @@ button.new-chat-btn1 {
 
   .chat-main {
     height: 100%;
+  }
+  .btn{
+    width: 100%;
   }
 }

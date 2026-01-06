@@ -346,24 +346,23 @@
           </div>
         </div>
 
-        <!-- Form Fields -->
-        <div class="form-group">
-          <label>Room Type</label>
-          <select [(ngModel)]="roomModel" class="form-select"
-            (click)="$event.stopPropagation()">
-            <option value>Select room...</option>
-            <option *ngFor="let room of rooms" [value]="room">{{ room
-              }}</option>
-          </select>
-        </div>
+        <div class="form-row">
+          <div class="form-group half">
+            <label>Room Type</label>
+            <select [(ngModel)]="roomModel" class="form-select">
+              <option value>Select room...</option>
+              <option *ngFor="let room of rooms" [value]="room">{{ room
+                }}</option>
+            </select>
+          </div>
 
-        <div class="form-group">
-          <label>Style Theme</label>
-          <select [(ngModel)]="style" class="form-select"
-            (click)="$event.stopPropagation()">
-            <option value>Select style...</option>
-            <option *ngFor="let s of StyleTags" [value]="s">{{ s }}</option>
-          </select>
+          <div class="form-group half">
+            <label>Style Theme</label>
+            <select [(ngModel)]="style" class="form-select">
+              <option value>Select style...</option>
+              <option *ngFor="let s of StyleTags" [value]="s">{{ s }}</option>
+            </select>
+          </div>
         </div>
 
         <!-- <div class="form-group">
@@ -375,7 +374,7 @@
           </select>
         </div> -->
 
-        <div class="form-group">
+        <div class="form-group" style="margin: 0;">
           <label>Description</label>
           <textarea [(ngModel)]="popupDescription" class="form-textarea"
             placeholder="I want a mordern living room with ambient sunlight..."
