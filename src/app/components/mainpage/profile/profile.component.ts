@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile',
@@ -28,8 +29,9 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private tokenService: TokenStorageService,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
     this.loadUserProfile();
@@ -38,7 +40,7 @@ export class ProfileComponent implements OnInit {
   loadUserProfile(): void {
     this.isLoading = true;
     const user = this.tokenService.getUser();
-    
+
     if (user && user.id) {
       this.userService.getUserProfile(user.id).subscribe(
         (data: User) => {
@@ -46,13 +48,13 @@ export class ProfileComponent implements OnInit {
           this.form.name = data.username || '';
           this.form.email = data.email;
           this.form.phone = data.mobile || '';
-          this.form.company = data.company || '';
-          
+          this.form.company = data.companyName || '';
+
           // Format roles for display
-          this.userRoles = data.roles 
-            ? data.roles.map((role: any) => role.name.replace('ROLE_', '')).join(', ') 
+          this.userRoles = data.roles
+            ? data.roles.map((role: any) => role.name.replace('ROLE_', '')).join(', ')
             : 'User';
-          
+
           this.loadRecentActivity();
           this.isLoading = false;
         },
@@ -94,44 +96,54 @@ export class ProfileComponent implements OnInit {
       // Reset form
       this.form.name = this.currentUser.name || '';
       this.form.email = this.currentUser.email;
-      this.form.phone = this.currentUser.phone || '';
-      this.form.company = this.currentUser.company || '';
+      this.form.phone = this.currentUser.mobile || '';
+      this.form.company = this.currentUser.companyName || '';
     }
   }
 
   updateProfile(): void {
     const updatedUser = {
-      ...this.currentUser,
-      name: this.form.name,
+      id: this.currentUser.id,           // ✅ REQUIRED by service
+      firstName: this.form.name,
       email: this.form.email,
-      phone: this.form.phone,
-      company: this.form.company
+      mobile: Number(this.form.phone),
+      companyName: this.form.company
     };
 
-    this.userService.updateUserProfile(updatedUser).subscribe(
-      (response: any) => {
-        this.currentUser = response;
-        this.isEditing = false;
-        
-        // Add activity
-        this.recentActivity.unshift({
-          type: 'edit',
-          description: 'Updated profile information',
-          date: new Date()
-        });
-      },
-      (error: any) => {
-        console.error('Error updating profile:', error);
-      }
+    // ✅ Remove empty / null values (important)
+    const payload = Object.fromEntries(
+      Object.entries(updatedUser).filter(([_, v]) => v !== null && v !== '')
     );
+
+    this.userService.updateUserProfile(payload as any)
+      .subscribe({
+        next: (response: any) => {
+          this.currentUser = {
+            ...this.currentUser,
+            ...response
+          };
+          this.isEditing = false;
+          this.showSuccess('Profile Updated Successfully');
+
+          this.recentActivity.unshift({
+            type: 'edit',
+            description: 'Updated profile information',
+            date: new Date()
+          });
+        },
+        error: (error: any) => {
+          console.error('Error updating profile:', error);
+        }
+      });
   }
+
 
   getSubscriptionPlan(): string {
     // Mock implementation - this would come from the user object in a real app
     if (this.currentUser.subscriptionPlan) {
       return this.currentUser.subscriptionPlan;
     }
-    
+
     if (this.currentUser.creditsRemaining && this.currentUser.creditsRemaining > 50) {
       return 'Premium Plan';
     } else if (this.currentUser.creditsRemaining && this.currentUser.creditsRemaining > 20) {
@@ -150,12 +162,30 @@ export class ProfileComponent implements OnInit {
   }
 
   getActivityIcon(type: string): string {
-    switch(type) {
+    switch (type) {
       case 'upload': return 'fa-upload';
       case 'edit': return 'fa-edit';
       case 'login': return 'fa-sign-in-alt';
       case 'delete': return 'fa-trash';
       default: return 'fa-circle';
     }
+  }
+  /* Snackbar helpers */
+  private showSuccess(message: string) {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+      panelClass: ['snackbar-success'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
+  }
+
+  private showError(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 4000,
+      panelClass: ['snackbar-error'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
   }
 }

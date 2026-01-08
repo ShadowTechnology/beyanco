@@ -338,9 +338,9 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   openConversation(chatId: number) {
-     if (window.innerWidth <= 768) {
-    this.mobileSidebarOpen = false;
-  }
+    if (window.innerWidth <= 768) {
+      this.mobileSidebarOpen = false;
+    }
     this.resetCompareState();
     this.chatId = chatId;
     this.activeConversationId.set(chatId);
@@ -1037,12 +1037,12 @@ export class ChatComponent implements AfterViewChecked {
       return null;
     }
   }
-isSidebarExpanded(): boolean {
-  if (window.innerWidth <= 768) {
-    return this.mobileSidebarOpen;
+  isSidebarExpanded(): boolean {
+    if (window.innerWidth <= 768) {
+      return this.mobileSidebarOpen;
+    }
+    return !this.sidebarCollapsed;
   }
-  return !this.sidebarCollapsed;
-}
 
 
   // private async convertBase64ToFile(base64: string, filename: string): Promise<File | null> {
@@ -1086,28 +1086,42 @@ isSidebarExpanded(): boolean {
     if (!this.currentImage) return;
     alert('Feedback recorded. We will improve!');
   }
-  async downloadImage() {
-    if (!this.currentImage) return;
 
-    try {
-      const response = await fetch(this.currentImage);
-      const blob = await response.blob();
+  // downloadImage() {
+  //   if (!this.currentImage) return;
 
-      const url = window.URL.createObjectURL(blob);
+  //   const link = document.createElement('a');
+  //   link.href = this.currentImage;
+  //   link.download = `beyanco-design-${Date.now()}.png`;
+  //   link.target = '_blank';
 
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `beyanco-design-${Date.now()}.png`;
-      document.body.appendChild(link);
-      link.click();
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // }
 
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Download failed:', error);
-      alert('Failed to download image.');
-    }
-  }
+  // async downloadImage() {
+  //   if (!this.currentImage) return;
+
+  //   try {
+  //     const response = await fetch(this.currentImage);
+  //     const blob = await response.blob();
+
+  //     const url = window.URL.createObjectURL(blob);
+
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.download = `beyanco-design-${Date.now()}.png`;
+  //     document.body.appendChild(link);
+  //     link.click();
+
+  //     document.body.removeChild(link);
+  //     window.URL.revokeObjectURL(url);
+  //   } catch (error) {
+  //     console.error('Download failed:', error);
+  //     alert('Failed to download image.');
+  //   }
+  // }
 
   // downloadImage() {
   //   if (!this.currentImage) return;
@@ -1117,6 +1131,43 @@ isSidebarExpanded(): boolean {
   //   link.download = `beyanco-design-${Date.now()}.png`;
   //   link.click();
   // }
+
+  downloadImage() {
+    if (!this.currentImage) return;
+
+    const key = this.getCurrentImageKey();
+
+    this.propertyService.getDownloadFile(key).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = key.split('/').pop() || 'image.png';
+        document.body.appendChild(a);
+        a.click();
+
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Download failed');
+      }
+    });
+  }
+
+  getCurrentImageKey(): string {
+    if (!this.currentImage) return '';
+
+    try {
+      const url = new URL(this.currentImage);
+      return url.pathname.substring(1); // removes leading "/"
+    } catch {
+      return '';
+    }
+  }
+
 
   shareImage() {
     if (!this.currentImage) return;

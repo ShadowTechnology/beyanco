@@ -88,4 +88,15 @@ export class PropertyService {
     });
   }
 
+  getDownloadFile(key: string): Observable<Blob> {
+    return this.http.get(
+      `${API_URL}download-image?key=${encodeURIComponent(key)}`,
+      {
+        headers: this.getAuthHeaders(),
+        responseType: 'blob'
+      }
+    );
+  }
+
+
 }

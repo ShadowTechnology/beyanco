@@ -22,33 +22,33 @@
         <h2>Welcome Back</h2>
         <p class="subtitle">Sign in to your account to continue</p>
 
-        <button class="google-btn">
+        <!-- <button class="google-btn">
+          <img src="assets/svg/google-icon.svg" alt="Google" />
+          Continue with Google
+        </button> -->
+        <!-- Hidden Google button -->
+        <div class="google-btn-wrapper" style="display: none;">
+          <div #googleBtn></div>
+        </div>
+
+        <button class="google-btn" (click)="triggerGoogleLogin()">
           <img src="assets/svg/google-icon.svg" alt="Google" />
           Continue with Google
         </button>
+
+
         <div class="divider">
           <span>or</span>
         </div>
         <!-- Form -->
-        <form
-          *ngIf="!isLoggedIn"
-          name="form"
-          (ngSubmit)="f.form.valid && onSubmit()"
-          #f="ngForm"
-          novalidate>
+        <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
           <!-- Email -->
           <div class="form-group">
             <label>User Name</label>
             <div class="input-wrapper">
               <i class="icon email fas fa-user"></i>
-              <input
-                type="text"
-                name="username"
-                placeholder="Enter your email"
-                [(ngModel)]="form.username"
-                required
-                #username="ngModel"
-                [class.invalid]="f.submitted && username.errors" />
+              <input type="text" name="username" placeholder="Enter your email" [(ngModel)]="form.username" required
+                #username="ngModel" [class.invalid]="f.submitted && username.errors" />
             </div>
             <small *ngIf="f.submitted && username.errors">
               Email is required
@@ -64,15 +64,8 @@
 
             <div class="input-wrapper">
               <i class="icon lock fas fa-unlock"></i>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                [(ngModel)]="form.password"
-                required
-                minlength="6"
-                #password="ngModel"
-                [class.invalid]="f.submitted && password.errors" />
+              <input type="password" name="password" placeholder="Enter your password" [(ngModel)]="form.password"
+                required minlength="6" #password="ngModel" [class.invalid]="f.submitted && password.errors" />
               <i class="icon eye"></i>
             </div>
 

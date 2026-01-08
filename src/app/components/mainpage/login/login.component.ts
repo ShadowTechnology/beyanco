@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -15,7 +15,7 @@ declare var google: any;
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit  {
   @ViewChild('googleBtn', { static: false }) googleBtn!: ElementRef;
   form: any = { username: null, password: null };
   isLoggedIn = false;
@@ -35,6 +35,11 @@ export class LoginComponent implements OnInit {
       this.roles = this.tokenStorage.getUser().roles;
       this.redirectAfterLogin();
     }
+  }
+  
+  triggerGoogleLogin(): void {
+    const btn = this.googleBtn.nativeElement.querySelector('div[role="button"]');
+    btn?.click();
   }
 
   onSubmit(): void {
@@ -57,15 +62,35 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit() {
+  // ngAfterViewInit() {
+  //   google.accounts.id.initialize({
+  //     client_id: environment.googleClientId,
+  //     callback: (response: any) => this.sendIdTokenToBackend(response.credential)
+  //   });
+
+  //   google.accounts.id.renderButton(
+  //     this.googleBtn.nativeElement,
+  //     { theme: "filled_blue", size: "large" }
+  //   );
+  // }
+  ngAfterViewInit(): void {
+    if (!this.googleBtn) {
+      console.error('Google button not found');
+      return;
+    }
+
     google.accounts.id.initialize({
       client_id: environment.googleClientId,
-      callback: (response: any) => this.sendIdTokenToBackend(response.credential)
+      callback: (response: any) =>
+        this.sendIdTokenToBackend(response.credential)
     });
 
     google.accounts.id.renderButton(
       this.googleBtn.nativeElement,
-      { theme: "filled_blue", size: "large" }
+      {
+        theme: 'outline',
+        size: 'large'
+      }
     );
   }
 
