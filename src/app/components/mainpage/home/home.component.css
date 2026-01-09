@@ -503,7 +503,9 @@ img {
   height: 100%;
   object-fit: cover;
 }
-
+.ba-img--before {
+    opacity: 0.6;
+}
 .ba-img--after {
   clip-path: polygon(var(--pos, 50%) 0, 100% 0, 100% 100%, var(--pos, 50%) 100%);
 }

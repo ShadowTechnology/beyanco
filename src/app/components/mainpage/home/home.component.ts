@@ -30,11 +30,11 @@ export class HomeComponent implements OnInit {
     { imageUrl: 'assets/images/banner3.jpg' }
   ];
   services = [
-    { icon: 'fas fa-house', title: 'Instantaneous furniture placements',  route:'/staging', tab: 'Living Rooms' },
-    { icon: 'fa-solid fa-kitchen-set', title: 'Choose desired color schemes for your space', route:'/staging', tab: 'Dining Rooms' },
-    { icon: 'fa-solid fa-bed', title: 'Generate premium-quality images',  route:'/staging', tab: 'Bedrooms' },
-    { icon: 'fa-solid fa-couch', title: 'Revise photos with smart prompt', route:'/staging', tab: 'Living Rooms' },
-    { icon: 'fa-solid fa-palette', title: 'Company every version with the next', route:'/staging', tab: 'Living Rooms' }
+    { icon: 'fa-solid fa-couch', title: 'Instantaneous furniture placements',  route:'/staging', tab: 'Living Rooms' },
+    { icon: 'fa-solid fa-palette', title: 'Choose desired color schemes for your space', route:'/staging', tab: 'Dining Rooms' },
+    { icon: 'fa-solid fa-image', title: 'Generate premium-quality images',  route:'/staging', tab: 'Bedrooms' },
+    { icon: 'fa-solid fa-terminal', title: 'Revise photos with smart prompt', route:'/staging', tab: 'Living Rooms' },
+    { icon: 'fa-solid fa-not-equal', title: 'Compare every version with the next', route:'/staging', tab: 'Living Rooms' }
     // { icon: 'fa-solid fa-desktop', title: 'Virtual Staging', text: 'AI-powered staging for stunning visual transformations.' },
   ];
   transformations = [

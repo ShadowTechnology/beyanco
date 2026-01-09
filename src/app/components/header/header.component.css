@@ -154,6 +154,7 @@
 .profile-menu a:hover {
   background: #f3f4f6;
 }
+
 /* ===============================
    CREDIT POPUP
 ================================ */
@@ -243,7 +244,8 @@
 ================================ */
 .mobile-drawer {
   position: fixed;
-  top: 64px; /* BELOW HEADER */
+  top: 64px;
+  /* BELOW HEADER */
   left: 0;
   width: 100%;
   background: #ffffff;
@@ -286,6 +288,11 @@
   display: flex;
 }
 
+.tagline {
+  color: #000;
+  font-size: 14px;
+}
+
 /* ===============================
    ANIMATIONS
 ================================ */
@@ -294,6 +301,7 @@
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -314,6 +322,10 @@
 
   .hamburger {
     display: block;
+  }
+
+  .tagline {
+    display: none;
   }
 }
 

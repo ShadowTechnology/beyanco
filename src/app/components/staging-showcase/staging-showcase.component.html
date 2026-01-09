@@ -1,7 +1,7 @@
 <section class="staging-section">
     <h2>Furnish your space to impress prospects</h2>
     <p class="subtitle">
-        Feature your property with unique interior furnishings and decor to influence more leads.
+        Feature your property with unique interior furnishings and decor to captivate more leads.
         <!-- <strong>18,000+ furniture pieces</strong> -->
     </p>
 
@@ -36,7 +36,8 @@
         <img
             [src]="currentImage"
             alt="Virtual Staging"
-            class="fade-img" />
+            class="fade-img" 
+            [style.opacity]="viewMode === 'before' ? '0.6' : '1'" />
 
         <!-- Navigation -->
         <button class="nav left" (click)="prev()">‹</button>
@@ -45,7 +46,7 @@
     </div>
 
     <!-- CTA -->
-    <button class="cta-btn">
+    <button class="cta-btn" (click)="goToChat()">
         Try for free →
     </button>
 </section>
@@ -55,7 +56,7 @@
        Join thousand of your real estate peers who have taken the smarter route with Virtual Home-Staging.
     </p>
 
-    <button class="cta-btn large" routerLink="/chat">
+    <button class="cta-btn large" (click)="goToPricing()">
         Choose Beyanco AI
     </button>
 </section>

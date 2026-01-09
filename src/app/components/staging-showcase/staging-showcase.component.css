@@ -122,8 +122,9 @@
 }
 
 .cta-btn {
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    color: #ffffff;
+    background: #facc15;
+    color: #000;
+    box-shadow: 0 3px 10px rgba(250, 204, 21, 0.4);
     border: none;
     padding: 14px 28px;
     border-radius: 999px;
@@ -190,7 +191,7 @@
     background: #ffffff;
     padding: 24px;
     border-radius: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     text-align: center;
 }
 
@@ -207,10 +208,21 @@
     color: #cbd5f5;
 }
 
+.fade-img {
+    width: 100%;
+    height: auto;
+    transition: opacity 0.4s ease;
+}
+
+.before-view {
+    opacity: 0.6;
+}
+
 @keyframes fade {
     from {
         opacity: 0.6;
     }
+
     to {
         opacity: 1;
     }

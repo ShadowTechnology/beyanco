@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from "@angular/router";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-staging-showcase',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './staging-showcase.component.html',
   styleUrls: ['./staging-showcase.component.css']
 })
@@ -34,7 +34,7 @@ export class StagingShowcaseComponent {
       after: 'assets/afterimages/A7-7.jpg'
     }
   };
-
+  constructor(private router: Router) { }
   setTab(tab: string) {
     this.activeTab = tab;
     this.viewMode = 'after';
@@ -58,6 +58,12 @@ export class StagingShowcaseComponent {
 
   get currentImage() {
     return this.gallery[this.activeTab][this.viewMode];
+  }
+  goToChat() {
+    this.router.navigate(['/chat']);
+  }
+  goToPricing() {
+    this.router.navigate(['/home'], { fragment: 'pricing' });
   }
 }
 
