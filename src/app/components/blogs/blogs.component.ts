@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blogs',
@@ -7,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './blogs.component.css'
 })
 export class BlogsComponent {
+  constructor(private router: Router) {}
 
+  openBlog(slug: string) {
+    this.router.navigate(['/blogs', slug]);
+  }
 }

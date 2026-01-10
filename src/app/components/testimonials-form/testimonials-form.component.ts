@@ -15,9 +15,7 @@ export class TestimonialsFormComponent {
       company: "Premium Properties NYC",
       initials: "SM",
       rating: 5,
-      message: `Beyanco AI transformed our listings completely. The professional staging helped us 
-                sell properties 40% faster than the market average. Their attention to detail 
-                and understanding of luxury aesthetics is unmatched.`
+      message: `We uploaded a few basic room shots and Beyanco’s AI turned them into beautifully staged interiors that looked like they were shot by a professional photographer. Interest in our property surged immediately!`
     },
     {
       name: "John Carter",
@@ -25,7 +23,7 @@ export class TestimonialsFormComponent {
       company: "Bright Homes",
       initials: "JC",
       rating: 5,
-      message: `Amazing service! The design ideas significantly improved the customer experience.`
+      message: `The platform is intuitive, fast and produces visuals that look genuinely premium. We use the enhanced photos across MLS, Instagram and ads — and the leads keep coming.`
     },
     {
       name: "Emma Collins",
@@ -33,7 +31,7 @@ export class TestimonialsFormComponent {
       company: "Urban Spaces",
       initials: "EC",
       rating: 4,
-      message: `Very professional team. Great quality work and timely delivery.`
+      message: `Beyanco allows me to quickly visualize furniture layouts, styles, and color palettes for clients before execution. The AI-generated interiors are realistic and help clients feel confident about design decisions early in the process.`
     },
     {
       name: "Michael Lee",
@@ -41,15 +39,15 @@ export class TestimonialsFormComponent {
       company: "Skyline Builders",
       initials: "ML",
       rating: 5,
-      message: `The best staging team we’ve worked with. Highly recommended!`
+      message: `Beyanco helps translate architectural spaces into lived-in environments that clients immediately understand. The AI visuals clearly convey scale, layout, and design intent, making presentations smoother and approvals faster.`
     },
     {
       name: "Priya Sharma",
-      role: "Consultant",
+      role: "Real Estate Consultant",
       company: "DesignFlow",
       initials: "PS",
       rating: 5,
-      message: `Incredible creativity and attention to detail. Truly impressed!`
+      message: `Beyanco’s AI visuals helped our properties stand out instantly on listing platforms. Buyers could clearly visualize the space, which led to more inquiries and faster decision-making. It’s now a core part of our marketing workflow.`
     }
   ];
 

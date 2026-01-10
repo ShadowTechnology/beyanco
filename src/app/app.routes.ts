@@ -47,6 +47,7 @@ import { StagingShowcaseComponent } from './components/staging-showcase/staging-
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { BlogsComponent } from './components/blogs/blogs.component';
+import { BlogsDeatilsComponent } from './components/blogs-deatils/blogs-deatils.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -59,6 +60,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'contactus-form', component: ContactusFormComponent },
   { path: 'our-blogs', component: BlogsComponent },
+   { path: 'blogs/:slug', component: BlogsDeatilsComponent },
   {
     path: 'admin-dashboard',
     component: AdminDashboardComponent,

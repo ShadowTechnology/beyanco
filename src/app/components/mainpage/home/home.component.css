@@ -162,11 +162,6 @@ img {
   align-items: center;
 }
 
-/* Slider container */
-.slider-wrapper {
-  width: 320px;
-  max-width: 85%;
-}
 
 /* Slide cards */
 .slide-card {
@@ -248,10 +243,10 @@ img {
 
 /* Slider container */
 .slider-wrapper {
-  position: relative;
-  width: 22%;
-  height: 180px;
-  overflow: hidden;
+    position: relative;
+    width: 30%;
+    height: 240px;
+    overflow: hidden;
 }
 
 .slide-card {
