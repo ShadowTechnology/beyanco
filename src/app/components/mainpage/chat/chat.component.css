@@ -160,7 +160,7 @@ button.new-chat-btn1 {
   position: fixed;
   bottom: 0;
   width: 260px;
-  background: #1c2739;
+  background: #1c2638;
   transition: width 0.3s ease;
 }
 
@@ -307,7 +307,7 @@ button.new-chat-btn1 {
 
 /* ---------------- Composer ---------------- */
 .chat-main .composer-container {
-  background: #fff;
+  background: #ffffff57;
   /* border-top: 1px solid #e5e7eb; */
   padding: 0.5rem;
   z-index: 5;
@@ -1231,6 +1231,64 @@ button.new-chat-btn1 {
   border-radius: 8px;
 }
 
+/* ===== MOBILE FAB ===== */
+.mobile-fab {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #FFC107;
+  color: #fff;
+  border: none;
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.mobile-fab i {
+  font-size: 20px;
+}
+
+/* SHOW FAB ONLY ON MOBILE */
+@media (max-width: 768px) {
+  .mobile-fab {
+    display: flex;
+  }
+
+  .image-modal .image-toolbar {
+    justify-content: center;
+  }
+
+}
+
+/* ===== MOBILE SIDEBAR FIX ===== */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100vh;
+    width: 280px;
+    z-index: 1500;
+    background: #111827;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar.collapsed {
+    left: -100%;
+  }
+}
+
+
 /* Small fade animation for panels */
 @keyframes fadeIn {
   from {
@@ -1297,6 +1355,7 @@ button.new-chat-btn1 {
 
   .page {
     display: block;
+    height: 90vh;
   }
 
   .sidebar {
@@ -1344,7 +1403,7 @@ button.new-chat-btn1 {
   }
 
   .chat-main {
-    height: 100%;
+    height: 90vh;
   }
 
   .btn {

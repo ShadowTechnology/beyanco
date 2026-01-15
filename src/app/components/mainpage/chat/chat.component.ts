@@ -43,6 +43,7 @@ export class ChatComponent implements AfterViewChecked {
   errorMessage: any;
   sidebarCollapsed = true;
   mobileSidebarOpen = false;
+  isMobile = false;
   showPopup = false;
   showImagePopup = false;
   hasActiveConversation = false;
@@ -135,6 +136,17 @@ export class ChatComponent implements AfterViewChecked {
   ) {
     this.loadChats();
   }
+  ngOnInit() {
+    this.checkScreen();
+    window.addEventListener('resize', () => this.checkScreen());
+  }
+
+  checkScreen() {
+    this.isMobile = window.innerWidth <= 768;
+    this.sidebarCollapsed = true;
+    this.mobileSidebarOpen = false;
+  }
+
   @HostListener('touchstart', ['$event'])
   onTouchStart(event: TouchEvent) {
     if (window.innerWidth > 768) return; // only mobile
@@ -301,7 +313,11 @@ export class ChatComponent implements AfterViewChecked {
     }
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
-  toggleMobileSidebar() { this.mobileSidebarOpen = !this.mobileSidebarOpen; }
+  toggleMobileSidebar() {
+    if (!this.isMobile) return;
+    this.mobileSidebarOpen = !this.mobileSidebarOpen;
+    this.sidebarCollapsed = !this.mobileSidebarOpen;
+  }
   goToProfile() { this.router.navigate(['/profile']); }
 
   room = computed(() => this.roomModel);

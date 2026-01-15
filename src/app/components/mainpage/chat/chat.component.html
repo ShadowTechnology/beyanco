@@ -1,7 +1,9 @@
 <div class="page" [class.sidebar-collapsed]="sidebarCollapsed"
   [class.modal-open]="showPopup || showImagePopup">
   <!-- Sidebar -->
-  <aside class="sidebar collapsed open" [class.collapsed]="sidebarCollapsed"
+  <aside
+    class="sidebar"
+    [class.collapsed]="sidebarCollapsed"
     [class.open]="mobileSidebarOpen">
     <div class="logo">
       <ng-container *ngIf="!sidebarCollapsed">
@@ -581,6 +583,14 @@
     </div>
   </div>
 </div>
+<!-- MOBILE FAB TOGGLE -->
+<button
+  class="mobile-fab"
+  (click)="toggleMobileSidebar()"
+  aria-label="Toggle Menu">
+  <i class="fa-solid"
+    [ngClass]="mobileSidebarOpen ? 'fa-xmark' : 'fa-comment'"></i>
+</button>
 <!-- BACKDROP -->
 <div class="credit-backdrop" *ngIf="showCreditPopup"
   (click)="closeCreditPopup()">

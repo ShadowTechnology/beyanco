@@ -1,67 +1,197 @@
-.blog-details {
-  padding: 60px 5%;
-  background: #f9fafb;
-}
-
-.container {
-  max-width: 900px;
-  margin: auto;
-}
-
-.details-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.details-header h1 {
-  font-size: 34px;
+/* =====================
+   GLOBAL
+===================== */
+.blog-wrapper {
+  background: #ffffff;
   color: #0f172a;
-  margin: 15px 0;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* =====================
+   HERO
+===================== */
+.blog-hero {
+  max-width: 1200px;
+  margin: auto;
+  padding: 80px 24px 40px;
+  display: grid;
+  gap: 40px;
+}
+
+.hero-content {
+  max-width: 720px;
+}
+
+.tag {
+  background: rgba(79, 70, 229, 0.12);
+  color: #4f46e5;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.hero-content h1 {
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  margin-bottom: 16px;
 }
 
 .meta {
   display: flex;
-  justify-content: center;
-  gap: 20px;
-  font-size: 13px;
-  color: #9ca3af;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #64748b;
 }
 
-.cover-image img {
+.hero-image img {
   width: 100%;
-  border-radius: 16px;
-  margin: 40px 0;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0,0,0,.12);
 }
 
-.content p {
-  font-size: 16px;
-  line-height: 1.8;
-  color: #374151;
-  margin-bottom: 20px;
+/* =====================
+   CONTENT
+===================== */
+.blog-container {
+  max-width: 760px;
+  margin: auto;
+  padding: 40px 24px 100px;
 }
-.content h2 {
-  margin-top: 24px;
-  font-size: 22px;
+
+.blog-content {
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.content-block {
+  margin-bottom: 24px;
+}
+
+/* Headings */
+.blog-content h2 {
+  font-size: 26px;
+  margin: 48px 0 16px;
   font-weight: 700;
 }
 
-.content h3 {
-  margin-top: 16px;
-  font-size: 18px;
-  font-weight: 600;
+.blog-content h3 {
+  font-size: 22px;
+  margin: 32px 0 12px;
 }
 
-.content ul {
-  padding-left: 20px;
-  margin: 12px 0;
+/* Paragraph */
+.blog-content p {
+  margin-bottom: 20px;
+  letter-spacing: 0.2px;
 }
 
-.content li {
-  margin-bottom: 6px;
+/* =====================
+   BULLET STYLE (2026)
+===================== */
+.blog-content ul {
+  list-style: none;
+  padding-left: 0;
 }
 
-.content p {
-  line-height: 1.7;
-  margin-bottom: 12px;
+.blog-content li {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 14px;
+}
+
+.blog-content li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border-radius: 50%;
+}
+
+/* =====================
+   NUMBERED LIST
+===================== */
+.blog-content ol {
+  counter-reset: list;
+  list-style: none;
+  padding-left: 0;
+}
+
+.blog-content ol li {
+  counter-increment: list;
+  padding-left: 40px;
+  position: relative;
+}
+
+.blog-content ol li::before {
+  content: counter(list);
+  position: absolute;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  background: #eef2ff;
+  color: #4f46e5;
+  border-radius: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =====================
+   BLOCKQUOTE
+===================== */
+.blog-content blockquote {
+  border-left: 4px solid #6366f1;
+  padding: 20px 24px;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin: 32px 0;
+  font-style: italic;
+}
+
+/* =====================
+   CALLOUT
+===================== */
+.callout {
+  padding: 20px 24px;
+  border-radius: 16px;
+  margin: 32px 0;
+}
+
+.callout.info {
+  background: #eef2ff;
+  border-left: 4px solid #6366f1;
+}
+
+/* =====================
+   DIVIDER
+===================== */
+.blog-content hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #c7d2fe, transparent);
+  margin: 48px 0;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media (min-width: 768px) {
+  .blog-hero {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .blog-content {
+    font-size: 16px;
+  }
 }

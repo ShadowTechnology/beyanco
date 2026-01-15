@@ -1,25 +1,30 @@
-<section class="blog-details">
-  <div class="container">
-    <!-- Header -->
-    <div class="details-header">
+<section class="blog-wrapper" *ngIf="blog">
+  <!-- HERO -->
+  <header class="blog-hero">
+    <div class="hero-content">
       <span class="tag">Design Tips</span>
       <h1>{{ blog.title }}</h1>
 
       <div class="meta">
-        <span>{{ blog.author }}</span>
-        <span>{{ blog.date }}</span>
-        <span>{{ blog.readTime }}</span>
+        <span>✍ {{ blog.author }}</span>
+        <span>📅 {{ blog.date }}</span>
+        <span>⏱ {{ blog.readTime }}</span>
       </div>
     </div>
 
-    <!-- Cover Image -->
-    <div class="cover-image">
+    <div class="hero-image">
       <img [src]="blog.image" alt="Blog Cover" />
     </div>
+  </header>
 
-    <!-- Content -->
-    <div class="content">
-      <div *ngFor="let paragraph of blog.content" [innerHTML]="paragraph"></div>
-    </div>
-  </div>
+  <!-- CONTENT -->
+  <main class="blog-container">
+    <article class="blog-content">
+      <div
+        *ngFor="let paragraph of blog.content"
+        class="content-block"
+        [innerHTML]="paragraph">
+      </div>
+    </article>
+  </main>
 </section>

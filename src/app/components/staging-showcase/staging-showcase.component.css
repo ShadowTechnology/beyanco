@@ -74,7 +74,7 @@
     top: 16px;
     left: 16px;
     display: flex;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgb(255 255 255 / 96%);
     border-radius: 8px;
     overflow: hidden;
     z-index: 2;
@@ -82,7 +82,7 @@
 
 .image-card .toggle button {
     padding: 6px 14px;
-    color: #ffffff;
+    color: #000;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -90,7 +90,7 @@
 }
 
 .image-card .toggle button.active {
-    background: #0f172a;
+    background: #f3c614;
     font-weight: 600;
 }
 
