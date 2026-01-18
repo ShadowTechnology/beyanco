@@ -607,7 +607,7 @@ export class ChatComponent implements AfterViewChecked {
       //   alert('To generate images, please upload a valid photo first.');
       //   return;
       // }
-
+      this.isUploading = true;
       const userMsg: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'user',
@@ -844,7 +844,7 @@ export class ChatComponent implements AfterViewChecked {
 
 
   private async uploadToBackend(userMsg: ChatMessage, text: string) {
-    this.isUploading = true;
+    // this.isUploading = true;
 
     // Convert image file → base64 string
     const base64File = await this.convertFileToBase64(this.pendingFiles[0]);
@@ -967,9 +967,16 @@ export class ChatComponent implements AfterViewChecked {
         const originalUrl = res.originalImageUrl;
         const generatedUrl = res.generatedImageUrl;
 
-        // show images
+        // ✅ update last generated image
+        // this.lastGeneratedImage = generatedUrl;
+
+        // ✅ update user message image
         this.messages.update(list =>
-          list.map(msg => msg.id === userMsg.id ? { ...msg, images: [originalUrl] } : msg)
+          list.map(msg =>
+            msg.id === userMsg.id
+              ? { ...msg, images: [originalUrl] }
+              : msg
+          )
         );
 
         // AI reply
@@ -982,7 +989,8 @@ export class ChatComponent implements AfterViewChecked {
         };
 
         this.messages.update(list => [...list, aiMsg]);
-        this.shouldScrollToBottom = true;
+        // FORCE AUTOSCROLL AFTER GENERATION
+        setTimeout(() => this.scrollToBottom(true), 50);
         this.clearComposer();
       },
       error: () => {
@@ -1201,15 +1209,19 @@ export class ChatComponent implements AfterViewChecked {
   }
   trackById(_: number, item: any): string { return item.id; }
 
-  private scrollToBottom() {
-    if (this.scrollArea) {
-      try {
-        this.scrollArea.nativeElement.scrollTop = this.scrollArea.nativeElement.scrollHeight;
-      } catch (err) {
-        console.error('Scroll error:', err);
-      }
+  private scrollToBottom(force = false) {
+    if (!this.scrollArea) return;
+
+    const el = this.scrollArea.nativeElement;
+
+    if (force) {
+      el.scrollTop = el.scrollHeight;
+      return;
     }
+
+    el.scrollTop = el.scrollHeight;
   }
+
 
   groupedConversations: { [key: string]: any[] } = {};
 

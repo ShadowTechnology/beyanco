@@ -97,162 +97,161 @@
   <!-- Main Chat Area -->
   <main class="chat-main">
     <div class="message-container">
-      
-    <!-- Messages Container -->
-    <div class="messages-container" #scrollArea>
-      <ng-container
-        *ngIf="hasActiveConversation || isUploading || isLoadingChat || messages().length; else welcomeScreen">
-        <div *ngFor="let msg of messages(); trackBy: trackById"
-          class="message-wrapper"
-          [class.user-message]="msg.role === 'user'"
-          [class.assistant-message]="msg.role === 'assistant'">
 
-          <div class="message-content">
-            <div class="avatar">
-              <i class="fa-solid"
-                [ngClass]="msg.role === 'user' ? 'fa-user' : 'fa-robot'"></i>
-            </div>
+      <!-- Messages Container -->
+      <div class="messages-container" #scrollArea>
+        <ng-container
+          *ngIf="hasActiveConversation || isUploading || isLoadingChat || messages().length; else welcomeScreen">
+          <div *ngFor="let msg of messages(); trackBy: trackById"
+            class="message-wrapper"
+            [class.user-message]="msg.role === 'user'"
+            [class.assistant-message]="msg.role === 'assistant'">
 
-            <div class="message-body">
-              <!-- <div class="message-text" *ngIf="msg.text">{{ msg.text
+            <div class="message-content">
+              <div class="avatar">
+                <i class="fa-solid"
+                  [ngClass]="msg.role === 'user' ? 'fa-user' : 'fa-robot'"></i>
+              </div>
+
+              <div class="message-body">
+                <!-- <div class="message-text" *ngIf="msg.text">{{ msg.text
                 }}</div> -->
 
-              <div class="message-images" *ngIf="msg.images?.length">
-                <img *ngFor="let img of msg.images" [src]="img" alt="Image"
-                  class="message-image"
-                  (click)="selectImage(img, $event)" />
-              </div>
-              <div
-                class="message-description-text"
-                *ngIf="msg.text">
-                {{ msg.text
-                }}
-              </div>
-              <div class="message-meta" *ngIf="msg.room || msg.style">
-                <span class="meta-tag" *ngIf="msg.room">
-                  <i class="fa fa-door-open"></i> {{ msg.room }}
-                </span>
-                <span class="meta-tag" *ngIf="msg.style">
-                  <i class="fa fa-palette"></i> {{ msg.style }}
-                </span>
-              </div>
+                <div class="message-images" *ngIf="msg.images?.length">
+                  <img *ngFor="let img of msg.images" [src]="img" alt="Image"
+                    class="message-image"
+                    (click)="selectImage(img, $event)" />
+                </div>
+                <div
+                  class="message-description-text"
+                  *ngIf="msg.text">
+                  {{ msg.text
+                  }}
+                </div>
+                <div class="message-meta" *ngIf="msg.room || msg.style">
+                  <span class="meta-tag" *ngIf="msg.room">
+                    <i class="fa fa-door-open"></i> {{ msg.room }}
+                  </span>
+                  <span class="meta-tag" *ngIf="msg.style">
+                    <i class="fa fa-palette"></i> {{ msg.style }}
+                  </span>
+                </div>
 
-              <div class="message-time">{{ msg.timestamp | date:'short' }}</div>
+                <div class="message-time">{{ msg.timestamp | date:'short'
+                  }}</div>
+              </div>
             </div>
           </div>
-        </div>
-      </ng-container>
+        </ng-container>
 
-      <ng-template #welcomeScreen>
-        <div *ngIf="!hasActiveConversation" class="welcome-screen">
-          <div class="welcome-icon">
-            <i class="fa fa-comments"></i>
+        <ng-template #welcomeScreen>
+          <div *ngIf="!hasActiveConversation" class="welcome-screen">
+            <div class="welcome-icon">
+              <i class="fa fa-comments"></i>
+            </div>
+            <h2>Welcome to Beyanco AI Chat</h2>
+            <p>Upload an image, select a room, and describe your vision. Our AI
+              will bring it to life.</p>
+
+            <div class="quick-actions">
+              <button class="quick-action-btn" (click)="openUploadPopup()">
+                <i class="fa fa-upload"></i>
+                <span>Upload Image</span>
+              </button>
+              <button class="quick-action-btn" (click)="openUploadPopup()">
+                <i class="fa fa-home"></i>
+                <span>Select Room</span>
+              </button>
+            </div>
           </div>
-          <h2>Welcome to Beyanco AI Chat</h2>
-          <p>Upload an image, select a room, and describe your vision. Our AI
-            will bring it to life.</p>
+        </ng-template>
 
-          <div class="quick-actions">
-            <button class="quick-action-btn" (click)="openUploadPopup()">
-              <i class="fa fa-upload"></i>
-              <span>Upload Image</span>
-            </button>
-            <button class="quick-action-btn" (click)="openUploadPopup()">
-              <i class="fa fa-home"></i>
-              <span>Select Room</span>
-            </button>
+      </div>
+      <!-- Generated Property Chat Messages -->
+      <div class="messages-container-generated" *ngIf="properties.length > 0">
+        <ng-container>
+          <div *ngFor="let p of properties">
+
+            <div class="message-wrapper user-message">
+              <div class="message-content">
+                <div class="avatar">
+                  <i class="fa fa-user"></i>
+                </div>
+
+                <div class="message-body">
+                  <!-- <div class="message-text">
+                  {{ p.title }}
+                </div> -->
+
+                  <div class="message-images" *ngIf="p.originalImageUrl">
+                    <img [src]="p.originalImageUrl" alt="Original Design"
+                      class="message-image"
+                      (click)="selectImage(p.originalImageUrl, $event)" />
+                  </div>
+                  <div
+                    class="message-title"
+                    *ngIf="p.title">
+                    {{ p.title }}
+                  </div>
+                  <div class="message-meta">
+                    <span class="meta-tag">
+                      <i class="fa fa-door-open"></i> {{ p.propertyType }}
+                    </span>
+                    <span class="meta-tag" *ngIf="p.enhancementStyle">
+                      <i class="fa fa-palette"></i> {{ p.enhancementStyle }}
+                    </span>
+                  </div>
+
+                  <div class="message-time">
+                    {{ p.createdAt | date:'short' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="message-wrapper assistant-message">
+              <div class="message-content">
+                <div class="avatar">
+                  <i class="fa fa-robot"></i>
+                </div>
+
+                <div class="message-body">
+                  <div class="message-text">
+                    Generated Design for <strong>{{ p.propertyType }}</strong>
+                  </div>
+                  <div class="message-images" *ngIf="p.generatedImageUrl">
+                    <img [src]="p.generatedImageUrl" alt="Generated Design"
+                      class="message-image"
+                      (click)="selectImage(p.generatedImageUrl, $event)" />
+                  </div>
+                  <div
+                    class="message-description"
+                    *ngIf="p.description">
+                    {{ p.description }}
+                  </div>
+                  <div class="message-meta">
+                    <span class="meta-tag">
+                      <i class="fa fa-door-open"></i> {{ p.propertyType }}
+                    </span>
+                    <span class="meta-tag" *ngIf="p.enhancementStyle">
+                      <i class="fa fa-palette"></i> {{ p.enhancementStyle }}
+                    </span>
+                  </div>
+
+                  <div class="message-time">
+                    {{ p.createdAt | date:'short' }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </ng-template>
-
-      <!-- Loading Indicator -->
+        </ng-container>
+      </div>
+      
       <div class="loading-indicator" *ngIf="isUploading">
         <div class="spinner"></div>
         <span>Generating your design...</span>
       </div>
-
-    </div>
-    <!-- Generated Property Chat Messages -->
-    <div class="messages-container-generated" *ngIf="properties.length > 0">
-      <ng-container>
-        <div *ngFor="let p of properties">
-
-          <div class="message-wrapper user-message">
-            <div class="message-content">
-              <div class="avatar">
-                <i class="fa fa-user"></i>
-              </div>
-
-              <div class="message-body">
-                <!-- <div class="message-text">
-                  {{ p.title }}
-                </div> -->
-
-                <div class="message-images" *ngIf="p.originalImageUrl">
-                  <img [src]="p.originalImageUrl" alt="Original Design"
-                    class="message-image"
-                    (click)="selectImage(p.originalImageUrl, $event)" />
-                </div>
-                <div
-                  class="message-title"
-                  *ngIf="p.title">
-                  {{ p.title }}
-                </div>
-                <div class="message-meta">
-                  <span class="meta-tag">
-                    <i class="fa fa-door-open"></i> {{ p.propertyType }}
-                  </span>
-                  <span class="meta-tag" *ngIf="p.enhancementStyle">
-                    <i class="fa fa-palette"></i> {{ p.enhancementStyle }}
-                  </span>
-                </div>
-
-                <div class="message-time">
-                  {{ p.createdAt | date:'short' }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="message-wrapper assistant-message">
-            <div class="message-content">
-              <div class="avatar">
-                <i class="fa fa-robot"></i>
-              </div>
-
-              <div class="message-body">
-                <div class="message-text">
-                  Generated Design for <strong>{{ p.propertyType }}</strong>
-                </div>
-                <div class="message-images" *ngIf="p.generatedImageUrl">
-                  <img [src]="p.generatedImageUrl" alt="Generated Design"
-                    class="message-image"
-                    (click)="selectImage(p.generatedImageUrl, $event)" />
-                </div>
-                <div
-                  class="message-description"
-                  *ngIf="p.description">
-                  {{ p.description }}
-                </div>
-                <div class="message-meta">
-                  <span class="meta-tag">
-                    <i class="fa fa-door-open"></i> {{ p.propertyType }}
-                  </span>
-                  <span class="meta-tag" *ngIf="p.enhancementStyle">
-                    <i class="fa fa-palette"></i> {{ p.enhancementStyle }}
-                  </span>
-                </div>
-
-                <div class="message-time">
-                  {{ p.createdAt | date:'short' }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-
     </div>
     <!-- Input Composer -->
     <div class="composer-container">

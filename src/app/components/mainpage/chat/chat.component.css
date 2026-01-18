@@ -317,6 +317,24 @@ button.new-chat-btn1 {
   /* border-top: 1px solid #e5e7eb; */
 }
 
+/* .loading-indicator {
+  position: absolute;
+  bottom: 90px;    
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 16px;
+  border-radius: 999px;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+} */
 
 
 .chat-main .composer-wrapper {
@@ -1307,6 +1325,11 @@ button.new-chat-btn1 {
     transform: translateY(0);
   }
 }
+/* @media (max-width: 768px) {
+  .loading-indicator {
+    bottom: calc(90px + env(safe-area-inset-bottom));
+  }
+} */
 
 /* Animations */
 @keyframes fadeIn {
