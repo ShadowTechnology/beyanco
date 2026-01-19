@@ -50,7 +50,7 @@
 .hero-image img {
   width: 100%;
   border-radius: 20px;
-  box-shadow: 0 25px 60px rgba(0,0,0,.12);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, .12);
 }
 
 /* =====================
@@ -102,8 +102,10 @@
   padding-left: 28px;
   margin-bottom: 14px;
 }
-
-.blog-content li::before {
+p.phara-style {
+    margin-bottom: 24px;
+}
+/* .blog-content li::before {
   content: '';
   position: absolute;
   left: 0;
@@ -112,7 +114,7 @@
   height: 10px;
   background: linear-gradient(135deg, #6366f1, #4f46e5);
   border-radius: 50%;
-}
+} */
 
 /* =====================
    NUMBERED LIST
@@ -179,6 +181,8 @@
   background: linear-gradient(to right, transparent, #c7d2fe, transparent);
   margin: 48px 0;
 }
+
+
 
 /* =====================
    RESPONSIVE
