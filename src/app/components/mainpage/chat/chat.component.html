@@ -2,9 +2,12 @@
   [class.modal-open]="showPopup || showImagePopup">
   <!-- Sidebar -->
   <aside
+    #chatSidebar
     class="sidebar"
     [class.collapsed]="sidebarCollapsed"
-    [class.open]="mobileSidebarOpen">
+    [class.open]="mobileSidebarOpen"
+    (click)="$event.stopPropagation()">
+
     <div class="logo">
       <ng-container *ngIf="!sidebarCollapsed">
         <i class="fa-solid fa-comment"></i>
@@ -247,7 +250,7 @@
           </div>
         </ng-container>
       </div>
-      
+
       <div class="loading-indicator" *ngIf="isUploading">
         <div class="spinner"></div>
         <span>Generating your design...</span>
@@ -586,13 +589,13 @@
   </div>
 </div>
 <!-- MOBILE FAB TOGGLE -->
-<button
+<!-- <button
   class="mobile-fab"
   (click)="toggleMobileSidebar()"
   aria-label="Toggle Menu">
   <i class="fa-solid"
     [ngClass]="mobileSidebarOpen ? 'fa-xmark' : 'fa-comment'"></i>
-</button>
+</button> -->
 <!-- BACKDROP -->
 <div class="credit-backdrop" *ngIf="showCreditPopup"
   (click)="closeCreditPopup()">

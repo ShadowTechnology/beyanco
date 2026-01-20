@@ -292,6 +292,23 @@
   color: #000;
   font-size: 14px;
 }
+.chat-sidebar-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  /* margin-right: 10px; */
+  cursor: pointer;
+  color: #111;
+}
+
+@media (max-width: 768px) {
+  .chat-sidebar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
 
 /* ===============================
    ANIMATIONS

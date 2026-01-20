@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, NO_ERRORS_SCHEMA, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { environment } from '../../../../environments/environment';
 import { ChatHistoryService } from '../../../services/chathistory.service';
 import { ChatHistory } from '../../../models/chathistory.model';
 import { Property } from '../../../models/property.model';
+import { ChatSidebarService } from '../../../services/chat-sidebar.service';
 
 interface ChatMessage {
   id: string;
@@ -35,6 +36,7 @@ export class ChatComponent implements AfterViewChecked {
   @ViewChild('scrollArea') scrollArea?: ElementRef;
   @ViewChild('textareaRef') textareaRef?: ElementRef;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('chatSidebar') chatSidebar!: ElementRef<HTMLElement>;
   showAddMenu = false;
 
   // UI state
@@ -43,7 +45,7 @@ export class ChatComponent implements AfterViewChecked {
   errorMessage: any;
   sidebarCollapsed = true;
   mobileSidebarOpen = false;
-  isMobile = false;
+  // isMobile = false;
   showPopup = false;
   showImagePopup = false;
   hasActiveConversation = false;
@@ -115,6 +117,9 @@ export class ChatComponent implements AfterViewChecked {
   chatList: ChatHistory[] = [];
   newChatHistory: ChatHistory = { title: '', messages: '' };
   chatId: any;
+  isChatPage = false;
+  isMobile = false;
+
   // ✅ ADD IT HERE (inside the class)
   dateOrder = (a: any, b: any): number => {
     const order = ['Today', 'Yesterday', 'Older'];
@@ -132,20 +137,46 @@ export class ChatComponent implements AfterViewChecked {
     private tokenStorage: TokenStorageService,
     private propertyService: PropertyService,
     private chatService: ChatHistoryService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private chatSidebarService: ChatSidebarService
   ) {
     this.loadChats();
   }
-  ngOnInit() {
+  ngOnInit(): void {
     this.checkScreen();
-    window.addEventListener('resize', () => this.checkScreen());
+
+    this.chatSidebarService.sidebarState$.subscribe(open => {
+      if (this.isMobile) {
+        this.mobileSidebarOpen = open;
+        this.sidebarCollapsed = false;
+      }
+    });
+
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isChatPage = event.urlAfterRedirects.startsWith('/chat');
+      }
+    });
   }
 
+
+  @HostListener('window:resize')
   checkScreen() {
     this.isMobile = window.innerWidth <= 768;
-    this.sidebarCollapsed = true;
-    this.mobileSidebarOpen = false;
   }
+
+
+  // ngOnInit() {
+  //   this.checkScreen();
+  //   window.addEventListener('resize', () => this.checkScreen());
+  // }
+
+  // checkScreen() {
+  //   this.isMobile = window.innerWidth <= 768;
+  //   this.sidebarCollapsed = true;
+  //   this.mobileSidebarOpen = false;
+  // }
 
   @HostListener('touchstart', ['$event'])
   onTouchStart(event: TouchEvent) {
@@ -199,16 +230,41 @@ export class ChatComponent implements AfterViewChecked {
       console.log('Credits updated:', this.userCredits);
     });
   }
-
-  // Host clicks to close tool panels
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
+  handleGlobalClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    const clickedInsideToolbar = target.closest('.image-toolbar') || target.closest('.message-image');
-    if (!clickedInsideToolbar && this.activeTool && !target.closest('.tool-panel')) {
+    if (this.isMobile && this.mobileSidebarOpen) {
+      if (!this.chatSidebar?.nativeElement.contains(target)) {
+        this.mobileSidebarOpen = false;
+      }
+    }
+    if (this.showAddMenu && !target.closest('.add-menu') && !target.closest('.add-btn')) {
+      this.showAddMenu = false;
+    }
+\
+    const clickedInsideToolbar =
+      target.closest('.image-toolbar') ||
+      target.closest('.message-image') ||
+      target.closest('.tool-panel');
+
+    if (this.activeTool && !clickedInsideToolbar) {
       this.closeTool();
     }
   }
+
+toggleChatSidebar(event: Event) {
+  event.stopPropagation();
+  this.chatSidebarService.toggle();
+}
+
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const target = event.target as HTMLElement;
+  //   const clickedInsideToolbar = target.closest('.image-toolbar') || target.closest('.message-image');
+  //   if (!clickedInsideToolbar && this.activeTool && !target.closest('.tool-panel')) {
+  //     this.closeTool();
+  //   }
+  // }
 
   toggleAddMenu(event: MouseEvent) {
     event.stopPropagation();
@@ -219,10 +275,10 @@ export class ChatComponent implements AfterViewChecked {
     this.showAddMenu = false;
     this.fileInput.nativeElement.click();
   }
-  @HostListener('document:click')
-  closeAddMenu() {
-    this.showAddMenu = false;
-  }
+  // @HostListener('document:click')
+  // closeAddMenu() {
+  //   this.showAddMenu = false;
+  // }
 
   // ---------- Thumbnail / Compare helpers ----------
 
@@ -307,17 +363,21 @@ export class ChatComponent implements AfterViewChecked {
 
   // ---------- Navigation ----------
   toggleSidebar() {
-    if (window.innerWidth <= 768) {
+    if (this.isMobile) {
       this.mobileSidebarOpen = !this.mobileSidebarOpen;
+      this.sidebarCollapsed = false;
       return;
     }
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
-  toggleMobileSidebar() {
-    if (!this.isMobile) return;
-    this.mobileSidebarOpen = !this.mobileSidebarOpen;
-    this.sidebarCollapsed = !this.mobileSidebarOpen;
-  }
+
+  toggleMobileSidebar() { this.mobileSidebarOpen = !this.mobileSidebarOpen; }
+
+  // toggleMobileSidebar() {
+  //   if (!this.isMobile) return;
+  //   this.mobileSidebarOpen = !this.mobileSidebarOpen;
+  //   this.sidebarCollapsed = !this.mobileSidebarOpen;
+  // }
   goToProfile() { this.router.navigate(['/profile']); }
 
   room = computed(() => this.roomModel);

@@ -1,9 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TokenStorageService } from '../../services/token-storage.service';
 import { UserService } from '../../services/user.service';
 import { FormsModule } from '@angular/forms';
+import { ChatSidebarService } from '../../services/chat-sidebar.service';
 
 @Component({
   selector: 'app-header',
@@ -31,13 +32,26 @@ export class HeaderComponent implements OnInit {
     AUD: 0.018
   };
   roles: string[] = [];
+  isChatPage = false;
+  isMobile = false;
+
   constructor(
     private tokenStorage: TokenStorageService,
     private router: Router,
     private userService: UserService,
+    private chatSidebarService: ChatSidebarService
   ) { }
 
   ngOnInit(): void {
+    this.checkScreen();
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isChatPage = event.urlAfterRedirects.startsWith('/chat');
+        console.log('Chat page:', this.isChatPage);
+      }
+    });
+
     this.tokenStorage.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
 
@@ -45,14 +59,22 @@ export class HeaderComponent implements OnInit {
         const user = this.tokenStorage.getUser();
         this.userId = user?.id;
         this.loadCredit(this.userId);
-        if (user?.roles) {
-          this.roles = user.roles;
-        }
+        this.roles = user?.roles || [];
       }
     });
   }
+  @HostListener('window:resize')
+  checkScreen() {
+    this.isMobile = window.innerWidth <= 768;
+    console.log('Mobile:', this.isMobile);
+  }
+  
   ngDoCheck() {
     console.log('Profile:', this.isProfileMenuOpen);
+  }
+  toggleChatSidebar(event: Event) {
+    event.stopPropagation();
+    this.chatSidebarService.toggle();
   }
 
   loadCredit(id: number): void {
