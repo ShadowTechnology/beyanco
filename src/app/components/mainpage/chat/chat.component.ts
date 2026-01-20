@@ -241,7 +241,6 @@ export class ChatComponent implements AfterViewChecked {
     if (this.showAddMenu && !target.closest('.add-menu') && !target.closest('.add-btn')) {
       this.showAddMenu = false;
     }
-\
     const clickedInsideToolbar =
       target.closest('.image-toolbar') ||
       target.closest('.message-image') ||
