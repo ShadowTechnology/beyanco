@@ -251,10 +251,15 @@ export class ChatComponent implements AfterViewChecked {
     }
   }
 
-toggleChatSidebar(event: Event) {
-  event.stopPropagation();
-  this.chatSidebarService.toggle();
+// toggleChatSidebar(event: Event) {
+//   event.stopPropagation();
+//   this.chatSidebarService.toggle();
+// }
+toggleChatSidebar(event?: Event) {
+  event?.stopPropagation();
+  this.mobileSidebarOpen = !this.mobileSidebarOpen;
 }
+
 
   // @HostListener('document:click', ['$event'])
   // onDocumentClick(event: MouseEvent) {

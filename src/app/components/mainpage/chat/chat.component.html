@@ -1,11 +1,12 @@
-<div class="page" [class.sidebar-collapsed]="sidebarCollapsed"
+<div
+  class="page"
+  (click)="mobileSidebarOpen = false"
   [class.modal-open]="showPopup || showImagePopup">
   <!-- Sidebar -->
   <aside
-    #chatSidebar
     class="sidebar"
-    [class.collapsed]="sidebarCollapsed"
     [class.open]="mobileSidebarOpen"
+    [class.collapsed]="sidebarCollapsed"
     (click)="$event.stopPropagation()">
 
     <div class="logo">
@@ -99,8 +100,14 @@
 
   <!-- Main Chat Area -->
   <main class="chat-main">
-    <div class="message-container">
 
+    <div class="message-container">
+      <button
+        class="chat-sidebar-btn mobile-only"
+        (click)="toggleChatSidebar($event)"
+        aria-label="Open chat sidebar">
+        <img src="assets/sidebar.png" alt="Open Sidebar" />
+      </button>
       <!-- Messages Container -->
       <div class="messages-container" #scrollArea>
         <ng-container
