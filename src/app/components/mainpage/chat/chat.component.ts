@@ -119,7 +119,7 @@ export class ChatComponent implements AfterViewChecked {
   chatId: any;
   isChatPage = false;
   isMobile = false;
-
+  activeMenuId: string | null = null;
   // ✅ ADD IT HERE (inside the class)
   dateOrder = (a: any, b: any): number => {
     const order = ['Today', 'Yesterday', 'Older'];
@@ -249,16 +249,23 @@ export class ChatComponent implements AfterViewChecked {
     if (this.activeTool && !clickedInsideToolbar) {
       this.closeTool();
     }
+    const clickedOnMenu =
+      target.closest('.menu-card') ||
+      target.closest('.ellipsis-icon');
+
+    if (this.activeMenuId && !clickedOnMenu) {
+      this.activeMenuId = null;
+    }
   }
 
-// toggleChatSidebar(event: Event) {
-//   event.stopPropagation();
-//   this.chatSidebarService.toggle();
-// }
-toggleChatSidebar(event?: Event) {
-  event?.stopPropagation();
-  this.mobileSidebarOpen = !this.mobileSidebarOpen;
-}
+  // toggleChatSidebar(event: Event) {
+  //   event.stopPropagation();
+  //   this.chatSidebarService.toggle();
+  // }
+  toggleChatSidebar(event?: Event) {
+    event?.stopPropagation();
+    this.mobileSidebarOpen = !this.mobileSidebarOpen;
+  }
 
 
   // @HostListener('document:click', ['$event'])
@@ -1340,6 +1347,72 @@ toggleChatSidebar(event?: Event) {
       event.preventDefault();
       this.send();
     }
+  }
+  toggleMenu(chatId: string) {
+    this.activeMenuId = this.activeMenuId === chatId ? null : chatId;
+  }
+
+  renameChat(chat: any) {
+    const newTitle = prompt('Rename chat', chat.title);
+
+    if (!newTitle || !newTitle.trim()) {
+      this.activeMenuId = null;
+      return;
+    }
+
+    this.chatService.updateChatTitle(chat.id, newTitle.trim()).subscribe({
+      next: () => {
+        chat.title = newTitle.trim();
+        this.activeMenuId = null;
+      },
+      error: err => {
+        console.error(err);
+        alert('Rename failed');
+        this.activeMenuId = null;
+      }
+    });
+  }
+
+
+
+  // pinChat(chat: any) {
+  //   console.log('Pin', chat);
+  //   this.activeMenuId = null;
+  // }
+
+  deleteChat(chat: any) {
+    const confirmDelete = confirm('Are you sure you want to delete this chat?');
+
+    if (!confirmDelete) {
+      this.activeMenuId = null;
+      return;
+    }
+
+    this.chatService.deleteChat(chat.id).subscribe({
+      next: () => {
+        Object.keys(this.groupedConversations).forEach(key => {
+          this.groupedConversations[key] =
+            this.groupedConversations[key].filter(c => c.id !== chat.id);
+
+          if (this.groupedConversations[key].length === 0) {
+            delete this.groupedConversations[key];
+          }
+        });
+
+        if (this.chatId === chat.id) {
+          this.messages.set([]);
+          this.chatId = null;
+          this.hasActiveConversation = false;
+        }
+
+        this.activeMenuId = null;
+      },
+      error: (err) => {
+        console.error('Delete failed', err);
+        alert('Delete failed');
+        this.activeMenuId = null;
+      }
+    });
   }
 
 }

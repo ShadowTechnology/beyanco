@@ -52,15 +52,59 @@
       <ng-container
         *ngFor="let group of groupedConversations | keyvalue: dateOrder">
 
+        <button
+          *ngFor="let conv of group.value"
+          class="history-item"
+          (click)="openConversation(conv.id)">
+
+          <div class="history-title">
+            {{ conv.title || 'New Design' }}
+          </div>
+
+          <div class="flex-right" (click)="$event.stopPropagation()">
+            <i
+              class="fa-solid fa-ellipsis ellipsis-icon"
+              (click)="toggleMenu(conv.id)">
+            </i>
+
+            <!-- Context Menu -->
+            <div
+              class="menu-card"
+              *ngIf="activeMenuId === conv.id">
+
+              <div class="menu-item" (click)="renameChat(conv)">
+                <i class="fa-solid fa-pen"></i> Rename
+              </div>
+
+              <!-- <div class="menu-item" (click)="pinChat(conv)">
+                <i class="fa-solid fa-map-pin"></i> Pin chat
+              </div> -->
+
+              <div class="menu-item danger" (click)="deleteChat(conv)">
+                <i class="fas fa-trash-alt"></i> Delete
+              </div>
+            </div>
+          </div>
+
+        </button>
+
+      </ng-container>
+    </div>
+
+    <!-- <div class="history-list" *ngIf="isSidebarExpanded()">
+      <ng-container
+        *ngFor="let group of groupedConversations | keyvalue: dateOrder">
+
         <button *ngFor="let conv of group.value" class="history-item"
           (click)="openConversation(conv.id)">
           <div class="history-title">
             {{ conv.title || 'New Design' }}
           </div>
+          <div class="flex-right"><i class="fa-solid fa-ellipsis"></i></div>
         </button>
 
       </ng-container>
-    </div>
+    </div> -->
 
     <ng-template #noHistory>
       <div class="no-history">No chat history found</div>

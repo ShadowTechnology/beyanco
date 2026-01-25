@@ -41,14 +41,14 @@ export class HomeComponent implements OnInit {
     {
       title: 'Living Room Enhancements',
       desc: 'From empty space to a sophisticated lounge with modern decor and warm-lit furnishings.',
-      before: 'https://gravelmag.com/wp-content/uploads/2022/02/spanish-16.jpg',
-      after: 'https://belleabodes.com/wp-content/uploads/2024/01/Emma-Stone-Spanish-Style-House-Living-Room-Get-the-Look-1024x682.jpg'
+      before: 'assets/experience/T 3 (1).jpg',
+      after: 'assets/experience/T 3-3 (1).png'
     },
     {
       title: 'Kitchen Renovation',
       desc: 'Choose from a variety of modern kitchen styles with state-of-the-art appliances and elegant design.',
-      before: 'https://mudosikitchenandbath.com/wp-content/uploads/2023/01/Rolling-Cart.jpg',
-      after: 'https://organizeddad.com/wp-content/uploads/2022/04/dl.beatsnoop.com-1649008255-3.jpg'
+      before: 'assets/experience/T 2 (1).png',
+      after: 'assets/experience/T 2-2 (1).jpg'
     }
   ];
 
@@ -63,28 +63,28 @@ export class HomeComponent implements OnInit {
 
   herosectionSlider = [
     {
-      title: 'Living Room Transformation',
-      desc: 'From empty space to welcoming living area with modern furniture and warm styling',
-      before: 'https://gravelmag.com/wp-content/uploads/2022/02/spanish-16.jpg',
-      after: 'https://belleabodes.com/wp-content/uploads/2024/01/Emma-Stone-Spanish-Style-House-Living-Room-Get-the-Look-1024x682.jpg'
+      // title: 'Living Room Transformation',
+      // desc: 'From empty space to welcoming living area with modern furniture and warm styling',
+      before: 'assets/homeslider/HS 1.png',
+      after: 'assets/homeslider/HS 1-1.png'
     },
     {
-      title: 'Kitchen Renovation',
-      desc: 'Complete kitchen staging with high‑end appliances and contemporary design elements',
-      before: 'https://mudosikitchenandbath.com/wp-content/uploads/2023/01/Rolling-Cart.jpg',
-      after: 'https://organizeddad.com/wp-content/uploads/2022/04/dl.beatsnoop.com-1649008255-3.jpg'
+      // title: 'Kitchen Renovation',
+      // desc: 'Complete kitchen staging with high‑end appliances and contemporary design elements',
+      before: 'assets/homeslider/HS 2.jpg',
+      after: 'assets/homeslider/HS 2-2.png'
     },
     {
-      title: 'Living Room Transformation',
-      desc: 'From empty space to welcoming living area with modern furniture and warm styling',
-      before: 'https://gravelmag.com/wp-content/uploads/2022/02/spanish-16.jpg',
-      after: 'https://belleabodes.com/wp-content/uploads/2024/01/Emma-Stone-Spanish-Style-House-Living-Room-Get-the-Look-1024x682.jpg'
+      // title: 'Living Room Transformation',
+      // desc: 'From empty space to welcoming living area with modern furniture and warm styling',
+      before: 'assets/homeslider/HS 3.jpg',
+      after: 'assets/homeslider/HS 3-3.png'
     },
     {
-      title: 'Kitchen Renovation',
-      desc: 'Complete kitchen staging with high‑end appliances and contemporary design elements',
-      before: 'https://mudosikitchenandbath.com/wp-content/uploads/2023/01/Rolling-Cart.jpg',
-      after: 'https://organizeddad.com/wp-content/uploads/2022/04/dl.beatsnoop.com-1649008255-3.jpg'
+      // title: 'Kitchen Renovation',
+      // desc: 'Complete kitchen staging with high‑end appliances and contemporary design elements',
+      before: 'assets/homeslider/HS 5.jpg',
+      after: 'assets/homeslider/HS 5-5.png'
     }
   ];
 

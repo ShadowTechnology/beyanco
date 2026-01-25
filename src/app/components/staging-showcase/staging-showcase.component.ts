@@ -18,20 +18,20 @@ export class StagingShowcaseComponent {
 
   gallery: any = {
     'Living Rooms': {
-      before: 'assets/beforeimages/A1.jpg',
-      after: 'assets/afterimages/A1-1.png'
+      before: 'assets/seesamples/SS 4.png',
+      after: 'assets/seesamples/SS 4-4.jpg'
     },
     'Bedrooms': {
-      before: 'assets/beforeimages/A4.jpg',
-      after: 'assets/afterimages/A4-4.png'
+      before: 'assets/seesamples/SS 2.png',
+      after: 'assets/seesamples/SS 2-2.jpg'
     },
     'Dining Rooms': {
-      before: 'assets/beforeimages/A9.jpg',
-      after: 'assets/afterimages/A9-9.jpg'
+      before: 'assets/seesamples/SS 1.png',
+      after: 'assets/seesamples/SS 1-1.jpg'
     },
     'Offices': {
-      before: 'assets/beforeimages/A7.jpg',
-      after: 'assets/afterimages/A7-7.jpg'
+      before: 'assets/seesamples/SS 5.jpg',
+      after: 'assets/seesamples/SS 5-5.png'
     }
   };
   constructor(private router: Router) { }

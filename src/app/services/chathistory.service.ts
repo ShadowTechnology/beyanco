@@ -39,12 +39,20 @@ export class ChatHistoryService {
       headers: this.getAuthHeaders()
     });
   }
-  
+
   // ✅ Update a chat
   updateChat(id: number, chat: ChatHistory): Observable<ChatHistory> {
     return this.http.put<ChatHistory>(`${API_URL}updateChat/${id}`, chat, {
       headers: this.getAuthHeaders()
     });
+  }
+
+  updateChatTitle(id: number, title: string): Observable<any> {
+    return this.http.put(
+      `${API_URL}updateChat/${id}`,
+      { title },
+      { headers: this.getAuthHeaders() }
+    );
   }
 
   // ✅ Delete chat
