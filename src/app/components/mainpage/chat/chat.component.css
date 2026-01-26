@@ -1348,7 +1348,7 @@ button.new-chat-btn1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 2000;
 }
 
 .modal-box {
@@ -1366,6 +1366,7 @@ button.new-chat-btn1 {
   width: 100%;
   padding: 8px;
   margin: 10px 0;
+  border-radius: 10px;
 }
 
 .actions {
