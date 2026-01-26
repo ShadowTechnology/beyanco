@@ -11,7 +11,7 @@ const API_URL = `${environment.backendUrl}/api/chats/`;
   providedIn: 'root'
 })
 export class ChatHistoryService {
-  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {}
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { }
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.tokenStorage.getToken();
@@ -61,4 +61,13 @@ export class ChatHistoryService {
       headers: this.getAuthHeaders()
     });
   }
+  // ✅ Rename chat (only title)
+  renameChat(id: number, title: string): Observable<any> {
+    return this.http.put(
+      `${API_URL}updateChat/${id}`,
+      { title },
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
 }

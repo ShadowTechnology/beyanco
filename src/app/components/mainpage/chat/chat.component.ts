@@ -50,6 +50,8 @@ export class ChatComponent implements AfterViewChecked {
   showImagePopup = false;
   hasActiveConversation = false;
   conversationLoaded = false;
+  showDeleteModal = false;
+  chatToDelete: any = null;
 
   // Thumbnails & compare
   compareThumbnails = signal<string[]>([]);
@@ -87,7 +89,9 @@ export class ChatComponent implements AfterViewChecked {
   currentGeneratedImage: string | null = null;
   selectedElement = '';
   selectedTool = '';
-
+  showRenameModal = false;
+  chatToRename: any = null;
+  newChatName = '';
   // Data lists
   rooms = ['Kitchen', 'Bedroom', 'Living Room', 'Bathroom', 'Dining', 'Study', 'Office', 'Garage'];
   StyleTags = ['Modern', 'Cozy', 'Luxury', 'Minimalist', 'Rustic', 'Industrial', 'Scandinavian', 'Bohemian'];
@@ -1351,45 +1355,25 @@ export class ChatComponent implements AfterViewChecked {
   toggleMenu(chatId: string) {
     this.activeMenuId = this.activeMenuId === chatId ? null : chatId;
   }
-
-  renameChat(chat: any) {
-    const newTitle = prompt('Rename chat', chat.title);
-
-    if (!newTitle || !newTitle.trim()) {
-      this.activeMenuId = null;
-      return;
-    }
-
-    this.chatService.updateChatTitle(chat.id, newTitle.trim()).subscribe({
-      next: () => {
-        chat.title = newTitle.trim();
-        this.activeMenuId = null;
-      },
-      error: err => {
-        console.error(err);
-        alert('Rename failed');
-        this.activeMenuId = null;
-      }
-    });
+  openDeletePopup(chat: any) {
+    this.chatToDelete = chat;
+    this.showDeleteModal = true;
+    this.activeMenuId = null;
   }
 
+  cancelDelete() {
+    this.showDeleteModal = false;
+    this.chatToDelete = null;
+  }
 
+  confirmDelete() {
+    if (!this.chatToDelete) return;
 
-  // pinChat(chat: any) {
-  //   console.log('Pin', chat);
-  //   this.activeMenuId = null;
-  // }
-
-  deleteChat(chat: any) {
-    const confirmDelete = confirm('Are you sure you want to delete this chat?');
-
-    if (!confirmDelete) {
-      this.activeMenuId = null;
-      return;
-    }
+    const chat = this.chatToDelete;
 
     this.chatService.deleteChat(chat.id).subscribe({
       next: () => {
+        // remove from grouped list
         Object.keys(this.groupedConversations).forEach(key => {
           this.groupedConversations[key] =
             this.groupedConversations[key].filter(c => c.id !== chat.id);
@@ -1399,18 +1383,51 @@ export class ChatComponent implements AfterViewChecked {
           }
         });
 
+        // reset active chat if deleted
         if (this.chatId === chat.id) {
           this.messages.set([]);
           this.chatId = null;
           this.hasActiveConversation = false;
         }
 
-        this.activeMenuId = null;
+        this.showDeleteModal = false;
+        this.chatToDelete = null;
       },
       error: (err) => {
         console.error('Delete failed', err);
         alert('Delete failed');
-        this.activeMenuId = null;
+        this.showDeleteModal = false;
+      }
+    });
+  }
+
+
+  openRenamePopup(chat: any) {
+    this.chatToRename = chat;
+    this.newChatName = chat.title || '';
+    this.showRenameModal = true;
+    this.activeMenuId = null;
+  }
+
+  cancelRename() {
+    this.showRenameModal = false;
+    this.chatToRename = null;
+  }
+
+  confirmRename() {
+    if (!this.newChatName.trim()) return;
+
+    this.chatService.renameChat(
+      this.chatToRename.id,
+      this.newChatName
+    ).subscribe({
+      next: () => {
+        this.chatToRename.title = this.newChatName;
+        this.showRenameModal = false;
+        this.chatToRename = null;
+      },
+      error: () => {
+        alert('Rename failed');
       }
     });
   }

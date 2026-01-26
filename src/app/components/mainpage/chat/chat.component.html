@@ -72,7 +72,7 @@
               class="menu-card"
               *ngIf="activeMenuId === conv.id">
 
-              <div class="menu-item" (click)="renameChat(conv)">
+              <div class="menu-item" (click)="openRenamePopup(conv)">
                 <i class="fa-solid fa-pen"></i> Rename
               </div>
 
@@ -80,7 +80,7 @@
                 <i class="fa-solid fa-map-pin"></i> Pin chat
               </div> -->
 
-              <div class="menu-item danger" (click)="deleteChat(conv)">
+              <div class="menu-item danger" (click)="openDeletePopup(conv)">
                 <i class="fas fa-trash-alt"></i> Delete
               </div>
             </div>
@@ -659,4 +659,31 @@
     <button class="close-btn" (click)="closeCreditPopup()">Close</button>
   </div>
 
+</div>
+
+<div class="modal-backdrop" *ngIf="showRenameModal">
+  <div class="modal-box">
+    <h3>Rename Chat</h3>
+
+    <input
+      type="text" class="fo"
+      [(ngModel)]="newChatName"
+      placeholder="Enter chat name" />
+
+    <div class="actions">
+      <button class="btn cancel" (click)="cancelRename()">Cancel</button>
+      <button class="btn primary" (click)="confirmRename()">Save</button>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" *ngIf="showDeleteModal">
+  <div class="modal-box">
+    <h3>Delete Chat?</h3>
+    <p>This action cannot be undone.</p>
+
+    <div class="actions">
+      <button class="btn cancel" (click)="cancelDelete()">No</button>
+      <button class="btn danger" (click)="confirmDelete()">Yes, Delete</button>
+    </div>
+  </div>
 </div>
