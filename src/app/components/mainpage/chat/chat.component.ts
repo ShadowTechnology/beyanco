@@ -398,7 +398,9 @@ export class ChatComponent implements AfterViewChecked {
   room = computed(() => this.roomModel);
 
   // ---------- Chat lifecycle ----------
-  newChat() {
+  newChat(event?: MouseEvent) {
+    event?.stopPropagation();
+    this.mobileSidebarOpen = !this.mobileSidebarOpen;
     const id = crypto.randomUUID();
     this.hasActiveConversation = false;
     this.conversations.update(list => {
@@ -1199,28 +1201,28 @@ export class ChatComponent implements AfterViewChecked {
   //   document.body.removeChild(link);
   // }
 
-  // async downloadImage() {
-  //   if (!this.currentImage) return;
+  async downloadImage() {
+    if (!this.currentImage) return;
 
-  //   try {
-  //     const response = await fetch(this.currentImage);
-  //     const blob = await response.blob();
+    try {
+      const response = await fetch(this.currentImage);
+      const blob = await response.blob();
 
-  //     const url = window.URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(blob);
 
-  //     const link = document.createElement('a');
-  //     link.href = url;
-  //     link.download = `beyanco-design-${Date.now()}.png`;
-  //     document.body.appendChild(link);
-  //     link.click();
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `beyanco-design-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
 
-  //     document.body.removeChild(link);
-  //     window.URL.revokeObjectURL(url);
-  //   } catch (error) {
-  //     console.error('Download failed:', error);
-  //     alert('Failed to download image.');
-  //   }
-  // }
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download image.');
+    }
+  }
 
   // downloadImage() {
   //   if (!this.currentImage) return;
@@ -1231,30 +1233,30 @@ export class ChatComponent implements AfterViewChecked {
   //   link.click();
   // }
 
-  downloadImage() {
-    if (!this.currentImage) return;
+  // downloadImage() {
+  //   if (!this.currentImage) return;
 
-    const key = this.getCurrentImageKey();
+  //   const key = this.getCurrentImageKey();
 
-    this.propertyService.getDownloadFile(key).subscribe({
-      next: (blob: Blob) => {
-        const url = window.URL.createObjectURL(blob);
+  //   this.propertyService.getDownloadFile(key).subscribe({
+  //     next: (blob: Blob) => {
+  //       const url = window.URL.createObjectURL(blob);
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = key.split('/').pop() || 'image.png';
-        document.body.appendChild(a);
-        a.click();
+  //       const a = document.createElement('a');
+  //       a.href = url;
+  //       a.download = key.split('/').pop() || 'image.png';
+  //       document.body.appendChild(a);
+  //       a.click();
 
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Download failed');
-      }
-    });
-  }
+  //       document.body.removeChild(a);
+  //       window.URL.revokeObjectURL(url);
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //       alert('Download failed');
+  //     }
+  //   });
+  // }
 
   getCurrentImageKey(): string {
     if (!this.currentImage) return '';
@@ -1301,9 +1303,9 @@ export class ChatComponent implements AfterViewChecked {
   groupedConversations: { [key: string]: any[] } = {};
 
   loadChats() {
-    this.chatService.getUserChats().subscribe({
+    this.chatService.getChatsByStatus(1).subscribe({
       next: (data) => {
-        this.conversationsList = data.sort(
+        this.conversationsList = (data || []).sort(
           (a: any, b: any) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
@@ -1312,6 +1314,7 @@ export class ChatComponent implements AfterViewChecked {
       },
       error: (err) => console.error('Error loading chats:', err)
     });
+
   }
 
   groupChatsByDate(chats: any[]) {
@@ -1366,14 +1369,15 @@ export class ChatComponent implements AfterViewChecked {
     this.chatToDelete = null;
   }
 
-  confirmDelete() {
+  confirmDelete(): void {
     if (!this.chatToDelete) return;
 
     const chat = this.chatToDelete;
 
-    this.chatService.deleteChat(chat.id).subscribe({
+    this.chatService.deleteChat(chat.id!).subscribe({
       next: () => {
-        // remove from grouped list
+
+        // Remove from grouped list
         Object.keys(this.groupedConversations).forEach(key => {
           this.groupedConversations[key] =
             this.groupedConversations[key].filter(c => c.id !== chat.id);
@@ -1383,9 +1387,8 @@ export class ChatComponent implements AfterViewChecked {
           }
         });
 
-        // reset active chat if deleted
+        // Reset active chat if deleted
         if (this.chatId === chat.id) {
-          this.messages.set([]);
           this.chatId = null;
           this.hasActiveConversation = false;
         }
@@ -1431,5 +1434,6 @@ export class ChatComponent implements AfterViewChecked {
       }
     });
   }
+
 
 }

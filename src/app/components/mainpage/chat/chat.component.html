@@ -30,7 +30,7 @@
     <button
       class="new-chat-btn"
       *ngIf="isSidebarExpanded()"
-      (click)="newChat()">
+      (click)="newChat($event)">
       <i class="fa-solid fa-plus"></i>
       <span>New Chat</span>
     </button>
@@ -146,12 +146,12 @@
   <main class="chat-main">
 
     <div class="message-container">
-      <button
+      <!-- <button
         class="chat-sidebar-btn mobile-only"
         (click)="toggleChatSidebar($event)"
         aria-label="Open chat sidebar">
         <img src="assets/sidebar.png" alt="Open Sidebar" />
-      </button>
+      </button> -->
       <!-- Messages Container -->
       <div class="messages-container" #scrollArea>
         <ng-container

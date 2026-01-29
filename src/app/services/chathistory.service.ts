@@ -33,6 +33,14 @@ export class ChatHistoryService {
     });
   }
 
+  getChatsByStatus(status: number) {
+    return this.http.get<ChatHistory[]>(
+      `${API_URL}getChatsByStatus/${status}`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+
   // ✅ Create a new chat
   createChat(chat: ChatHistory): Observable<ChatHistory> {
     return this.http.post<ChatHistory>(`${API_URL}createChat`, chat, {
@@ -62,12 +70,13 @@ export class ChatHistoryService {
     });
   }
   // ✅ Rename chat (only title)
-  renameChat(id: number, title: string): Observable<any> {
+  renameChat(id: number, title: string) {
     return this.http.put(
-      `${API_URL}updateChat/${id}`,
+      `${API_URL}renameChat/${id}`,
       { title },
       { headers: this.getAuthHeaders() }
     );
   }
+
 
 }
