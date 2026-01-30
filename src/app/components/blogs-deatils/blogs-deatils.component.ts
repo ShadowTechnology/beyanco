@@ -288,14 +288,14 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
           <p>Step 7: Use the Beyanco AI-generated images to promote your property on listing websites.</p>
 
 
-         <p class="phara-style">These are the simple steps to get high-definition, fully furnished interior pictures to market assets and enhance prospect engagement. Furthermore, this leads to more favourable deals for real estate agents.</p>`,
+         <p class="phara-style style1">These are the simple steps to get high-definition, fully furnished interior pictures to market assets and enhance prospect engagement. Furthermore, this leads to more favourable deals for real estate agents.</p>`,
 
 
           `<h2>Conclusion</h2>
 
          <p class="phara-style">Meghan Keaney Anderson, the former VP of Marketing at Hubspot says,</p>
         
-         <p class="phara-style">”Don’t push people where you want to be; meet them where they are.”</p>
+         <p class="phara-style italic">”Don’t push people where you want to be; meet them where they are.”</p>
          
          <p class="phara-style">In this scenario, staging fits perfectly into the narrative of meeting people where they are—online. Staging is essential for bringing prospects to their desired home. Now, for a real estate agent, virtual staging is the preferred alternative offering scalability, cost-efficiency and results. Thus, choosing virtual staging in real estate is the clever and smart move for any real estate agent looking to develop their marketing abilities.</p>
          <p>Looking to stage your property and influence more leads? Beyanco AI can do that for you in seconds! Try now and attract qualified prospects.</p>`
