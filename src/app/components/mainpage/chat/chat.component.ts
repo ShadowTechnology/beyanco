@@ -150,10 +150,12 @@ export class ChatComponent implements AfterViewChecked {
     this.checkScreen();
 
     this.chatSidebarService.sidebarState$.subscribe(open => {
-      if (this.isMobile) {
-        this.mobileSidebarOpen = open;
+      // console.log('[chat] sidebar service ->', open, 'isMobile:', this.isMobile);
+      this.mobileSidebarOpen = !!open;
+      if (this.isMobile && open) {
         this.sidebarCollapsed = false;
       }
+      this.cdRef.detectChanges();
     });
 
 
@@ -209,7 +211,7 @@ export class ChatComponent implements AfterViewChecked {
       this.touchStartX < this.edgeThreshold &&
       !this.mobileSidebarOpen
     ) {
-      this.mobileSidebarOpen = true;
+      this.chatSidebarService.toggle();
       return;
     }
 
@@ -218,7 +220,7 @@ export class ChatComponent implements AfterViewChecked {
       deltaX < -this.swipeThreshold &&
       this.mobileSidebarOpen
     ) {
-      this.mobileSidebarOpen = false;
+      this.chatSidebarService.close();
     }
   }
 
@@ -237,10 +239,14 @@ export class ChatComponent implements AfterViewChecked {
   @HostListener('document:click', ['$event'])
   handleGlobalClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (this.isMobile && this.mobileSidebarOpen) {
-      if (!this.chatSidebar?.nativeElement.contains(target)) {
-        this.mobileSidebarOpen = false;
-      }
+    if (target.closest('.chat-toggle-btn')) return;
+    if (
+      this.isMobile &&
+      this.mobileSidebarOpen &&
+      this.chatSidebar &&
+      !this.chatSidebar.nativeElement.contains(target)
+    ) {
+      this.chatSidebarService.close();
     }
     if (this.showAddMenu && !target.closest('.add-menu') && !target.closest('.add-btn')) {
       this.showAddMenu = false;
@@ -266,9 +272,14 @@ export class ChatComponent implements AfterViewChecked {
   //   event.stopPropagation();
   //   this.chatSidebarService.toggle();
   // }
+  // toggleChatSidebar(event?: Event) {
+  //   event?.stopPropagation();
+  //   this.chatSidebarService.toggle();
+  // }
+
   toggleChatSidebar(event?: Event) {
     event?.stopPropagation();
-    this.mobileSidebarOpen = !this.mobileSidebarOpen;
+    this.chatSidebarService.toggle();
   }
 
 
@@ -378,15 +389,14 @@ export class ChatComponent implements AfterViewChecked {
 
   // ---------- Navigation ----------
   toggleSidebar() {
-    if (this.isMobile) {
-      this.mobileSidebarOpen = !this.mobileSidebarOpen;
-      this.sidebarCollapsed = false;
-      return;
-    }
-    this.sidebarCollapsed = !this.sidebarCollapsed;
+  if (this.isMobile) {
+    this.chatSidebarService.toggle();
+    return;
   }
+  this.sidebarCollapsed = !this.sidebarCollapsed;
+}
 
-  toggleMobileSidebar() { this.mobileSidebarOpen = !this.mobileSidebarOpen; }
+  toggleMobileSidebar() { this.chatSidebarService.open(); }
 
   // toggleMobileSidebar() {
   //   if (!this.isMobile) return;
@@ -400,7 +410,9 @@ export class ChatComponent implements AfterViewChecked {
   // ---------- Chat lifecycle ----------
   newChat(event?: MouseEvent) {
     event?.stopPropagation();
-    this.mobileSidebarOpen = !this.mobileSidebarOpen;
+    if (this.isMobile) {
+      this.chatSidebarService.close();
+    }
     const id = crypto.randomUUID();
     this.hasActiveConversation = false;
     this.conversations.update(list => {
@@ -432,7 +444,7 @@ export class ChatComponent implements AfterViewChecked {
 
   openConversation(chatId: number) {
     if (window.innerWidth <= 768) {
-      this.mobileSidebarOpen = false;
+      this.chatSidebarService.close();
     }
     this.resetCompareState();
     this.chatId = chatId;

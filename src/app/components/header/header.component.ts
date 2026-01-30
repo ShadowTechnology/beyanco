@@ -5,6 +5,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
 import { UserService } from '../../services/user.service';
 import { FormsModule } from '@angular/forms';
 import { ChatSidebarService } from '../../services/chat-sidebar.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -45,12 +46,11 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.checkScreen();
 
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
         this.isChatPage = event.urlAfterRedirects.startsWith('/chat');
-        console.log('Chat page:', this.isChatPage);
-      }
-    });
+      });
 
     this.tokenStorage.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
@@ -66,9 +66,11 @@ export class HeaderComponent implements OnInit {
   @HostListener('window:resize')
   checkScreen() {
     this.isMobile = window.innerWidth <= 768;
-    console.log('Mobile:', this.isMobile);
+    if (!this.isMobile) {
+      this.chatSidebarService.close();
+    }
   }
-  
+
   ngDoCheck() {
     console.log('Profile:', this.isProfileMenuOpen);
   }
@@ -186,7 +188,8 @@ export class HeaderComponent implements OnInit {
   toggleProfileMenu(event: Event) {
     event.stopPropagation();
     this.isProfileMenuOpen = !this.isProfileMenuOpen;
+    console.log('Profile:', this.isProfileMenuOpen);
   }
 
-
+  
 }

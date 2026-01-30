@@ -1,9 +1,9 @@
 <div
   class="page"
-  (click)="mobileSidebarOpen = false"
   [class.modal-open]="showPopup || showImagePopup">
   <!-- Sidebar -->
   <aside
+    #chatSidebar
     class="sidebar"
     [class.open]="mobileSidebarOpen"
     [class.collapsed]="sidebarCollapsed"
