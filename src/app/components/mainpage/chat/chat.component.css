@@ -34,10 +34,10 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
-.sidebar .logo i {
+/* .sidebar .logo i {
   color: #facc15;
   margin-right: 10px;
-}
+} */
 
 .sidebar .logo .collapse-btn {
   margin-left: auto;
@@ -61,7 +61,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  width: 186px;
+  /* width: 186px; */
 }
 
 .sidebar.collapsed .history-title,
@@ -1006,6 +1006,8 @@ button.new-chat-btn1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  align-content: stretch;
   padding: 0.75rem 1rem;
   position: sticky;
   top: 0;
@@ -1018,6 +1020,7 @@ button.new-chat-btn1 {
 .image-modal .toolbar-right {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.6rem;
 }
 
@@ -1341,10 +1344,11 @@ button.new-chat-btn1 {
 .menu-item.danger:hover {
   background: rgba(255, 92, 92, 0.15);
 }
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.4);
+  background: rgba(0, 0, 0, .4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1381,9 +1385,25 @@ button.new-chat-btn1 {
   cursor: pointer;
 }
 
-.btn.cancel { background: #eee; }
-.btn.primary { background: #4f46e5; color: white; }
-.btn.danger { background: #dc2626; color: white; }
+.btn.cancel {
+  background: #eee;
+}
+
+.btn.primary {
+  background: #4f46e5;
+  color: white;
+}
+
+.btn.danger {
+  background: #dc2626;
+  color: white;
+}
+
+.thumb.selected {
+  outline: 3px solid #facc15;
+  box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.35);
+}
+
 
 /* ===== MOBILE SIDEBAR FIX ===== */
 @media (max-width: 768px) {
@@ -1419,6 +1439,10 @@ button.new-chat-btn1 {
   .ellipsis-icon {
     opacity: 1;
     visibility: visible;
+  }
+
+  .image-modal .image-toolbar {
+    flex-direction: column;
   }
 }
 

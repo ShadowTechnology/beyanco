@@ -12,15 +12,15 @@
         <h3>{{ project.title }}</h3>
         <div class="menu-container">
           <button class="dots-btn" (click)="toggleMenu()">
-            <i class="fa-solid fa-ellipsis"></i>
+            <span class="fa-solid fa-ellipsis"></span>
           </button>
   
           <!-- Dropdown -->
           <div class="dropdown-menu" *ngIf="menuOpen">
-            <button><i class="fa fa-eye"></i> View Design</button>
-            <button><i class="fa fa-download"></i> Download</button>
-            <button><i class="fa fa-edit"></i> Edit</button>
-            <button class="danger"><i class="fa fa-trash"></i> Delete</button>
+            <button><span class="fa-solid fa-eye"></span> View Design</button>
+            <button><span class="fa-solid fa-download"></span> Download</button>
+            <button><span class="fa-solid fa-edit"></span> Edit</button>
+            <button class="danger"><span class="fa-solid fa-trash"></span> Delete</button>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
       <div class="footer-row">
         <div class="date">{{ project.date }}</div>
         <button class="view-btn">
-          <i class="fa fa-eye"></i> View
+          <span class="fa-solid fa-eye"></span> View
         </button>
       </div>
     </div>

@@ -11,27 +11,27 @@
 
     <div class="logo">
       <ng-container *ngIf="!sidebarCollapsed">
-        <i class="fa-solid fa-comment"></i>
+        <span class="fa-solid fa-comment" style="color: #facc15; margin-right: 10px;"></span>
         <span>Beyanco AI Chat</span>
       </ng-container>
-      <!-- <i class="fa fa-comment"></i>
+      <!-- <span class="fa-solid fa-comment"></span>
       <span *ngIf="!sidebarCollapsed">Beyanco AI Chat</span> -->
       <button class="collapse-btn" (click)="toggleSidebar()">
-        <i class="fa-solid"
-          [ngClass]="!isSidebarExpanded() ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+        <span class="fa-solid"
+          [ngClass]="!isSidebarExpanded() ? 'fa-chevron-right' : 'fa-chevron-left'" style="opacity: 1;color: #facc15; margin-right: 10px;"></span>
       </button>
     </div>
     <button
       class="new-chat-btn1"
       *ngIf="!isSidebarExpanded()"
       (click)="newChat()">
-      <i class="fa-solid fa-plus"></i>
+      <span class="fa-solid fa-plus"></span>
     </button>
     <button
       class="new-chat-btn"
       *ngIf="isSidebarExpanded()"
       (click)="newChat($event)">
-      <i class="fa-solid fa-plus"></i>
+      <span class="fa-solid fa-plus"></span>
       <span>New Chat</span>
     </button>
 
@@ -42,7 +42,7 @@
     <!-- <div class="history-list" *ngIf="conversationsList.length; else noHistory">
       <button *ngFor="let conv of conversationsList;" class="history-item"
         (click)="openConversation(conv.id)">
-        <i class="fa fa-message"></i>
+        <span class="fa-solid fa-message"></span>
         <div class="history-content">
           <div class="history-title">{{ conv.title }}</div>
         </div>
@@ -62,10 +62,10 @@
           </div>
 
           <div class="flex-right" (click)="$event.stopPropagation()">
-            <i
+            <span
               class="fa-solid fa-ellipsis ellipsis-icon"
               (click)="toggleMenu(conv.id)">
-            </i>
+            </span>
 
             <!-- Context Menu -->
             <div
@@ -73,15 +73,15 @@
               *ngIf="activeMenuId === conv.id">
 
               <div class="menu-item" (click)="openRenamePopup(conv)">
-                <i class="fa-solid fa-pen"></i> Rename
+                <span class="fa-solid fa-pen"></span> Rename
               </div>
 
               <!-- <div class="menu-item" (click)="pinChat(conv)">
-                <i class="fa-solid fa-map-pin"></i> Pin chat
+                <span class="fa-solid fa-map-pin"></span> Pin chat
               </div> -->
 
               <div class="menu-item danger" (click)="openDeletePopup(conv)">
-                <i class="fas fa-trash-alt"></i> Delete
+                <span class="fas fa-trash-alt"></span> Delete
               </div>
             </div>
           </div>
@@ -100,7 +100,7 @@
           <div class="history-title">
             {{ conv.title || 'New Design' }}
           </div>
-          <div class="flex-right"><i class="fa-solid fa-ellipsis"></i></div>
+          <div class="flex-right"><span class="fa-solid fa-ellipsis"></span></div>
         </button>
 
       </ng-container>
@@ -112,7 +112,7 @@
 
     <ng-template #noHistory>
       <div class="empty-state" *ngIf="sidebarCollapsed">
-        <i class="fa-solid fa-inbox"></i>
+        <span class="fa-solid fa-inbox"></span>
         <p>No conversations yet</p>
       </div>
     </ng-template>
@@ -123,7 +123,7 @@
         *ngIf="!isSidebarExpanded()"
         (click)="goToProfile()"
         title="Profile">
-        <i class="fa-solid fa-circle-user"></i>
+        <span class="fa-solid fa-circle-user" style="color: #facc15; font-size:20px"></span>
       </button>
 
       <button
@@ -131,12 +131,12 @@
         *ngIf="isSidebarExpanded()"
         (click)="goToProfile()"
         title="Profile">
-        <i class="fa-solid fa-circle-user"></i>
+        <span class="fa-solid fa-circle-user" style="color: #facc15; font-size:20px"></span>
         <span>Profile</span>
       </button>
 
       <!-- <button class="footer-btn" title="Settings">
-        <i class="fa fa-cog"></i>
+        <span class="fa-solid fa-cog"></span>
         <span *ngIf="!sidebarCollapsed">Settings</span>
       </button> -->
     </div>
@@ -163,8 +163,8 @@
 
             <div class="message-content">
               <div class="avatar">
-                <i class="fa-solid"
-                  [ngClass]="msg.role === 'user' ? 'fa-user' : 'fa-robot'"></i>
+                <span class="fa-solid"
+                  [ngClass]="msg.role === 'user' ? 'fa-user' : 'fa-robot'"></span>
               </div>
 
               <div class="message-body">
@@ -184,10 +184,10 @@
                 </div>
                 <div class="message-meta" *ngIf="msg.room || msg.style">
                   <span class="meta-tag" *ngIf="msg.room">
-                    <i class="fa fa-door-open"></i> {{ msg.room }}
+                    <span class="fa-solid fa-door-open"></span> {{ msg.room }}
                   </span>
                   <span class="meta-tag" *ngIf="msg.style">
-                    <i class="fa fa-palette"></i> {{ msg.style }}
+                    <span class="fa-solid fa-palette"></span> {{ msg.style }}
                   </span>
                 </div>
 
@@ -201,7 +201,7 @@
         <ng-template #welcomeScreen>
           <div *ngIf="!hasActiveConversation" class="welcome-screen">
             <div class="welcome-icon">
-              <i class="fa fa-comments"></i>
+              <span class="fa-solid fa-comments"></span>
             </div>
             <h2>Welcome to Beyanco AI Chat</h2>
             <p>Upload an image, select a room, and describe your vision. Our AI
@@ -209,11 +209,11 @@
 
             <div class="quick-actions">
               <button class="quick-action-btn" (click)="openUploadPopup()">
-                <i class="fa fa-upload"></i>
+                <span class="fa-solid fa-upload"></span>
                 <span>Upload Image</span>
               </button>
               <button class="quick-action-btn" (click)="openUploadPopup()">
-                <i class="fa fa-home"></i>
+                <span class="fa-solid fa-home"></span>
                 <span>Select Room</span>
               </button>
             </div>
@@ -229,7 +229,7 @@
             <div class="message-wrapper user-message">
               <div class="message-content">
                 <div class="avatar">
-                  <i class="fa fa-user"></i>
+                  <span class="fa-solid fa-user"></span>
                 </div>
 
                 <div class="message-body">
@@ -249,10 +249,10 @@
                   </div>
                   <div class="message-meta">
                     <span class="meta-tag">
-                      <i class="fa fa-door-open"></i> {{ p.propertyType }}
+                      <span class="fa-solid fa-door-open"></span> {{ p.propertyType }}
                     </span>
                     <span class="meta-tag" *ngIf="p.enhancementStyle">
-                      <i class="fa fa-palette"></i> {{ p.enhancementStyle }}
+                      <span class="fa-solid fa-palette"></span> {{ p.enhancementStyle }}
                     </span>
                   </div>
 
@@ -266,7 +266,7 @@
             <div class="message-wrapper assistant-message">
               <div class="message-content">
                 <div class="avatar">
-                  <i class="fa fa-robot"></i>
+                  <span class="fa-solid fa-robot"></span>
                 </div>
 
                 <div class="message-body">
@@ -285,10 +285,10 @@
                   </div>
                   <div class="message-meta">
                     <span class="meta-tag">
-                      <i class="fa fa-door-open"></i> {{ p.propertyType }}
+                      <span class="fa-solid fa-door-open"></span> {{ p.propertyType }}
                     </span>
                     <span class="meta-tag" *ngIf="p.enhancementStyle">
-                      <i class="fa fa-palette"></i> {{ p.enhancementStyle }}
+                      <span class="fa-solid fa-palette"></span> {{ p.enhancementStyle }}
                     </span>
                   </div>
 
@@ -343,7 +343,7 @@
               <!-- Add menu -->
               <div class="add-menu" *ngIf="showAddMenu">
                 <button (click)="triggerFileInput()">
-                  <i class="fa fa-image"></i> Add Photo
+                  <span class="fa-solid fa-image"></span> Add Photo
                 </button>
               </div>
 
@@ -360,7 +360,7 @@
                 class="action-btn send-btn"
                 (click)="send()"
                 [disabled]="!canSend()">
-                <i class="fa fa-paper-plane"></i>
+                <span class="fa-solid fa-paper-plane"></span>
               </button>
 
             </div>
@@ -377,7 +377,7 @@
       <div class="modal-header">
         <h2>Setup Your Project</h2>
         <button class="close-modal-btn" (click)="closePopup()">
-          <i class="fa fa-times"></i>
+          <span class="fa-solid fa-times"></span>
         </button>
       </div>
 
@@ -385,7 +385,7 @@
         <!-- Upload Area -->
         <div class="upload-area" *ngIf="!pendingImages().length">
           <label class="upload-label">
-            <i class="fa fa-cloud-upload-alt"></i>
+            <span class="fa-solid fa-cloud-upload-alt"></span>
             <span>Click to upload or drag & drop</span>
             <small>PNG, JPG up to 10MB</small>
             <input type="file" accept="image/*" multiple
@@ -398,8 +398,10 @@
           <div class="preview-card"
             *ngFor="let img of pendingImages(); let i = index">
             <img [src]="img" alt="Preview">
-            <button class="remove-btn" (click)="removePendingImage(i)">
-              <i class="fa fa-trash"></i>
+            <button
+              class="remove-btn"
+              (mousedown)="$event.stopPropagation()"
+              (click)="removeCompareImage(i, $event)">
             </button>
           </div>
         </div>
@@ -441,24 +443,27 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="closePopup()">Cancel</button>
-        <button class="btn btn-primary" (click)="confirmPopup()">Generate</button>
+        <button class="btn btn-secondary"
+          (click)="closePopup()">Cancel</button>
+        <button class="btn btn-primary"
+          (click)="confirmPopup()">Generate</button>
       </div>
     </div>
   </div>
 
   <!-- Image Viewer Modal -->
   <div class="modal-overlay" *ngIf="showImagePopup && currentImage"
-    (click)="closeImagePopup()">
-    <div class="modal-content image-modal" (click)="$event.stopPropagation()">
+    (mousedown)="closeImagePopup()">
+    <div class="modal-content image-modal"
+      (mousedown)="$event.stopPropagation()">
       <!-- Toolbar -->
       <div class="image-toolbar">
         <div class="toolbar-left">
           <button class="toolbar-btn" (click)="undo()" title="Undo">
-            <i class="fa fa-undo"></i>
+            <span class="fa-solid fa-undo"></span>
           </button>
           <button class="toolbar-btn" (click)="redo()" title="Redo">
-            <i class="fa fa-redo"></i>
+            <span class="fa-solid fa-redo"></span>
           </button>
 
           <select [(ngModel)]="selectedTool" (change)="openTool(selectedTool)"
@@ -471,48 +476,57 @@
 
         <div class="toolbar-right">
           <button class="toolbar-btn" (click)="likeImage()" title="Like">
-            <i class="fa fa-thumbs-up"></i>
+            <span class="fa-solid fa-thumbs-up"></span>
           </button>
-          <button class="toolbar-btn" (click)="dislikeImage()" title="Dislike">
-            <i class="fa fa-thumbs-down"></i>
+          <button class="toolbar-btn" (click)="dislikeImage()"
+            title="Dislike">
+            <span class="fa-solid fa-thumbs-down"></span>
           </button>
           <button class="toolbar-btn" (click)="downloadImage()"
             title="Download">
-            <i class="fa fa-download"></i>
+            <span class="fa-solid fa-download"></span>
           </button>
           <button class="toolbar-btn" (click)="shareImage()" title="Share">
-            <i class="fa fa-share-alt"></i>
+            <span class="fa-solid fa-share-alt"></span>
           </button>
           <button class="toolbar-btn close-btn" (click)="closeImagePopup()">
-            <i class="fa fa-times"></i>
+            <span class="fa-solid fa-times"></span>
           </button>
         </div>
       </div>
 
       <!-- Tool Panels -->
       <div class="tool-panel" *ngIf="activeTool === 'Magic Eraser'">
-        <h3><i class="fa fa-eraser"></i> Magic Eraser</h3>
+        <h3><span class="fa-solid fa-eraser"></span> Magic Eraser</h3>
         <p>Remove unwanted objects and clean up your image automatically.</p>
         <div class="tool-actions">
           <button class="btn btn-primary" (click)="applyEraser()">
-            <i class="fa fa-magic"></i> Apply Magic Eraser
+            <span class="fa-solid fa-magic"></span> Apply Magic Eraser
           </button>
           <!-- <button class="btn btn-secondary"
             (click)="closeTool()">Cancel</button> -->
         </div>
       </div>
       <div class="tool-panel" *ngIf="activeTool === 'Compare Version'">
-        <h3><i class="fa fa-columns"></i> Compare Images</h3>
+        <h3><span class="fa-solid fa-columns"></span> Compare Images</h3>
 
         <!-- Thumbnail Strip with Load More -->
         <div class="thumbnail-strip">
-          <div class="thumb"
+          <div
+            class="thumb mobile-hint"
             *ngFor="let img of visibleThumbnails; let i = index"
-            draggable="true"
-            (dragstart)="onDragStart($event, img)">
+            [class.selected]="selectedCompareImage === img"
+            [attr.draggable]="!isTouchDevice()"
+            (mousedown)="$event.stopPropagation()"
+            (dragstart)="!isTouchDevice() && onDragStart($event, img)"
+            (click)="isTouchDevice() && selectCompareImage(img)">
+
             <img [src]="img" alt="Thumbnail" />
-            <button class="remove-btn" (click)="removeCompareImage(i, $event)">
-              <i class="fa fa-times"></i>
+
+            <button
+              class="remove-btn"
+              (click)="removeCompareImage(i, $event)">
+              <span class="fa-solid fa-times"></span>
             </button>
           </div>
 
@@ -535,13 +549,14 @@
         </div>
         <!-- Orientation buttons -->
         <div class="compare-mode-selector">
-          <button class="mode-btn" [class.active]="compareMode === 'horizontal'"
+          <button class="mode-btn"
+            [class.active]="compareMode === 'horizontal'"
             (click)="setCompareMode('horizontal')">
-            <i class="fa fa-grip-lines-vertical"></i> Horizontal
+            <span class="fa-solid fa-grip-lines-vertical"></span> Horizontal
           </button>
           <button class="mode-btn" [class.active]="compareMode === 'vertical'"
             (click)="setCompareMode('vertical')">
-            <i class="fa fa-grip-lines"></i> Vertical
+            <span class="fa-solid fa-grip-lines"></span> Vertical
           </button>
         </div>
         <!-- Comparison Area -->
@@ -549,10 +564,13 @@
           [class.horizontal]="compareMode === 'horizontal'"
           [class.vertical]="compareMode === 'vertical'">
 
-          <div class="comparison-side"
+          <div
+            class="comparison-side"
             *ngFor="let box of compareBoxes; let i = index"
-            (drop)="onDrop($event, i)"
-            (dragover)="onDragOver($event)">
+            (mousedown)="$event.stopPropagation()"
+            (click)="isTouchDevice() && placeCompareImage(i)"
+            (dragover)="onDragOver($event)"
+            (drop)="onDrop($event, i)">
 
             <div class="comparison-label">Box {{i+1}}</div>
             <img *ngIf="box" [src]="box" alt="Comparison" />
@@ -566,14 +584,14 @@
       </div>
 
       <!-- <div class="tool-panel" *ngIf="activeTool === 'Compare Version'">
-        <h3><i class="fa fa-columns"></i> Compare Images</h3>
+        <h3><span class="fa-solid fa-columns"></span> Compare Images</h3>
 
         <div class="compare-mode-selector">
           <button class="mode-btn" [class.active]="compareMode === 'horizontal'" (click)="setCompareMode('horizontal')">
-            <i class="fa fa-grip-lines-vertical"></i> Horizontal
+            <span class="fa-solid fa-grip-lines-vertical"></span> Horizontal
           </button>
           <button class="mode-btn" [class.active]="compareMode === 'vertical'" (click)="setCompareMode('vertical')">
-            <i class="fa fa-grip-lines"></i> Vertical
+            <span class="fa-solid fa-grip-lines"></span> Vertical
           </button>
         </div>
 
@@ -599,20 +617,20 @@
       </div> -->
 
       <div class="tool-panel" *ngIf="activeTool === 'Add Element'">
-        <h3><i class="fa fa-plus-circle"></i> Add Element</h3>
+        <h3><span class="fa-solid fa-plus-circle"></span> Add Element</h3>
         <p>Select an element to enhance your design:</p>
 
         <div class="element-grid">
           <button *ngFor="let el of elements" class="element-card"
             [class.selected]="selectedElement === el.name"
             (click)="selectedElement = el.name">
-            <i class="fa fa-lightbulb" *ngIf="el.name === 'Add Lighting'"></i>
-            <i class="fa fa-leaf" *ngIf="el.name === 'Add Plants'"></i>
-            <i class="fa fa-couch" *ngIf="el.name === 'Add Furniture'"></i>
-            <i class="fa fa-image" *ngIf="el.name === 'Add Artwork'"></i>
-            <i class="fa fa-th-large" *ngIf="el.name === 'Add Rug'"></i>
-            <i class="fa fa-window-maximize"
-              *ngIf="el.name === 'Add Curtains'"></i>
+            <span class="fa-solid fa-lightbulb" *ngIf="el.name === 'Add Lighting'"></span>
+            <span class="fa-solid fa-leaf" *ngIf="el.name === 'Add Plants'"></span>
+            <span class="fa-solid fa-couch" *ngIf="el.name === 'Add Furniture'"></span>
+            <span class="fa-solid fa-image" *ngIf="el.name === 'Add Artwork'"></span>
+            <span class="fa-solid fa-th-large" *ngIf="el.name === 'Add Rug'"></span>
+            <span class="fa-solid fa-window-maximize"
+              *ngIf="el.name === 'Add Curtains'"></span>
             <span>{{ el.name }}</span>
           </button>
         </div>
@@ -624,7 +642,7 @@
         <div class="tool-actions">
           <button class="btn btn-primary" (click)="applyElement()"
             [disabled]="!selectedElement">
-            <i class="fa fa-check"></i> Apply Element
+            <span class="fa-solid fa-check"></span> Apply Element
           </button>
           <!-- <button class="btn btn-secondary"
             (click)="closeTool()">Cancel</button> -->
@@ -643,8 +661,8 @@
   class="mobile-fab"
   (click)="toggleMobileSidebar()"
   aria-label="Toggle Menu">
-  <i class="fa-solid"
-    [ngClass]="mobileSidebarOpen ? 'fa-xmark' : 'fa-comment'"></i>
+  <span class="fa-solid"
+    [ngClass]="mobileSidebarOpen ? 'fa-xmark' : 'fa-comment'"></span>
 </button> -->
 <!-- BACKDROP -->
 <div class="credit-backdrop" *ngIf="showCreditPopup"
@@ -682,7 +700,8 @@
 
     <div class="actions">
       <button class="btn cancel" (click)="cancelDelete()">No</button>
-      <button class="btn danger" (click)="confirmDelete()">Yes, Delete</button>
+      <button class="btn danger" (click)="confirmDelete()">Yes,
+        Delete</button>
     </div>
   </div>
 </div>

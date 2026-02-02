@@ -124,6 +124,8 @@ export class ChatComponent implements AfterViewChecked {
   isChatPage = false;
   isMobile = false;
   activeMenuId: string | null = null;
+  selectedCompareImage: string | null = null;
+
   // ✅ ADD IT HERE (inside the class)
   dateOrder = (a: any, b: any): number => {
     const order = ['Today', 'Yesterday', 'Older'];
@@ -172,7 +174,9 @@ export class ChatComponent implements AfterViewChecked {
     this.isMobile = window.innerWidth <= 768;
   }
 
-
+  isTouchDevice(): boolean {
+    return window.innerWidth <= 768;
+  }
   // ngOnInit() {
   //   this.checkScreen();
   //   window.addEventListener('resize', () => this.checkScreen());
@@ -386,15 +390,28 @@ export class ChatComponent implements AfterViewChecked {
       this.compareBoxes = newBoxes;
     }
   }
+  selectCompareImage(img: string) {
+    this.selectedCompareImage = img;
+  }
+  placeCompareImage(index: number) {
+    if (!this.selectedCompareImage) return;
+
+    if (index < this.numCompareBoxes) {
+      this.compareBoxes[index] = this.selectedCompareImage;
+    }
+
+    // Clear selection after placing
+    this.selectedCompareImage = null;
+  }
 
   // ---------- Navigation ----------
   toggleSidebar() {
-  if (this.isMobile) {
-    this.chatSidebarService.toggle();
-    return;
+    if (this.isMobile) {
+      this.chatSidebarService.toggle();
+      return;
+    }
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
-  this.sidebarCollapsed = !this.sidebarCollapsed;
-}
 
   toggleMobileSidebar() { this.chatSidebarService.open(); }
 
