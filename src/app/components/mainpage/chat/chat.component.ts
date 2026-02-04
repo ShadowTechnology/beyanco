@@ -480,35 +480,59 @@ export class ChatComponent implements AfterViewChecked {
 
     // --- Load chat history ---
     this.propertyService.getChatProperty(chatId).subscribe({
-      next: (chatData: any) => {
-        // Ensure messages exist and parse if needed
-        const messages = chatData?.messages
-          ? typeof chatData.messages === 'string'
-            ? JSON.parse(chatData.messages)
-            : chatData.messages
+      next: (res: any) => {
+        const messages = res?.messages
+          ? typeof res.messages === 'string'
+            ? JSON.parse(res.messages)
+            : res.messages
           : [];
 
-        const parsedMessages: ChatMessage[] = messages.map((msg: any, index: number) => ({
-          id: msg.id || `msg-${index}`,
-          role: (msg.role as 'user' | 'assistant') || 'user',
-          text: msg.content || msg.text || '',
-          timestamp: msg.timestamp ? new Date(msg.timestamp) : new Date(),
-          images: msg.images || [],
-          room: msg.room,
-          style: msg.style
-        }));
+        const parsedMessages: ChatMessage[] = messages
+          .map((msg: any, index: number) => ({
+            id: msg.id || `msg-${index}`,
+            role: (msg.role as 'user' | 'assistant') || 'user',
+            text: (msg.content || msg.text || '').trim(),
+            timestamp: msg.timestamp ? new Date(msg.timestamp) : new Date(),
+            images: msg.images || [],
+            room: msg.room,
+            style: msg.style
+          }))
+          .filter((m:any) => m.text || (m.images && m.images.length));
+
         this.messages.set(parsedMessages);
         this.shouldScrollToBottom = true;
         this.isLoadingChat = false;
         this.conversationLoaded = true;
+
+        const propertiesArray = Array.isArray(res) ? res : [];
+
+        this.properties = propertiesArray
+          .map((p: any) => ({
+            ...p,
+            originalImageUrl: (p.originalImageUrl || '').trim(),
+            generatedImageUrl: (p.generatedImageUrl || '').trim()
+          }))
+          .filter(p => p.originalImageUrl || p.generatedImageUrl);
+
+        this.compareThumbnails.update(() =>
+          this.properties
+            .map(pr => (pr.generatedImageUrl || pr.originalImageUrl || '').trim())
+            .filter(Boolean)
+        );
+
+        this.updateVisibleThumbnails();
+        this.isLoadingProperties = false;
       },
       error: (err) => {
         console.error('Error loading chat history:', err);
         this.messages.set([]);
+        this.properties = [];
         this.isLoadingChat = false;
+        this.isLoadingProperties = false;
         this.conversationLoaded = true;
       }
     });
+
 
     // --- Load properties (designs) ---
     this.propertyService.getChatProperty(chatId).subscribe({
@@ -630,22 +654,60 @@ export class ChatComponent implements AfterViewChecked {
     this.send();
   }
 
-  async applyElement() {
-    const element = this.elements.find(e => e.name === this.selectedElement);
-    if (!element) return alert('Please select an element to apply.');
-    const baseImagePath = this.currentImage;
-    if (!baseImagePath) return alert('No image found to modify.');
-    this.composerDescription = element.prompt;
+  // async applyElement() {
+  //   const element = this.elements.find(e => e.name === this.selectedElement);
+  //   if (!element) return alert('Please select an element to apply.');
+  //   const baseImagePath = this.currentImage;
+  //   if (!baseImagePath) return alert('No image found to modify.');
+  //   this.composerDescription = element.prompt;
+  //   try {
+  //     const file = await this.fetchImageAsFile(baseImagePath, 'element-image.png');
+  //     this.pendingFiles = [file];
+  //     this.pendingImages.set([baseImagePath]);
+  //     this.closeTool();
+  //     this.closeImagePopup();
+  //     this.send();
+  //     this.clearComposer();
+  //   } catch (e) {
+  //     alert('Image conversion failed. Check console.');
+  //   }
+  // }
+  applyElement() {
+    if (!this.selectedElement || !this.currentImage || !this.chatId) return;
+
+    const imageKey = this.extractS3Key(this.currentImage);
+
+    const payload = {
+      imageKey,
+      prompt: this.getElementPrompt(this.selectedElement),
+      chatHistoryId: this.chatId
+    };
+
+    this.closeTool();
+    this.closeImagePopup();
+    this.clearComposer();
+
+    this.propertyService.applyElement(payload).subscribe(res => {
+      // 1️⃣ Add to properties list
+      this.properties.unshift(res);
+
+      // 2️⃣ Update thumbnails
+      this.compareThumbnails.update(list => [
+        res.generatedImageUrl,
+        ...list
+      ]);
+    });
+  }
+
+  private extractS3Key(imageUrl: string): string {
     try {
-      const file = await this.fetchImageAsFile(baseImagePath, 'element-image.png');
-      this.pendingFiles = [file];
-      this.pendingImages.set([baseImagePath]);
-      this.closeTool();
-      this.closeImagePopup();
-      this.send();
-      this.clearComposer();
-    } catch (e) {
-      alert('Image conversion failed. Check console.');
+      const url = new URL(imageUrl);
+      return url.pathname.startsWith('/')
+        ? url.pathname.substring(1)
+        : url.pathname;
+    } catch {
+      // fallback: already a key
+      return imageUrl;
     }
   }
 

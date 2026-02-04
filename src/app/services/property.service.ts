@@ -98,5 +98,13 @@ export class PropertyService {
     );
   }
 
+  applyElement(payload: { imageKey: string; prompt: string }): Observable<any> {
+    return this.http.post(
+      `${API_URL}apply-element`,
+      payload,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
 
 }
