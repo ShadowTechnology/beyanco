@@ -50,6 +50,9 @@ export class HeaderComponent implements OnInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.isChatPage = event.urlAfterRedirects.startsWith('/chat');
+        if (this.isChatPage) {
+          this.isMobileMenuActive = false;
+        }
       });
 
     this.tokenStorage.isLoggedIn$.subscribe(status => {
@@ -76,6 +79,7 @@ export class HeaderComponent implements OnInit {
   }
   toggleChatSidebar(event: Event) {
     event.stopPropagation();
+    this.isMobileMenuActive = false;
     this.chatSidebarService.toggle();
   }
 
@@ -120,6 +124,7 @@ export class HeaderComponent implements OnInit {
   // }
   toggleMenu(): void {
     this.isMobileMenuActive = !this.isMobileMenuActive;
+    this.chatSidebarService.close();
     this.isProfileMenuOpen = false;
     this.isPopupOpen = false;
   }
@@ -191,5 +196,5 @@ export class HeaderComponent implements OnInit {
     console.log('Profile:', this.isProfileMenuOpen);
   }
 
-  
+
 }

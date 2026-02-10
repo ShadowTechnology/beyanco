@@ -22,18 +22,19 @@ export class BlogsDeatilsComponent {
   loadBlog(slug: string) {
     const blogs: any = {
       'virtual-home-staging': {
-        title: 'Virtual Home-Staging for Real Estate Agents',
+        title: 'Virtual Home-staging for Real estate agents:How AI helps sell properties faster',
         author: 'Akash',
         date: 'Jan 10, 2025',
         readTime: '5 min read',
         image: 'assets/blogs/main-blog.jpg',
         content: [
-          `<h1><strong>Virtual Home-staging for Real estate agents:How AI helps sell properties faster</strong></h1>`,
 
           `<p class="phara-style">Humans in general, are visual beings. We focus more on the visible aspects of a person, object or place. We naturally judge based on appearances, on the first encounter. For instance, in a job interview, we want to look presentable to make an impression that we are professional. The same goes with the real estate market.</p>`,
 
           `<p class="phara-style">Having outdated pictures of your property with rented furniture and dull lights just won’t do the trick anymore. Prospects expect clean, minimalistic and modern interiors in their spaces. They look for such spaces on listing websites. So, how can real estate agents act efficiently and get the best possible outcome? The answer is Virtual staging using AI.</p>`,
-          `<p class="phara-style">Agents can make use of AI to captivate potential buyers. Wondering what kind of AI tools are available in the market? Flaunt realistically furnished property images with Beyanco AI! Stunning interior designs and easy-to-use software at your fingertips. </p>`,
+          `<p class="phara-style">Agents can make use of AI to captivate potential buyers. Wondering what kind of AI tools are available in the market? Flaunt realistically furnished property images with <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>! Stunning interior designs and easy-to-use software at your fingertips. </p>`,
           `<p class="phara-style">In this blog, let’s discuss how virtual home-staging is the new move in marketing; let’s see how real estate agents can optimize AI-powered tools to sell quicker.</p>`,
           `<h2>What is Virtual Home-staging?</h2>
            <p class="phara-style">Virtual Home-staging means implementing interior design in your space via an AI-driven tool or software(SaaS) and generating the resulting images. Real estate agents use these polished property pictures to promote their property on various listing platforms.</p>`,
@@ -112,7 +113,9 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
              <li>Improved click rates on listings</li>
              <li>Attract the exact type of qualified buyers expected</li>
              <li>Sharp decrease in marketing costs</li>
-             <li>Upper hand in the ruthless real estate marketThese are some of the obvious advantages of virtual staging. Try it with Beyanco AI, to experience it first hand!</li>
+             <li>Upper hand in the ruthless real estate marketThese are some of the obvious advantages of virtual staging. Try it with <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>, to experience it first hand!</li>
            </ul>`,
 
           `<h2>How does Virtual Home-staging work for vacant and furnished spaces</h2>
@@ -121,25 +124,27 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
 
           `<h2>Conclusion</h2>
            <p class="phara-style">In this blog, we have discussed in great detail the comprehensive nature of virtual home-staging. So, taking everything into account, we conclude that real estate agents can truly profit from virtual staging. Minimal marketing investment, for favourable results. This could be your new marketing strategy to upgrade your listings and gain more potential leads.</p>
-           <p class="phara-style">Be part of this marketing trend with Beyanco AI. Explore the world of Virtual staging and take the smarter route!</p>`
+           <p class="phara-style">Be part of this marketing trend with <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>. Explore the world of Virtual staging and take the smarter route!</p>`
         ]
       },
       // ✅ BLOG 2 (NEW)
       'interior-design-trends-2024': {
-        title: 'Virtual Staging Vs Physical Staging',
+        title: 'Virtual Staging Vs Physical Staging: Which is better for Real estate Agents',
         author: 'Akash',
         date: 'Jan 10, 2025',
         readTime: '7 min read',
         image: 'assets/blogs/blog1.jpg',
         content: [
 
-          `<h1>Virtual Staging Vs Physical Staging: Which is better for Real estate Agents</h1>`,
-
           `<p>As per a survey done by National Association of Realtors, 83% of buyer’s agents state that staging a home made it easier for a buyer to visualize the property as their potential, future home.This shows the significant demand for some type of staging. Prospects want to see their ideal, dream home in your property before proceeding further and investing.</p>`,
 
           `<p>Be it Physical or Virtual staging, whatever you might prefer, staging has become a necessary marketing strategy to manage your property listings.</p>`,
 
-          `<p>If you’re looking to stage your property virtually, choose Beyanco AI. Get stunningly impressive property images in just a click. Elevate your online listings and attract more potential buyers.</p>`,
+          `<p>If you’re looking to stage your property virtually, choose <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>. Get stunningly impressive property images in just a click. Elevate your online listings and attract more potential buyers.</p>`,
           `<p>In this blog, let’s get some insights on what benefits and drawbacks come with both Physical staging and Virtual staging. Also, let’s find out which among the two is comparatively efficient enough to resolve an agent’s marketing struggles.</p>`,
 
           `<h2>Physical Staging</h2>
@@ -183,7 +188,9 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
 
          <ul>
            <li>Helps prospects visualize the space instantly.</li>
-           <li>Cost-efficient. For example, Beyanco AI pricing plans start from $7!</li>
+           <li>Cost-efficient. For example, <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> pricing plans start from $7!</li>
            <li>Involves expert interior designs.</li>
            <li>No manual labour required.</li>
            <li>User-friendly AI.</li>
@@ -212,23 +219,28 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
         
          <p class="phara-style">Physical staging is needed in some cases but it has taken the backseat in the current industry. Every marketing situation has its own demands. Select the best staging strategy that supports your marketing budget and sales.</p>
          
-         <p class="phara-style">Want to try Virtual Staging? Choose Beyanco AI for the best Virtual staging experience. </p>`
+         <p class="phara-style">Want to try Virtual Staging? Choose <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> for the best Virtual staging experience. </p>`
         ]
       },
       // ✅ BLOG 3 (NEW)
       'What-is-Virtual-Staging': {
-        title: 'What is Virtual Staging in Real Estate?',
+        title: 'What is Virtual Staging in Real Estate? A Complete Guide for Agents',
         author: 'Akash',
         date: 'Jan 30, 2026',
         readTime: '5 min read',
         image: 'assets/blogs/blog3.jpeg',
         content: [
 
-          `<h1>What is Virtual Staging in Real Estate? A Complete Guide for Agents</h1>`,
 
           `<p>According to a 2024 survey done by Statista, searching for homes and virtual tours are the most common uses of AI in homebuying. Most respondents chose these two as the top reasons for using AI, when looking to buy a home. Therefore, we can understand the significance of digitized visuals in the real estate market. Homebuyers expect high-quality, professionally designed property pictures on listing websites.</p>`,
 
-          `<p>Curious about what AI-driven virtual staging tools are available in the market? Try Beyanco AI for high-definition and uniquely designed interior images in seconds! Promote your property on listing websites with Beyanco AI as your virtual staging partner.</p>`,
+          `<p>Curious about what AI-driven virtual staging tools are available in the market? Try <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> for high-definition and uniquely designed interior images in seconds! Promote your property on listing websites with <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> as your virtual staging partner.</p>`,
 
           `<p>In this article, let’s discuss the key aspects of virtual staging and how real estate agents can optimize this marketing strategy to its full potential. Also, you can find a virtual staging tool guide for real estate agents in the article.</p>`,
 
@@ -272,7 +284,9 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
 
           `<h2>A Step-by-step Guide for Real estate agents</h2>
 
-          <p class="phara-style">Now, coming to the main objective of this article, let’s discuss how a typical virtual staging AI tool works. Let’s take Beyanco AI as an example here and discuss its functions in detail.</p>
+          <p class="phara-style">Now, coming to the main objective of this article, let’s discuss how a typical virtual staging AI tool works. Let’s take <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> as an example here and discuss its functions in detail.</p>
           <p>Step 1: Upload an image of your empty space.</p>
 
           <p>Step 2: Choose the type of room you want the space to be furnished as.</p>
@@ -285,7 +299,9 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
 
           <p>Step 6: For further improvements, you can opt for the ‘Compare Version’ and the ‘Add Elements’ features for the ideal results.</p>
 
-          <p>Step 7: Use the Beyanco AI-generated images to promote your property on listing websites.</p>
+          <p>Step 7: Use the <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>-generated images to promote your property on listing websites.</p>
 
 
          <p class="phara-style style1">These are the simple steps to get high-definition, fully furnished interior pictures to market assets and enhance prospect engagement. Furthermore, this leads to more favourable deals for real estate agents.</p>`,
@@ -298,25 +314,27 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
          <p class="phara-style italic">”Don’t push people where you want to be; meet them where they are.”</p>
          
          <p class="phara-style">In this scenario, staging fits perfectly into the narrative of meeting people where they are—online. Staging is essential for bringing prospects to their desired home. Now, for a real estate agent, virtual staging is the preferred alternative offering scalability, cost-efficiency and results. Thus, choosing virtual staging in real estate is the clever and smart move for any real estate agent looking to develop their marketing abilities.</p>
-         <p>Looking to stage your property and influence more leads? Beyanco AI can do that for you in seconds! Try now and attract qualified prospects.</p>`
+         <p>Looking to stage your property and influence more leads? <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> can do that for you in seconds! Try now and attract qualified prospects.</p>`
         ]
       },
       // ✅ BLOG 4 (NEW)
       'why-Virtual-Staging': {
-        title: 'Why Virtual Staging Is a Scalable Solution',
+        title: 'Why Virtual Staging Is a Scalable Solution for Growing Real Estate Businesses',
         author: 'Akash',
-        date: 'an 30, 2026',
+        date: 'Jan 30, 2026',
         readTime: '4 min read',
         image: 'assets/blogs/blog4.jpeg',
         content: [
-
-          `<h1>Why Virtual Staging Is a Scalable Solution for Growing Real Estate Businesses</h1>`,
 
           `<p>Like many basic marketing strategies, Staging has become an undeniable essential in the real estate market. According to NAR, 100% of buyers today use the internet in their home search. This highlights the significance of an online presence for any real estate business in today’s world. You have to make your mark digitally to grow your business.</p>`,
 
           `<p>In the real estate industry, making your mark digitally means creating attractive property listings. Since most people browse listing websites, hoping to find that dream home, having a strong and professional property profile makes all the difference. While physical staging is still practised, Virtual staging is the more feasible and scalable solution for real estate agents and businesses alike.</p>`,
 
-          `<p>Looking to find a suitable AI-powered Virtual staging tool for your real estate business? Choose Beyanco AI for realistically designed, professional interior photos on your property listings. Enhance your space in seconds and impress your clients instantly.</p>`,
+          `<p>Looking to find a suitable AI-powered Virtual staging tool for your real estate business? Choose <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> for realistically designed, professional interior photos on your property listings. Enhance your space in seconds and impress your clients instantly.</p>`,
           `<p>In this article, let’s discuss why Virtual staging is a scalable solution for growing real estate businesses. Also, let’s see how businesses can optimize staging for their growth.</p>`,
 
           `<h2>Virtual Staging</h2>
@@ -352,7 +370,7 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
          <p class="phara-style">Marketing can be directly linked to the growth of a real estate business. Any business, for that matter, needs to adapt new marketing strategies to expand gradually. Here are some challenges in the real estate industry that Virtual staging helps address.</p>
        
          <ul>
-           <li>TMarketing effectively: Having access to the right medium is key in real estate marketing. Virtual staging provides the fitting platform to generate impressionable images and market your property in the best way.
+           <li>Marketing effectively: Having access to the right medium is key in real estate marketing. Virtual staging provides the fitting platform to generate impressionable images and market your property in the best way.
 </li>
            <li>Online visibility: Using virtual staging improves visibility on MLS platforms. Consequently, this drives more engagement in your listing profile.</li>
            <li>Maintains brand consistency: Virtual staging helps preserve the quality of all your property listings. So, this builds credibility among prospects—they tend to trust the brand more when the real estate business appears consistent across all online platforms.</li>
@@ -370,7 +388,137 @@ The virtual staging process itself is exceedingly time-saving. So that makes it 
         
          <p class="phara-style">In this rapidly growing industry, strengthening your market position and growing internally is crucial in the long run. If you aim for your real estate business to stay ahead, choosing Virtual staging now is your best, scalable option. Virtual staging shows high-performance, optimization and scalability, all at once. So, if you’re a developing real estate business, virtual staging is an ideal solution.</p>
          
-         <p class="phara-style">Virtually stage your space with Beyanco AI. Engage with more qualified leads and grow your business efficiently.</p>`
+         <p class="phara-style">Virtually stage your space with <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>. Engage with more qualified leads and grow your business efficiently.</p>`
+        ]
+      },
+      // ✅ BLOG 5 (NEW)
+      'virtual-staging-solution': {
+        title: 'Challenges in Traditional Staging—and How Virtual Staging Solves Them',
+        author: 'Akash',
+        date: 'Feb 09, 2026',
+        readTime: '5 min read',
+        image: 'assets/blogs/blog6.jpeg',
+        content: [
+
+          `<p>According to <a href="https://www.realtor.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    realtor.com
+  </a>, Frances Katzen, founder of the Katzen team stated,”We’re seeing a clear shift from first impressions happening outside the home to first emotional impressions happening the moment the buyer walks inside.” From this, we infer that impressions and visual appeal still matter in the real estate market. Therefore, it is evident that staging plays an important role in selling a property.</p>`,
+
+          `<p>The big question is, which staging to try? Traditional or Virtual staging. Though agents use traditional staging for their staging requirements, it has its own set of drawbacks. Virtual staging might be able to eliminate those setbacks for upcoming real estate businesses and agents.</p>`,
+
+          `<p>Use <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> for your virtual staging requirements. Create premium-quality interior images instantly and elevate your property listings.</p>`,
+          `<p>In this blog, let’s discuss the numerous challenges that accompany traditional staging. Also, let’s see how Virtual staging can be used as an effective solution.</p>`,
+
+          `<h2>Current data on Traditional staging practices</h2>
+
+         <p class="phara-style">Here are the common pain points of traditional staging that every real estate agent needs to know before investing in it.</p>
+           <ul>
+           <li>Quite expensive.</li>
+           <li>Planning, organizing and sourcing every little detail.</li>
+           <li>Hiring skilled professionals for every job.</li>
+           <li>Time-taking process.</li>
+           <li>Bland interior design across all spaces, unless you take on a proficient interior designer.</li>
+           <li>Risk of loss, considering unintended damages and theft probability.</li>
+         </ul>
+         <p>The main disadvantage is the risk of loss, when we take ROI into account. How can one splurge in traditional staging knowing the risks involved? Besides, there is no guarantee of profit at the end of this bothersome marketing procedure. Now let’s examine how virtual staging makes staging a beneficial marketing strategy for budding real estate agents and businesses.</p>`,
+
+          `<h2>Virtual Staging as the solution</h2>
+
+          <p class="phara-style">Virtual staging acts as the perfect solution for your traditional staging problems. Now, let’s inspect every traditional challenge and see how virtual staging resolves them.</p>
+         <p class="phara-style">The budget: While traditional staging costs are always peaking, virtual staging prices are at a reasonable range. For example, At <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>, virtual staging plans start from $7.</p>
+        
+          <p class="phara-style">Executing the staging itself: Traditional staging involves appointing professionals to take care of every part of staging. Conversely, virtual staging needs no recruiting, plans or execution. You just click the picture, upload and generate your desired interior photo.</p>
+          <p class="phara-style">Time-consuming: Virtual staging is done in no time at all. Try <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> and stage your space instantly. Get expert interior pictures, realistically, in seconds. Since, virtual staging is time-saving, the staging-to-market time is immensely shortened. This means faster engagements and a competent listing profile.</p>
+          <p class="phara-style">Typical interior design: Traditional staging offers the same, average interior designs and furniture. Meanwhile, virtual staging provides a variety to choose from. You can select as per your needs and your prospects’ requirements. <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> has Bohemian, Scandinavian, Minimalistic, etc., interior design styles to furnish your space.</p>
+          <p class="phara-style">The risks: With virtual staging, there are no risks concerning ROI, theft or furniture damage. Specifically, return on investment improves as staging expenses reduce, while attracting leads and closing deals.</p>
+         `,
+
+          `<h2>Conclusion</h2>
+
+         <p class="phara-style">In this article, we reviewed the challenges of traditional staging and efficiency of virtual staging. Virtual staging is comprehensive in nature and does the job effectively for all real estate professionals. Moreover, it is extremely convenient and accessible to anyone who wants to stage a property.</p>
+        
+         <p class="phara-style">Virtual staging is best recommended for emerging real estate businesses and agents. Low-cost investment for maximum gain in profits.</p>
+         
+         <p class="phara-style">Flaunt your space with <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>. Strengthen your listing profile with realistic, polished images. Improve clickthrough rates and increase client  interest.</p>`
+        ]
+      },
+      // ✅ BLOG 6 (NEW)
+      'digitizing-real-estate': {
+        title: 'AI Virtual Staging Software: How It Transforms Real Estate Marketing in 2026',
+        author: 'Akash',
+        date: 'Feb 09, 2026',
+        readTime: '5 min read',
+        image: 'assets/blogs/blog7.jpeg',
+        content: [
+
+          `<p>The pandemic brought about many changes in all our lives. The real estate industry also faced multiple challenges in that period. One such problem was Staging. Physical staging could not be sourced efficiently so the real estate market was about to take a real hit. That’s when AI virtual staging software came into the picture. It essentially saved many real estate agents who were about to experience the wrath of the pandemic.</p>`,
+
+          `<p>According to <a href="https://www.realtor.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    realtor.com
+  </a>, virtual staging for real estate was a practical solution during those tough times. This statement remains a fact to this day. Virtual home-staging is revolutionizing today’s real estate market, emerging as a game-changing marketing strategy for modern listings.</p>`,
+
+          `<p>Confused about which AI Virtual Staging tool to opt for? Select <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> to market your properties with high-resolution, modern interior photos. Make your listing profile stand out to your prospects.</p>`,
+          `<p>In this article, let’s explore AI virtual staging software and how it rebuilds real estate marketing in 2026.</p>`,
+
+          `<h2>What is AI Virtual Staging Software?</h2>
+
+         <p class="phara-style">AI virtual staging software is using a software platform to stage a property or space with your desired interior designs, digitally. Unlike your traditionally taken property images, virtually staged photos are generated in no time, with minimum expense and aesthetic interior designs.</p>
+          
+          <p>For example, at <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>, you upload a photo of your empty space, choose your preferred interior style and then generate your real estate photo instantly. This is why most real estate agents approve of virtual staging. It serves as the convenient and cohesive alternative for both individual agents and real estate businesses.</p>`,
+          `<h2>Key benefits of Virtual Staging for real estate professionals</h3>
+          <p>AI is used to streamline many processes in real estate marketing. One such AI-powered tool is virtual staging. Virtual design tools help enhance listing profiles and scale marketing workflows for real estate people.
+Here’s a list of merits to choosing AI virtual staging software,
+</p>
+          <ul>
+           <li>Budget-friendly.</li>
+           <li>Stage multiple properties simultaneously.</li>
+           <li>Prospects instantly connect emotionally to the home marketed.</li>
+           <li>Completely accessible and flexible.</li>
+           <li>Re-staging for property renovations.</li>
+           <li>Nil outsourcing and recruitment.</li>
+           <li>Automated specialized interior designs.</li>
+         </ul>
+         <p>On top of these benefits, virtual staging is a growth strategy that numerous real estate businesses make use of. For instance, Jackie Sinclair, a real estate agent, at Sinclair Real Estate says,” Buyers are smart. They appreciate clarity, not embellishment. When AI is used responsibly, it builds trust, doesn’t break it.” This testimony reiterates the impact of AI virtual staging among clients, when utilized appropriately.</p>`,
+
+          `<h2>Redefining Real Estate Marketing in 2026</h2>
+
+          <p class="phara-style">Based on the key findings of NAR from last year, 82% agents report that integrating technology in the buying-selling process was well-received by their clients. This shows the weight technology carries in the current housing industry.</p>
+         <p class="phara-style">Virtual staging in real estate is an extremely efficient marketing approach with reasonable pricing as well. At <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a>, our prices start from $7! Furthermore, real estate automation is evolving as a key marketing trend and presenting a logical solution for all housing enterprises.</p>
+        
+          <p class="phara-style">Also, there are AI image enhancement tools and property photo editing software to tinker the last version of a virtually staged property picture. All these are about to redefine and transform real estate marketing in 2026.</p>
+         `,
+
+          `<h2>How AI image enhancement boost listing engagement</h2>
+
+         <p class="phara-style">A study from NAR states that high-quality photos performed 61% better on listing websites than poor-quality ones.</p>
+        
+         <p class="phara-style">AI image enhancement tools assist real estate peers achieve photo clarity, sharpness and resolution. The more clear-cut the property pictures are, the more clicks and views a listing gains. It allows buyers to mentally visualize your space right away. In addition to this, maintaining consistency in image quality increases engagement on the listing profile. Consequently, this improves brand credibility and helps prospects trust consistent property profiles on MLS platforms.</p>`,
+          `<h2>Final thoughts</h2>
+
+         <p class="phara-style">In this blog, we discussed the various AI-driven marketing trends that are reshaping real estate entirely. Clearly, virtual staging is one of the top marketing plans that’s transforming real estate marketing in 2026. Besides, AI virtual staging software is a necessity to sustain scalability, business growth and brand positioning in today’s real estate market.</p>
+        
+         <p class="phara-style">With AI image enhancement tools and real estate automation systems available, real estate agents and businesses can leverage AI-based solutions to maximize profitability.</p>
+         <p class="phara-style">Starting out in real estate? <a href="https://app.beyanco.com" class="anchor-color" target="_blank" rel="noopener noreferrer">
+    Beyanco AI
+  </a> offers fresh blogs every week, with valuable marketing insights. Visit our website for the latest updates and strategies.</p>`,
         ]
       }
     };

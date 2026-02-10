@@ -240,3 +240,6 @@ ol {
 .italic {
   font-style: italic;
 }
+a.anchor-color {
+    color: blue;
+}

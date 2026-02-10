@@ -34,7 +34,7 @@
 }
 
 .hero-content h1 {
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-size: clamp(2.2rem, 4vw, 2.2rem);
   font-weight: 800;
   margin-bottom: 16px;
 }
@@ -181,7 +181,6 @@ p.phara-style {
   background: linear-gradient(to right, transparent, #c7d2fe, transparent);
   margin: 48px 0;
 }
-
 
 
 /* =====================

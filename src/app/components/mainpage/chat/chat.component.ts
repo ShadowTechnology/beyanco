@@ -16,6 +16,7 @@ interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
   text: string;
+  prompt: string;
   timestamp: Date;
   images?: string[];
   description?: string;
@@ -478,88 +479,100 @@ export class ChatComponent implements AfterViewChecked {
     this.activeTool = null;
     this.showImagePopup = false;
 
-    // --- Load chat history ---
     this.propertyService.getChatProperty(chatId).subscribe({
       next: (res: any) => {
-        const messages = res?.messages
+        //  Parse normal messages
+        const rawMessages = res?.messages
           ? typeof res.messages === 'string'
             ? JSON.parse(res.messages)
             : res.messages
           : [];
 
-        const parsedMessages: ChatMessage[] = messages
+        const parsedMessages: ChatMessage[] = rawMessages
           .map((msg: any, index: number) => ({
             id: msg.id || `msg-${index}`,
             role: (msg.role as 'user' | 'assistant') || 'user',
             text: (msg.content || msg.text || '').trim(),
-            timestamp: msg.timestamp ? new Date(msg.timestamp) : new Date(),
+            timestamp: msg.timestamp
+              ? new Date(msg.timestamp)
+              : new Date(),
             images: msg.images || [],
             room: msg.room,
             style: msg.style
           }))
-          .filter((m:any) => m.text || (m.images && m.images.length));
-
-        this.messages.set(parsedMessages);
-        this.shouldScrollToBottom = true;
-        this.isLoadingChat = false;
-        this.conversationLoaded = true;
+          .filter((m: any) => m.text || m.images?.length);
+        // Convert properties → messages
 
         const propertiesArray = Array.isArray(res) ? res : [];
 
-        this.properties = propertiesArray
-          .map((p: any) => ({
-            ...p,
-            originalImageUrl: (p.originalImageUrl || '').trim(),
-            generatedImageUrl: (p.generatedImageUrl || '').trim()
-          }))
-          .filter(p => p.originalImageUrl || p.generatedImageUrl);
+        const propertyMessages: ChatMessage[] = propertiesArray.flatMap((p: any) => {
 
+          const originalUrl = (p.originalImageUrl || '').trim();
+          const generatedUrl = (p.generatedImageUrl || '').trim();
+          const createdTime = p.createdAt
+            ? new Date(p.createdAt)
+            : new Date();
+
+          const list: ChatMessage[] = [];
+
+          if (originalUrl) {
+            list.push({
+              id: crypto.randomUUID(),
+              role: 'user',
+              text:
+                p.enhancementType === 'add_element' ? p.prompt || '' : p.description || p.title || '',
+              images: [originalUrl],
+              timestamp: createdTime,
+              room: p.propertyType,
+              style: p.enhancementStyle,
+              prompt: ''
+            });
+          }
+
+          if (generatedUrl) {
+            list.push({
+              id: crypto.randomUUID(),
+              role: 'assistant',
+              text: `Generated Design for ${p.propertyType}`,
+              images: [generatedUrl],
+              timestamp: createdTime,
+              prompt: ''
+            });
+          }
+
+          return list;
+        });
+        // Merge everything
+        const finalMessages = [
+          ...parsedMessages,
+          ...propertyMessages
+        ].sort((a, b) =>
+          a.timestamp.getTime() - b.timestamp.getTime()
+        );
+
+        this.messages.set(finalMessages);
+        // Compare thumbnails
         this.compareThumbnails.update(() =>
-          this.properties
-            .map(pr => (pr.generatedImageUrl || pr.originalImageUrl || '').trim())
+          propertiesArray
+            .map((p: any) =>
+              (p.generatedImageUrl || p.originalImageUrl || '').trim()
+            )
             .filter(Boolean)
         );
 
         this.updateVisibleThumbnails();
+        //UI Flags
+        this.shouldScrollToBottom = true;
+        this.isLoadingChat = false;
         this.isLoadingProperties = false;
+        this.conversationLoaded = true;
       },
       error: (err) => {
         console.error('Error loading chat history:', err);
         this.messages.set([]);
-        this.properties = [];
         this.isLoadingChat = false;
         this.isLoadingProperties = false;
         this.conversationLoaded = true;
-      }
-    });
-
-
-    // --- Load properties (designs) ---
-    this.propertyService.getChatProperty(chatId).subscribe({
-      next: (res: any) => {
-        // Ensure res is an array
-        const propertiesArray = Array.isArray(res) ? res : [];
-
-        this.properties = propertiesArray.map((p: any) => ({
-          ...p,
-          originalImageUrl: p.originalImageUrl || '',
-          generatedImageUrl: p.generatedImageUrl || ''
-        }));
-
-        // Populate compare thumbnails (fresh per chat)
-        this.compareThumbnails.update(() =>
-          this.properties
-            .map(pr => pr.generatedImageUrl || pr.originalImageUrl)
-            .filter(Boolean)
-        );
-
-        this.updateVisibleThumbnails();
-        this.isLoadingProperties = false;
-      },
-      error: (err) => {
-        console.error('Error loading properties:', err);
-        this.properties = [];
-        this.isLoadingProperties = false;
       }
     });
   }
@@ -614,6 +627,11 @@ export class ChatComponent implements AfterViewChecked {
   // ---------- Image viewer ----------
   selectImage(img: string, event?: MouseEvent) {
     if (event) event.stopPropagation();
+
+    // Reset tool states when switching images
+    this.activeTool = null;
+    this.selectedTool = '';
+    this.selectedElement = '';
     this.currentImage = img;
     const msgs = this.messages();
     for (let i = msgs.length - 1; i >= 0; i--) {
@@ -633,6 +651,8 @@ export class ChatComponent implements AfterViewChecked {
     this.showImagePopup = false;
     this.currentImage = null;
     this.activeTool = null;
+    this.selectedTool = '';
+    this.selectedElement = '';
     this.compareBoxes = Array(this.numCompareBoxes).fill(null);
   }
 
@@ -776,6 +796,7 @@ export class ChatComponent implements AfterViewChecked {
       //   return;
       // }
       this.isUploading = true;
+      this.cdRef.detectChanges();
       const userMsg: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'user',
@@ -783,7 +804,8 @@ export class ChatComponent implements AfterViewChecked {
         images: this.pendingImages().slice(),
         timestamp: new Date(),
         room: this.roomModel || undefined,
-        style: this.style || undefined
+        style: this.style || undefined,
+        prompt: ''
       };
 
       this.messages.update(list => [...list, userMsg]);
@@ -1153,7 +1175,8 @@ export class ChatComponent implements AfterViewChecked {
           role: 'assistant',
           text: '✨ Your AI generated image is ready!',
           images: [generatedUrl],
-          timestamp: new Date()
+          timestamp: new Date(),
+          prompt: ''
         };
 
         this.messages.update(list => [...list, aiMsg]);
@@ -1178,7 +1201,8 @@ export class ChatComponent implements AfterViewChecked {
       id: crypto.randomUUID(),
       role: 'assistant',
       text: `❌ Error: ${message}`,
-      timestamp: new Date()
+      timestamp: new Date(),
+      prompt: ''
     };
     this.messages.update(list => [...list, errorMsg]);
     this.shouldScrollToBottom = true;
@@ -1398,7 +1422,8 @@ export class ChatComponent implements AfterViewChecked {
       next: (data) => {
         this.conversationsList = (data || []).sort(
           (a: any, b: any) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.updatedAt || b.createdAt).getTime() -
+            new Date(a.updatedAt || a.createdAt).getTime()
         );
 
         this.groupChatsByDate(this.conversationsList);

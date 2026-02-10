@@ -11,14 +11,16 @@
 
     <div class="logo">
       <ng-container *ngIf="!sidebarCollapsed">
-        <span class="fa-solid fa-comment" style="color: #facc15; margin-right: 10px;"></span>
+        <span class="fa-solid fa-comment"
+          style="color: #facc15; margin-right: 10px;"></span>
         <span>Beyanco AI Chat</span>
       </ng-container>
       <!-- <span class="fa-solid fa-comment"></span>
       <span *ngIf="!sidebarCollapsed">Beyanco AI Chat</span> -->
       <button class="collapse-btn" (click)="toggleSidebar()">
         <span class="fa-solid"
-          [ngClass]="!isSidebarExpanded() ? 'fa-chevron-right' : 'fa-chevron-left'" style="opacity: 1;color: #facc15; margin-right: 10px;"></span>
+          [ngClass]="!isSidebarExpanded() ? 'fa-chevron-right' : 'fa-chevron-left'"
+          style="opacity: 1;color: #facc15; margin-right: 10px;"></span>
       </button>
     </div>
     <button
@@ -55,6 +57,8 @@
         <button
           *ngFor="let conv of group.value"
           class="history-item"
+          [class.active]="activeConversationId() === conv.id"
+          [class.menu-open]="activeMenuId === conv.id"
           (click)="openConversation(conv.id)">
 
           <div class="history-title">
@@ -123,7 +127,8 @@
         *ngIf="!isSidebarExpanded()"
         (click)="goToProfile()"
         title="Profile">
-        <span class="fa-solid fa-circle-user" style="color: #facc15; font-size:20px"></span>
+        <span class="fa-solid fa-circle-user"
+          style="color: #facc15; font-size:20px"></span>
       </button>
 
       <button
@@ -131,7 +136,8 @@
         *ngIf="isSidebarExpanded()"
         (click)="goToProfile()"
         title="Profile">
-        <span class="fa-solid fa-circle-user" style="color: #facc15; font-size:20px"></span>
+        <span class="fa-solid fa-circle-user"
+          style="color: #facc15; font-size:20px"></span>
         <span>Profile</span>
       </button>
 
@@ -222,7 +228,7 @@
 
       </div>
       <!-- Generated Property Chat Messages -->
-      <div class="messages-container-generated" *ngIf="properties.length > 0">
+      <!-- <div class="messages-container-generated" *ngIf="properties.length > 0">
         <ng-container>
           <div *ngFor="let p of properties">
 
@@ -233,9 +239,6 @@
                 </div>
 
                 <div class="message-body">
-                  <!-- <div class="message-text">
-                  {{ p.title }}
-                </div> -->
 
                   <div class="message-images" *ngIf="p.originalImageUrl">
                     <img [src]="p.originalImageUrl" alt="Original Design"
@@ -249,10 +252,12 @@
                   </div>
                   <div class="message-meta">
                     <span class="meta-tag">
-                      <span class="fa-solid fa-door-open"></span> {{ p.propertyType }}
+                      <span class="fa-solid fa-door-open"></span> {{
+                      p.propertyType }}
                     </span>
                     <span class="meta-tag" *ngIf="p.enhancementStyle">
-                      <span class="fa-solid fa-palette"></span> {{ p.enhancementStyle }}
+                      <span class="fa-solid fa-palette"></span> {{
+                      p.enhancementStyle }}
                     </span>
                   </div>
 
@@ -285,10 +290,12 @@
                   </div>
                   <div class="message-meta">
                     <span class="meta-tag">
-                      <span class="fa-solid fa-door-open"></span> {{ p.propertyType }}
+                      <span class="fa-solid fa-door-open"></span> {{
+                      p.propertyType }}
                     </span>
                     <span class="meta-tag" *ngIf="p.enhancementStyle">
-                      <span class="fa-solid fa-palette"></span> {{ p.enhancementStyle }}
+                      <span class="fa-solid fa-palette"></span> {{
+                      p.enhancementStyle }}
                     </span>
                   </div>
 
@@ -300,7 +307,7 @@
             </div>
           </div>
         </ng-container>
-      </div>
+      </div> -->
 
       <div class="loading-indicator" *ngIf="isUploading">
         <div class="spinner"></div>
@@ -309,66 +316,64 @@
     </div>
     <!-- Input Composer -->
     <div class="composer-container">
-      <div class="composer-container">
-        <div class="composer-wrapper">
+      <div class="composer-wrapper">
 
-          <div class="composer-input">
+        <div class="composer-input">
 
-            <!-- Image preview (LEFT of textarea) -->
-            <div class="inline-image-preview" *ngIf="pendingImages().length">
-              <img [src]="pendingImages()[0]" />
-              <button class="remove-img" (click)="removePendingImage(0)">
-                ✕
-              </button>
-            </div>
+          <!-- Image preview (LEFT of textarea) -->
+          <div class="inline-image-preview" *ngIf="pendingImages().length">
+            <img [src]="pendingImages()[0]" />
+            <button class="remove-img" (click)="removePendingImage(0)">
+              ✕
+            </button>
+          </div>
 
-            <!-- Textarea -->
-            <textarea
-              [(ngModel)]="composerDescription"
-              class="composer-textarea"
-              placeholder="Describe your vision..."
-              rows="1"
-              (keydown)="onEnterKey($event)"
-              #textareaRef>
+          <!-- Textarea -->
+          <textarea
+            [(ngModel)]="composerDescription"
+            class="composer-textarea"
+            placeholder="Describe your vision..."
+            rows="1"
+            (keydown)="onEnterKey($event)"
+            #textareaRef>
       </textarea>
 
-            <!-- Actions -->
-            <div class="composer-actions">
+          <!-- Actions -->
+          <div class="composer-actions">
 
-              <!-- ➕ Add button -->
-              <button class="action-btn" (click)="toggleAddMenu($event)">
-                <img src="assets/add-button.png" class="add-btn" />
+            <!-- ➕ Add button -->
+            <button class="action-btn" (click)="toggleAddMenu($event)">
+              <img src="assets/add-button.png" class="add-btn" />
+            </button>
+
+            <!-- Add menu -->
+            <div class="add-menu" *ngIf="showAddMenu">
+              <button (click)="triggerFileInput()">
+                <span class="fa-solid fa-image"></span> Add Photo
               </button>
-
-              <!-- Add menu -->
-              <div class="add-menu" *ngIf="showAddMenu">
-                <button (click)="triggerFileInput()">
-                  <span class="fa-solid fa-image"></span> Add Photo
-                </button>
-              </div>
-
-              <!-- Hidden file input -->
-              <input
-                #fileInput
-                type="file"
-                accept="image/*"
-                hidden
-                (change)="onFiles($event)" />
-
-              <!-- Send -->
-              <button
-                class="action-btn send-btn"
-                (click)="send()"
-                [disabled]="!canSend()">
-                <span class="fa-solid fa-paper-plane"></span>
-              </button>
-
             </div>
+
+            <!-- Hidden file input -->
+            <input
+              #fileInput
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="onFiles($event)" />
+
+            <!-- Send -->
+            <button
+              class="action-btn send-btn"
+              (click)="send()"
+              [disabled]="!canSend()">
+              <span class="fa-solid fa-paper-plane"></span>
+            </button>
+
           </div>
         </div>
       </div>
-
     </div>
+
   </main>
 
   <!-- Setup Popup -->
@@ -459,12 +464,12 @@
       <!-- Toolbar -->
       <div class="image-toolbar">
         <div class="toolbar-left">
-          <button class="toolbar-btn" (click)="undo()" title="Undo">
+          <!-- <button class="toolbar-btn" (click)="undo()" title="Undo">
             <span class="fa-solid fa-undo"></span>
           </button>
           <button class="toolbar-btn" (click)="redo()" title="Redo">
             <span class="fa-solid fa-redo"></span>
-          </button>
+          </button> -->
 
           <select [(ngModel)]="selectedTool" (change)="openTool(selectedTool)"
             class="tool-select">
@@ -475,7 +480,7 @@
         </div>
 
         <div class="toolbar-right">
-          <button class="toolbar-btn" (click)="likeImage()" title="Like">
+          <!-- <button class="toolbar-btn" (click)="likeImage()" title="Like">
             <span class="fa-solid fa-thumbs-up"></span>
           </button>
           <button class="toolbar-btn" (click)="dislikeImage()"
@@ -485,7 +490,7 @@
           <button class="toolbar-btn" (click)="downloadImage()"
             title="Download">
             <span class="fa-solid fa-download"></span>
-          </button>
+          </button> -->
           <button class="toolbar-btn" (click)="shareImage()" title="Share">
             <span class="fa-solid fa-share-alt"></span>
           </button>
@@ -624,11 +629,16 @@
           <button *ngFor="let el of elements" class="element-card"
             [class.selected]="selectedElement === el.name"
             (click)="selectedElement = el.name">
-            <span class="fa-solid fa-lightbulb" *ngIf="el.name === 'Add Lighting'"></span>
-            <span class="fa-solid fa-leaf" *ngIf="el.name === 'Add Plants'"></span>
-            <span class="fa-solid fa-couch" *ngIf="el.name === 'Add Furniture'"></span>
-            <span class="fa-solid fa-image" *ngIf="el.name === 'Add Artwork'"></span>
-            <span class="fa-solid fa-th-large" *ngIf="el.name === 'Add Rug'"></span>
+            <span class="fa-solid fa-lightbulb"
+              *ngIf="el.name === 'Add Lighting'"></span>
+            <span class="fa-solid fa-leaf"
+              *ngIf="el.name === 'Add Plants'"></span>
+            <span class="fa-solid fa-couch"
+              *ngIf="el.name === 'Add Furniture'"></span>
+            <span class="fa-solid fa-image"
+              *ngIf="el.name === 'Add Artwork'"></span>
+            <span class="fa-solid fa-th-large"
+              *ngIf="el.name === 'Add Rug'"></span>
             <span class="fa-solid fa-window-maximize"
               *ngIf="el.name === 'Add Curtains'"></span>
             <span>{{ el.name }}</span>
