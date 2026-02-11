@@ -106,5 +106,8 @@ export class PropertyService {
     );
   }
 
+  streamUpload(jobId: string): EventSource {
+    return new EventSource(`${API_URL}upload/stream/${jobId}`);
+  }
 
 }
