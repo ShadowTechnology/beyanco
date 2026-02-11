@@ -551,13 +551,18 @@ export class ChatComponent implements AfterViewChecked {
         );
 
         this.messages.set(finalMessages);
-        // Compare thumbnails
+                // Compare thumbnails
         this.compareThumbnails.update(() =>
-          propertiesArray
-            .map((p: any) =>
-              (p.generatedImageUrl || p.originalImageUrl || '').trim()
-            )
-            .filter(Boolean)
+          propertiesArray.flatMap((p: any) => {
+            const images: string[] = [];
+            if (p.originalImageUrl) {
+              images.push(p.originalImageUrl.trim());
+            }
+            if (p.generatedImageUrl) {
+              images.push(p.generatedImageUrl.trim());
+            }
+            return images;
+          })
         );
 
         this.updateVisibleThumbnails();
@@ -809,6 +814,7 @@ export class ChatComponent implements AfterViewChecked {
       };
 
       this.messages.update(list => [...list, userMsg]);
+      userMsg.images?.forEach(img => this.addCompareImage(img));
       this.shouldScrollToBottom = true;
 
       // if (this.pendingFiles.length > 0) {
@@ -1157,10 +1163,18 @@ export class ChatComponent implements AfterViewChecked {
         const originalUrl = res.originalImageUrl;
         const generatedUrl = res.generatedImageUrl;
 
-        // ✅ update last generated image
+        // UPDATE thumbnails immediately
+        this.compareThumbnails.update(list => [
+          generatedUrl,
+          originalUrl,
+          ...list
+        ]);
+
+        this.updateVisibleThumbnails();
+        //  update last generated image
         // this.lastGeneratedImage = generatedUrl;
 
-        // ✅ update user message image
+        // update user message image
         this.messages.update(list =>
           list.map(msg =>
             msg.id === userMsg.id
