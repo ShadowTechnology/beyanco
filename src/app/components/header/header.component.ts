@@ -178,10 +178,12 @@ export class HeaderComponent implements OnInit {
   //   if (!target) this.isPopupOpen = false;
   // }
 
-  togglePopup() {
-    this.isPopupOpen = !this.isPopupOpen;
-    this.isProfileMenuOpen = false;
-  }
+togglePopup(event?: Event) {
+  event?.stopPropagation();
+  this.isPopupOpen = !this.isPopupOpen;
+  this.isProfileMenuOpen = false;
+}
+
   updatePrice() {
     this.totalPrice = this.count * 10;
   }
@@ -193,7 +195,8 @@ export class HeaderComponent implements OnInit {
   toggleProfileMenu(event: Event) {
     event.stopPropagation();
     this.isProfileMenuOpen = !this.isProfileMenuOpen;
-    console.log('Profile:', this.isProfileMenuOpen);
+    // console.log('Profile:', this.isProfileMenuOpen);
+    this.isPopupOpen = false;
   }
 
 

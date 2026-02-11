@@ -47,8 +47,8 @@ export class HomeComponent implements OnInit {
     {
       title: 'Kitchen Renovation',
       desc: 'Choose from a variety of modern kitchen styles with state-of-the-art appliances and elegant design.',
-      before: 'assets/experience/T 2 (1).png',
-      after: 'assets/experience/T 2-2 (1).jpg'
+      before: 'assets/experience/empty_kitchen_512x640.png',
+      after: 'assets/experience/modern_kitchen_512x640.png'
     }
   ];
 
@@ -65,8 +65,8 @@ export class HomeComponent implements OnInit {
     {
       // title: 'Living Room Transformation',
       // desc: 'From empty space to welcoming living area with modern furniture and warm styling',
-      before: 'assets/homeslider/HS 1.png',
-      after: 'assets/homeslider/HS 1-1.png'
+      before: 'assets/homeslider/HS 1.jpg',
+      after: 'assets/homeslider/HS1-1.png'
     },
     {
       // title: 'Kitchen Renovation',
@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
     {
       // title: 'Living Room Transformation',
       // desc: 'From empty space to welcoming living area with modern furniture and warm styling',
-      before: 'assets/homeslider/HS 3.jpg',
+      before: 'assets/homeslider/HS 3.png',
       after: 'assets/homeslider/HS 3-3.png'
     },
     {

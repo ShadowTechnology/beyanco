@@ -96,6 +96,7 @@
   font-weight: 600;
   box-shadow: 0 3px 10px rgba(250, 204, 21, 0.4);
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .credits-pill.low {
