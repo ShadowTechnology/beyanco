@@ -428,6 +428,7 @@ export class ChatComponent implements AfterViewChecked {
   // ---------- Chat lifecycle ----------
   newChat(event?: MouseEvent) {
     event?.stopPropagation();
+    this.isUploading = false;
     if (this.isMobile) {
       this.chatSidebarService.close();
     }
@@ -464,6 +465,9 @@ export class ChatComponent implements AfterViewChecked {
     if (window.innerWidth <= 768) {
       this.chatSidebarService.close();
     }
+
+    this.isUploading = false;        // ✅ reset loader
+    this.errorMessage = null;        // optional
     this.resetCompareState();
     this.chatId = chatId;
     this.activeConversationId.set(chatId);
@@ -700,6 +704,9 @@ export class ChatComponent implements AfterViewChecked {
   applyElement() {
     if (!this.selectedElement || !this.currentImage || !this.chatId) return;
 
+    if (this.isUploading) return;
+    this.isUploading = true;
+
     const imageKey = this.extractS3Key(this.currentImage);
 
     const payload = {
@@ -709,20 +716,49 @@ export class ChatComponent implements AfterViewChecked {
     };
 
     this.closeTool();
-    this.closeImagePopup();
+    this.activeTool = null;
+    this.selectedTool = '';
+    this.selectedElement = '';
     this.clearComposer();
 
-    this.propertyService.applyElement(payload).subscribe(res => {
-      // 1️⃣ Add to properties list
-      this.properties.unshift(res);
+    this.propertyService.applyElement(payload).subscribe({
+      next: res => {
+        this.properties.unshift(res);
+        this.compareThumbnails.update(list => [res.generatedImageUrl, ...list]);
 
-      // 2️⃣ Update thumbnails
-      this.compareThumbnails.update(list => [
-        res.generatedImageUrl,
-        ...list
-      ]);
+        const userMsg: ChatMessage = {
+          id: crypto.randomUUID(),
+          role: 'user',
+          text: res.prompt || 'Add Element',
+          images: [res.originalImageUrl],
+          timestamp: new Date(),
+          room: res.propertyType,
+          style: res.enhancementStyle,
+          prompt: ''
+        };
+
+        const aiMsg: ChatMessage = {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          text: '✨ Updated design with new element',
+          images: [res.generatedImageUrl],
+          timestamp: new Date(),
+          prompt: ''
+        };
+
+        this.messages.update(list => [...list, userMsg, aiMsg]);
+        this.shouldScrollToBottom = true;
+
+        this.isUploading = false;
+      },
+      error: err => {
+        console.error(err?.error?.message || 'AI failed, try again');
+        this.isUploading = false;
+      }
     });
   }
+
+
 
   private extractS3Key(imageUrl: string): string {
     try {
@@ -790,6 +826,8 @@ export class ChatComponent implements AfterViewChecked {
 
   send() {
     // ensure currentUser/credits available
+
+    if (this.isUploading) return;
     if (this.userCredits === undefined || this.userCredits === null) this.userCredits = 0;
 
     if (this.userCredits > 0) {
@@ -833,6 +871,7 @@ export class ChatComponent implements AfterViewChecked {
       this.clearComposerUI();
     }
     else {
+      this.isUploading = false;
       this.openCreditPopup();
     }
   }
@@ -1101,7 +1140,29 @@ export class ChatComponent implements AfterViewChecked {
     this.propertyService.uploadPropertyAsync(jsonPayload).subscribe({
       next: (res: any) => {
         const jobId = res.jobId;
-        this.pollUploadStatus(jobId, userMsg);
+        // this.pollUploadStatus(jobId, userMsg);
+        const es = this.propertyService.streamUpload(jobId);
+
+        es.onmessage = (event) => {
+          const job = JSON.parse(event.data);
+
+          if (job.status === 'FAILED') {
+            es.close();
+            this.resetAfterUploadError(userMsg, job.errorMessage);
+          }
+
+          if (job.status === 'COMPLETED') {
+            es.close();
+            this.fetchCompletedProperty(job.propertyId, userMsg);
+          }
+        };
+
+        es.onerror = () => {
+          es.close();
+          this.isUploading = false;
+          this.errorMessage = 'Connection lost while generating image';
+        };
+
       },
       error: err => {
         this.isUploading = false;
@@ -1120,36 +1181,36 @@ export class ChatComponent implements AfterViewChecked {
   }
 
 
-  pollUploadStatus(jobId: string, userMsg: ChatMessage) {
-    const interval = setInterval(() => {
-      this.propertyService.getUploadStatus(jobId).subscribe({
-        next: (job: any) => {
+  // pollUploadStatus(jobId: string, userMsg: ChatMessage) {
+  //   const interval = setInterval(() => {
+  //     this.propertyService.getUploadStatus(jobId).subscribe({
+  //       next: (job: any) => {
 
-          if (job.status === 'PROCESSING' || job.status === 'PENDING') {
-            console.log("Still processing...");
-            return;
-          }
+  //         if (job.status === 'PROCESSING' || job.status === 'PENDING') {
+  //           console.log("Still processing...");
+  //           return;
+  //         }
 
-          clearInterval(interval);
+  //         clearInterval(interval);
 
-          if (job.status === 'FAILED') {
-            this.isUploading = false;
-            this.errorMessage = job.errorMessage || 'AI Processing Failed';
-            this.resetAfterUploadError(userMsg, job.errorMessage);
-            return;
-          }
+  //         if (job.status === 'FAILED') {
+  //           this.isUploading = false;
+  //           this.errorMessage = job.errorMessage || 'AI Processing Failed';
+  //           this.resetAfterUploadError(userMsg, job.errorMessage);
+  //           return;
+  //         }
 
-          if (job.status === 'COMPLETED') {
-            this.fetchCompletedProperty(job.propertyId, userMsg);
-          }
-        },
-        error: err => {
-          clearInterval(interval);
-          console.error('Polling error:', err);
-        }
-      });
-    }, 3000); // Poll every 3 seconds
-  }
+  //         if (job.status === 'COMPLETED') {
+  //           this.fetchCompletedProperty(job.propertyId, userMsg);
+  //         }
+  //       },
+  //       error: err => {
+  //         clearInterval(interval);
+  //         console.error('Polling error:', err);
+  //       }
+  //     });
+  //   }, 3000); // Poll every 3 seconds
+  // }
 
   fetchCompletedProperty(id: number, userMsg: ChatMessage) {
     this.propertyService.getProperty(id).subscribe({
@@ -1197,8 +1258,11 @@ export class ChatComponent implements AfterViewChecked {
         // FORCE AUTOSCROLL AFTER GENERATION
         setTimeout(() => this.scrollToBottom(true), 50);
         this.clearComposer();
+        this.clearComposerUI();
+        this.closePopup();
       },
       error: () => {
+        this.isUploading = false;
         this.errorMessage = "Couldn't fetch property after completion.";
       }
     });
@@ -1210,6 +1274,7 @@ export class ChatComponent implements AfterViewChecked {
     this.pendingImages.set([]);
     this.pendingFiles = [];
     this.actionsOpen.set(false);
+    this.isUploading = false;
 
     const errorMsg: ChatMessage = {
       id: crypto.randomUUID(),
@@ -1564,6 +1629,4 @@ export class ChatComponent implements AfterViewChecked {
       }
     });
   }
-
-
 }
