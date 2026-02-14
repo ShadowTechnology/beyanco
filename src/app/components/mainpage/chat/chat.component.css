@@ -227,14 +227,27 @@ button.new-chat-btn1 {
 /* ---------------- Messages Container ---------------- */
 
 .chat-main .message-container {
-  flex: 1;
+  flex: 1;  
   overflow-y: auto;
-  padding: 16px 10px 90px;
+  overflow-x: visible;
 }
 
-.chat-main .messages-container-generated {
-  padding: 0 3rem 2rem;
+.chat-main .messages-container {
+  padding-left: 60px;
+  padding-right: 60px;
 }
+
+.chat-main .message-wrapper.assistant-message .avatar {
+  left: -45px;
+  right: auto;
+}
+
+.chat-main .message-wrapper.user-message .avatar {
+  right: -45px;
+  left: auto;
+}
+
+
 
 /* ---------------- Message Wrapper ---------------- */
 .chat-main .message-wrapper {
@@ -262,6 +275,7 @@ button.new-chat-btn1 {
 /* ---------------- Message Content ---------------- */
 .chat-main .message-content {
   /* max-width: 40%; */
+  min-width: 140px;
   border-radius: 16px;
   padding: 1rem 1.25rem;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
@@ -322,13 +336,32 @@ button.new-chat-btn1 {
 }
 
 /* ---------------- Composer ---------------- */
-.composer-container {
+/* .composer-container {
   flex-shrink: 0;
   background: #fff;
   padding: 0.5rem;
-  /* border-top: 1px solid #e5e7eb; */
   padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+} */
+
+.composer-container {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 50;
 }
+
+
+
+.composer-container {
+  padding: 16px 10px;
+}
+
+.chat-main .message-container {
+  padding: 16px 10px 90px;
+}
+
+
+
 
 /* .loading-indicator {
   position: absolute;
@@ -1400,6 +1433,17 @@ button.new-chat-btn1 {
   box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.35);
 }
 
+.loading-indicator {
+  pointer-events: none;   /* 🔥 allow clicks to pass through */
+}
+
+.message-image {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 /* Testing css */
 /* button.chat-sidebar-btn {
   width: 34px;
@@ -1450,6 +1494,9 @@ button.new-chat-btn1 {
 
   .chat-main .message-container {
     padding: 16px 10px 0;
+  }
+  .composer-container {
+    padding: 12px 10px;
   }
 }
 
