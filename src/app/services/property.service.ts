@@ -34,11 +34,17 @@ export class PropertyService {
     return this.http.get(`${API_URL}test`, { responseType: 'text' });
   }
 
-  getAllProperty(): Observable<Property> {
-    return this.http.get<Property>(`${API_URL}all`, {
+  // getAllProperty(): Observable<Property> {
+  //   return this.http.get<Property>(`${API_URL}all`, {
+  //     headers: this.getAuthHeaders()
+  //   });
+  // }
+  getAllProperty(): Observable<Property[]> {
+    return this.http.get<Property[]>(`${API_URL}all`, {
       headers: this.getAuthHeaders()
     });
   }
+
 
   getProperty(id: number): Observable<Property> {
     return this.http.get<Property>(`${API_URL}${id}`, {
@@ -64,11 +70,17 @@ export class PropertyService {
     });
   }
 
-  getChatProperty(id: number): Observable<Property> {
-    return this.http.get<Property>(`${API_URL}byChat/${id}`, {
+  // getChatProperty(id: number): Observable<Property> {
+  //   return this.http.get<Property>(`${API_URL}byChat/${id}`, {
+  //     headers: this.getAuthHeaders()
+  //   });
+  // }
+  getChatProperty(id: number): Observable<Property[]> {
+    return this.http.get<Property[]>(`${API_URL}byChat/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
+
 
   // uploadPropertyAsync(formData: FormData): Observable<any> {
   //   return this.http.post(`${API_URL}upload`, formData, {
