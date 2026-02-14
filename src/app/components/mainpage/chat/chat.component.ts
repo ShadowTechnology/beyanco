@@ -109,6 +109,14 @@ export class ChatComponent implements AfterViewChecked {
     { name: 'Add Rug', prompt: 'Add a stylish area rug that complements the room design' },
     { name: 'Add Curtains', prompt: 'Add elegant window treatments and curtains for privacy' }
   ];
+  qualifiers = [
+    'Makeover', 'Revamp', 'Refresh', 'Upgrade', 'Transformation',
+    'Inspiration', 'Concept', 'Design', 'Idea', 'Look',
+    'Sunlit Space', 'Bright Interior', 'Warm Lighting', 'Ambient Glow',
+    'Wood Accents', 'Open Layout', 'Premium Look', 'Hotel Style',
+    'Clean Aesthetic', 'Comfort Living', 'Designer Touch'
+  ];
+
   properties: Property[] = [];
 
   // Internal
@@ -126,6 +134,8 @@ export class ChatComponent implements AfterViewChecked {
   isMobile = false;
   activeMenuId: string | null = null;
   selectedCompareImage: string | null = null;
+  uploadingChatId: number | null = null;
+
 
   // ✅ ADD IT HERE (inside the class)
   dateOrder = (a: any, b: any): number => {
@@ -429,6 +439,8 @@ export class ChatComponent implements AfterViewChecked {
   newChat(event?: MouseEvent) {
     event?.stopPropagation();
     this.isUploading = false;
+    this.uploadingChatId = null;
+
     if (this.isMobile) {
       this.chatSidebarService.close();
     }
@@ -467,6 +479,8 @@ export class ChatComponent implements AfterViewChecked {
     }
 
     this.isUploading = false;        // ✅ reset loader
+    this.uploadingChatId = null;
+
     this.errorMessage = null;        // optional
     this.resetCompareState();
     this.chatId = chatId;
@@ -484,14 +498,21 @@ export class ChatComponent implements AfterViewChecked {
     this.showImagePopup = false;
 
     this.propertyService.getChatProperty(chatId).subscribe({
-      next: (res: any) => {
-        //  Parse normal messages
-        const rawMessages = res?.messages
-          ? typeof res.messages === 'string'
-            ? JSON.parse(res.messages)
-            : res.messages
+      next: (res: any[]) => {
+
+        // 1️⃣ Chat text messages (from chatHistory)
+        const chatHistory = res?.[0]?.chatHistory;
+        const rawMessages = chatHistory?.messages
+          ? JSON.parse(chatHistory.messages)
           : [];
 
+        // const parsedMessages: ChatMessage[] = rawMessages.map((msg: any, index: number) => ({
+        //   id: msg.id || `msg-${index}`,
+        //   role: msg.role || 'user',
+        //   text: msg.content || msg.text || '',
+        //   timestamp: msg.timestamp ? new Date(msg.timestamp) : new Date(),
+        //   images: msg.images || []
+        // }));
         const parsedMessages: ChatMessage[] = rawMessages
           .map((msg: any, index: number) => ({
             id: msg.id || `msg-${index}`,
@@ -504,86 +525,79 @@ export class ChatComponent implements AfterViewChecked {
             room: msg.room,
             style: msg.style
           }))
-          .filter((m: any) => m.text || m.images?.length);
-        // Convert properties → messages
+          .filter((m: any) => {
+            // ❌ remove empty user messages from backend
+            if (m.role === 'user' && !m.text && !m.images?.length) {
+              return false;
+            }
+            return true;
+          });
 
-        const propertiesArray = Array.isArray(res) ? res : [];
 
-        const propertyMessages: ChatMessage[] = propertiesArray.flatMap((p: any) => {
-
-          const originalUrl = (p.originalImageUrl || '').trim();
-          const generatedUrl = (p.generatedImageUrl || '').trim();
-          const createdTime = p.createdAt
-            ? new Date(p.createdAt)
-            : new Date();
-
+        // 2️⃣ Property → image messages (handle failed AI too)
+        const propertyMessages: ChatMessage[] = res.flatMap((p: any) => {
           const list: ChatMessage[] = [];
 
-          if (originalUrl) {
+          // USER message (right)
+          if (p.originalImageUrl) {
             list.push({
               id: crypto.randomUUID(),
               role: 'user',
-              text:
-                p.enhancementType === 'add_element' ? p.prompt || '' : p.description || p.title || '',
-              images: [originalUrl],
-              timestamp: createdTime,
+              text: p.description || '',
+              images: [p.originalImageUrl],
+              timestamp: new Date(p.createdAt),
               room: p.propertyType,
               style: p.enhancementStyle,
-              prompt: ''
+              prompt: p.prompt
             });
           }
 
-          if (generatedUrl) {
+          // AI success (left)
+          if (p.generatedImageUrl) {
             list.push({
               id: crypto.randomUUID(),
               role: 'assistant',
               text: `Generated Design for ${p.propertyType}`,
-              images: [generatedUrl],
-              timestamp: createdTime,
+              images: [p.generatedImageUrl],
+              timestamp: new Date(p.createdAt),
+              prompt: ''
+            });
+          }
+
+          // ❌ AI failed case (left)
+          if (!p.generatedImageUrl) {
+            list.push({
+              id: crypto.randomUUID(),
+              role: 'assistant',
+              text: '❌ AI Processing Failed. Please try again.',
+              images: [],   // no image
+              timestamp: new Date(p.createdAt),
               prompt: ''
             });
           }
 
           return list;
         });
-        // Merge everything
-        const finalMessages = [
-          ...parsedMessages,
-          ...propertyMessages
-        ].sort((a, b) =>
-          a.timestamp.getTime() - b.timestamp.getTime()
+
+
+        // 3️⃣ Merge and sort
+        const finalMessages = [...parsedMessages, ...propertyMessages].sort(
+          (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
         );
 
         this.messages.set(finalMessages);
-                // Compare thumbnails
-        this.compareThumbnails.update(() =>
-          propertiesArray.flatMap((p: any) => {
-            const images: string[] = [];
-            if (p.originalImageUrl) {
-              images.push(p.originalImageUrl.trim());
-            }
-            if (p.generatedImageUrl) {
-              images.push(p.generatedImageUrl.trim());
-            }
-            return images;
-          })
-        );
-
-        this.updateVisibleThumbnails();
-        //UI Flags
         this.shouldScrollToBottom = true;
         this.isLoadingChat = false;
-        this.isLoadingProperties = false;
-        this.conversationLoaded = true;
       },
-      error: (err) => {
-        console.error('Error loading chat history:', err);
-        this.messages.set([]);
+      error: err => {
+        console.error('Error loading chat:', err);
         this.isLoadingChat = false;
-        this.isLoadingProperties = false;
-        this.conversationLoaded = true;
       }
     });
+
+    setTimeout(() => {
+      this.textareaRef?.nativeElement?.focus();
+    }, 200);
   }
 
   // ---------- Popup ----------
@@ -637,24 +651,34 @@ export class ChatComponent implements AfterViewChecked {
   selectImage(img: string, event?: MouseEvent) {
     if (event) event.stopPropagation();
 
-    // Reset tool states when switching images
     this.activeTool = null;
     this.selectedTool = '';
     this.selectedElement = '';
-    this.currentImage = img;
-    const msgs = this.messages();
-    for (let i = msgs.length - 1; i >= 0; i--) {
-      const msg = msgs[i];
-      if (msg.role === 'assistant' && msg.images?.length) {
-        this.currentGeneratedImage = msg.images[0];
+
+    // 🔥 Defer popup logic to next tick
+    setTimeout(() => {
+      this.currentImage = img;
+
+      const msgs = this.messages();
+
+      this.currentOriginalImage = null;
+      this.currentGeneratedImage = null;
+
+      for (let i = msgs.length - 1; i >= 0; i--) {
+        const msg = msgs[i];
+        if (msg.role === 'assistant' && msg.images?.length) {
+          this.currentGeneratedImage = msg.images[0];
+        }
+        if (msg.role === 'user' && msg.images?.length) {
+          this.currentOriginalImage = msg.images[0];
+          break;
+        }
       }
-      if (msg.role === 'user' && msg.images?.length) {
-        this.currentOriginalImage = msg.images[0];
-        break;
-      }
-    }
-    this.showImagePopup = true;
+
+      this.showImagePopup = true;   // ✅ open AFTER state is ready
+    }, 0);
   }
+
 
   closeImagePopup() {
     this.showImagePopup = false;
@@ -703,40 +727,43 @@ export class ChatComponent implements AfterViewChecked {
   // }
   applyElement() {
     if (!this.selectedElement || !this.currentImage || !this.chatId) return;
-
     if (this.isUploading) return;
+
+    // ✅ Store BEFORE clearing UI
+    const sourceImage = this.currentImage;
+    const elementPrompt = this.getElementPrompt(this.selectedElement); // 👈 store prompt
+
+    this.uploadingChatId = this.chatId;
     this.isUploading = true;
 
-    const imageKey = this.extractS3Key(this.currentImage);
-
     const payload = {
-      imageKey,
-      prompt: this.getElementPrompt(this.selectedElement),
+      imageKey: this.extractS3Key(sourceImage),
+      prompt: elementPrompt,
       chatHistoryId: this.chatId
     };
 
+    // ❌ Clear UI AFTER storing values
     this.closeTool();
-    this.activeTool = null;
-    this.selectedTool = '';
-    this.selectedElement = '';
+    this.closeImagePopup();
     this.clearComposer();
+
+    // ✅ ADD USER MESSAGE IMMEDIATELY (RIGHT SIDE)
+    const userMsg: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      text: elementPrompt,        // 👈 now works
+      images: [sourceImage],      // 👈 now shows instantly
+      timestamp: new Date(),
+      prompt: '',
+    };
+
+    this.messages.update(list => [...list, userMsg]);
+    this.shouldScrollToBottom = true;
 
     this.propertyService.applyElement(payload).subscribe({
       next: res => {
-        this.properties.unshift(res);
-        this.compareThumbnails.update(list => [res.generatedImageUrl, ...list]);
 
-        const userMsg: ChatMessage = {
-          id: crypto.randomUUID(),
-          role: 'user',
-          text: res.prompt || 'Add Element',
-          images: [res.originalImageUrl],
-          timestamp: new Date(),
-          room: res.propertyType,
-          style: res.enhancementStyle,
-          prompt: ''
-        };
-
+        // ✅ AI MESSAGE (LEFT SIDE)
         const aiMsg: ChatMessage = {
           id: crypto.randomUUID(),
           role: 'assistant',
@@ -746,19 +773,21 @@ export class ChatComponent implements AfterViewChecked {
           prompt: ''
         };
 
-        this.messages.update(list => [...list, userMsg, aiMsg]);
+        this.messages.update(list => [...list, aiMsg]);
         this.shouldScrollToBottom = true;
 
         this.isUploading = false;
+        this.uploadingChatId = null;
+        this.cdRef.detectChanges();
       },
       error: err => {
-        console.error(err?.error?.message || 'AI failed, try again');
+        console.error('Apply element failed:', err);
         this.isUploading = false;
+        this.uploadingChatId = null;
+        this.cdRef.detectChanges();
       }
     });
   }
-
-
 
   private extractS3Key(imageUrl: string): string {
     try {
@@ -838,8 +867,10 @@ export class ChatComponent implements AfterViewChecked {
       //   alert('To generate images, please upload a valid photo first.');
       //   return;
       // }
+      this.uploadingChatId = this.chatId;   // 👈 track which chat is uploading
       this.isUploading = true;
       this.cdRef.detectChanges();
+
       const userMsg: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'user',
@@ -872,6 +903,8 @@ export class ChatComponent implements AfterViewChecked {
     }
     else {
       this.isUploading = false;
+      this.uploadingChatId = null;
+
       this.openCreditPopup();
     }
   }
@@ -890,163 +923,41 @@ export class ChatComponent implements AfterViewChecked {
   openCreditPopup() { this.showCreditPopup = true; }
   closeCreditPopup() { this.showCreditPopup = false; }
 
-  generateChatTitle(
-    description?: string,
-    propertyType?: string,
-    style?: string
-  ): string {
+  private lastGeneratedTitle = '';
 
-    const parts: string[] = [];
+  generateChatTitle(description?: string, propertyType?: string, style?: string): string {
+    let title = '';
 
-    // 1️⃣ Style
-    parts.push(style && style.trim()
-      ? this.capitalize(style)
-      : 'Modern'
-    );
+    do {
+      const finalStyle = style?.trim() || this.pickRandom(this.StyleTags);
+      const finalRoom =
+        propertyType?.trim() ||
+        this.detectRoomFromDescription(description || '') ||
+        this.pickRandom(this.rooms);
 
-    // 2️⃣ Room / Property
-    const room =
-      propertyType?.trim() ||
-      this.detectRoomFromDescription(description || '') ||
-      'Interior';
+      const qualifier = this.pickRandom(this.qualifiers);
 
-    parts.push(room);
+      title = `${finalStyle} ${finalRoom} ${qualifier}`;
+    } while (title === this.lastGeneratedTitle);
 
-    // 3️⃣ Random qualifier
-    const qualifier = this.getRandomQualifier(description);
-    if (qualifier) {
-      parts.push(qualifier);
-    }
-
-    // 4️⃣ Ensure 4–5 words
-    if (parts.length < 4) {
-      parts.push('Design');
-    }
-
-    return parts.slice(0, 5).join(' ');
+    this.lastGeneratedTitle = title;
+    return title;
   }
 
-  getRandomQualifier(desc?: string): string | null {
-    if (!desc) return null;
-
-    const d = desc.toLowerCase();
-
-    const qualifiers: { [key: string]: string[] } = {
-
-      /* LIGHTING */
-      light: [
-        'Sunlit Space',
-        'Bright Interior',
-        'Natural Light Focus',
-        'Soft Daylight Mood'
-      ],
-      lighting: [
-        'Balanced Lighting',
-        'Ambient Light Design',
-        'Soft Light Interior'
-      ],
-
-      /* MATERIALS */
-      wood: [
-        'Warm Wood Accents',
-        'Natural Wood Finish',
-        'Wood Texture Focus'
-      ],
-      marble: [
-        'Marble Finish',
-        'Premium Stone Look',
-        'Polished Marble Style'
-      ],
-      fabric: [
-        'Soft Fabric Textures',
-        'Textile Rich Interior'
-      ],
-
-      /* COLORS */
-      white: [
-        'Neutral Tones',
-        'Soft White Palette',
-        'Clean Color Theme'
-      ],
-      beige: [
-        'Warm Neutral Shades',
-        'Earthy Color Palette'
-      ],
-      dark: [
-        'Moody Color Theme',
-        'Deep Tone Interior'
-      ],
-
-      /* LAYOUT */
-      open: [
-        'Open Layout',
-        'Spacious Planning',
-        'Airy Interior Flow'
-      ],
-      compact: [
-        'Smart Space Planning',
-        'Compact Layout Design'
-      ],
-
-      /* STYLE & MOOD */
-      cozy: [
-        'Cozy Atmosphere',
-        'Warm And Inviting',
-        'Comfort Living Style'
-      ],
-      luxury: [
-        'Luxury Finish',
-        'Premium Interior Look',
-        'High-End Styling'
-      ],
-      minimal: [
-        'Minimal Look',
-        'Clean Design Style',
-        'Clutter-Free Space'
-      ],
-      modern: [
-        'Contemporary Design',
-        'Modern Aesthetic'
-      ],
-
-      /* REAL ESTATE STAGING */
-      staged: [
-        'Real Estate Ready',
-        'Professionally Staged',
-        'Market-Ready Design'
-      ],
-
-      /* QUALITY */
-      realistic: [
-        'Photorealistic Finish',
-        'High Detail Render'
-      ]
-    };
-
-    for (const key in qualifiers) {
-      if (d.includes(key)) {
-        return this.pickRandom(qualifiers[key]);
-      }
-    }
-
-    return null;
+  pickRandom(list: string[]): string {
+    return list[Math.floor(Math.random() * list.length)];
   }
-
 
   detectRoomFromDescription(desc: string): string | null {
     const d = desc.toLowerCase();
-
     if (d.includes('living')) return 'Living Room';
     if (d.includes('bed')) return 'Bedroom';
     if (d.includes('kitchen')) return 'Kitchen';
     if (d.includes('bath')) return 'Bathroom';
-    if (d.includes('office')) return 'Home Office';
-
+    if (d.includes('office')) return 'Office';
     return null;
   }
-  pickRandom(list: string[]): string {
-    return list[Math.floor(Math.random() * list.length)];
-  }
+
 
 
   capitalize(value: string): string {
@@ -1106,6 +1017,8 @@ export class ChatComponent implements AfterViewChecked {
           this.chatId = data.id;
           this.activeConversationId.set(data.id);
 
+          this.loadChats();
+
           const jsonPayload = {
             userId: this.currentUser.id,
             title: autoGeneratedTitle || 'Image modification',
@@ -1160,12 +1073,16 @@ export class ChatComponent implements AfterViewChecked {
         es.onerror = () => {
           es.close();
           this.isUploading = false;
+          this.uploadingChatId = null;
+
           this.errorMessage = 'Connection lost while generating image';
         };
 
       },
       error: err => {
         this.isUploading = false;
+        this.uploadingChatId = null;
+
         this.errorMessage = err?.error?.message || 'Upload failed.';
       }
     });
@@ -1217,6 +1134,9 @@ export class ChatComponent implements AfterViewChecked {
       next: (res: any) => {
         this.loadChats();
         this.isUploading = false;
+        this.uploadingChatId = null;   // 👈 reset
+        this.cdRef.detectChanges();
+
 
         // const baseUrl = environment.backendUrl;
         // const originalUrl = `${baseUrl}${res.originalImageUrl}`;
@@ -1263,6 +1183,9 @@ export class ChatComponent implements AfterViewChecked {
       },
       error: () => {
         this.isUploading = false;
+        this.uploadingChatId = null;   // 👈 reset\
+        this.cdRef.detectChanges();
+
         this.errorMessage = "Couldn't fetch property after completion.";
       }
     });
@@ -1275,6 +1198,7 @@ export class ChatComponent implements AfterViewChecked {
     this.pendingFiles = [];
     this.actionsOpen.set(false);
     this.isUploading = false;
+    this.uploadingChatId = null;
 
     const errorMsg: ChatMessage = {
       id: crypto.randomUUID(),
@@ -1481,17 +1405,14 @@ export class ChatComponent implements AfterViewChecked {
   trackById(_: number, item: any): string { return item.id; }
 
   private scrollToBottom(force = false) {
-    if (!this.scrollArea) return;
+    if (!this.scrollArea?.nativeElement) return;
 
-    const el = this.scrollArea.nativeElement;
-
-    if (force) {
+    requestAnimationFrame(() => {
+      const el = this.scrollArea!.nativeElement;
       el.scrollTop = el.scrollHeight;
-      return;
-    }
-
-    el.scrollTop = el.scrollHeight;
+    });
   }
+
 
 
   groupedConversations: { [key: string]: any[] } = {};
