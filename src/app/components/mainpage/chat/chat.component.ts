@@ -600,6 +600,37 @@ export class ChatComponent implements AfterViewChecked {
     }, 200);
   }
 
+  private uploadTimeoutRef: any;
+
+  private startUploadLoader(chatId: number) {
+    this.isUploading = true;
+    this.uploadingChatId = chatId;
+
+    // 🛡 failsafe: stop loader after 90 seconds
+    clearTimeout(this.uploadTimeoutRef);
+    this.uploadTimeoutRef = setTimeout(() => {
+      console.warn('Upload timeout – resetting loader');
+      this.isUploading = false;
+      this.uploadingChatId = null;
+
+      const failMsg: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        text: '⚠️ Network issue. Please try again.',
+        timestamp: new Date(),
+        prompt: ''
+      };
+      this.messages.update(list => [...list, failMsg]);
+    }, 90000); // 90 seconds
+  }
+
+  private stopUploadLoader() {
+    this.isUploading = false;
+    this.uploadingChatId = null;
+    clearTimeout(this.uploadTimeoutRef);
+  }
+
+
   // ---------- Popup ----------
   openUploadPopup() { this.showPopup = true; }
   closePopup() { this.showPopup = false; }
@@ -733,8 +764,7 @@ export class ChatComponent implements AfterViewChecked {
     const sourceImage = this.currentImage;
     const elementPrompt = this.getElementPrompt(this.selectedElement); // 👈 store prompt
 
-    this.uploadingChatId = this.chatId;
-    this.isUploading = true;
+    this.startUploadLoader(this.chatId);
 
     const payload = {
       imageKey: this.extractS3Key(sourceImage),
@@ -776,14 +806,12 @@ export class ChatComponent implements AfterViewChecked {
         this.messages.update(list => [...list, aiMsg]);
         this.shouldScrollToBottom = true;
 
-        this.isUploading = false;
-        this.uploadingChatId = null;
+        this.stopUploadLoader();
         this.cdRef.detectChanges();
       },
       error: err => {
         console.error('Apply element failed:', err);
-        this.isUploading = false;
-        this.uploadingChatId = null;
+        this.stopUploadLoader();
         this.cdRef.detectChanges();
       }
     });
@@ -1072,16 +1100,25 @@ export class ChatComponent implements AfterViewChecked {
 
         es.onerror = () => {
           es.close();
-          this.isUploading = false;
-          this.uploadingChatId = null;
 
-          this.errorMessage = 'Connection lost while generating image';
+          this.messages.update(list => [
+            ...list,
+            {
+              id: crypto.randomUUID(),
+              role: 'assistant',
+              text: '⚠️ Connection lost while generating image. Please retry.',
+              timestamp: new Date(),
+              prompt: ''
+            }
+          ]);
+
+          this.stopUploadLoader();
         };
+
 
       },
       error: err => {
-        this.isUploading = false;
-        this.uploadingChatId = null;
+        this.stopUploadLoader();
 
         this.errorMessage = err?.error?.message || 'Upload failed.';
       }
